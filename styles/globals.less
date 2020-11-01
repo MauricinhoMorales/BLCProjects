@@ -1,0 +1,73 @@
+@import '~rsuite/lib/styles/themes/default/index.less';
+@import (css) url('https://fonts.googleapis.com/css2?family=Cabin&display=swap');
+@base-color: #a42419;
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: 'Cabin', sans-serif;
+  overflow: hidden !important;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: black !important;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+p {
+  font-size: medium;
+}
+
+.full-container {
+  height: 100vh;
+}
+
+.text-centered {
+  text-align: center;
+}
+
+.container {
+  background-color: @base-color;
+}
+
+.white-text {
+  color: white;
+}
+
+.vertical-centered-items {
+  display: flex !important;
+  align-items: center !important;
+}
+
+.primary-text {
+  color: @base-color;
+}
+
+.black-text {
+  color: black;
+}
+
+.bold-text {
+  font-weight: bold;
+}
+
+.overlay {
+  position: fixed;
+  overflow-y: scroll;
+  top: 0;
+  right: 0;
+}
