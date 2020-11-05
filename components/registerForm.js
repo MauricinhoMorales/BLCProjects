@@ -45,12 +45,7 @@ export default function LoginForm(props) {
             style={{ textAlign: 'center' }}>
             <FormGroup className="padding-bottom">
               <InputGroup style={{ width: '100%' }} size="lg">
-                <FormControl
-                  className="textfield"
-                  size="lg"
-                  name="email"
-                  placeholder="Email"
-                />
+                <FormControl size="lg" name="email" placeholder="Email" />
                 <InputGroup.Addon style={{ backgroundColor: '#ededef' }}>
                   <Icon icon="envelope" />
                 </InputGroup.Addon>
@@ -60,7 +55,6 @@ export default function LoginForm(props) {
               <InputGroup inside size="lg" style={{ width: '100%' }}>
                 <FormControl
                   size="lg"
-                  className="textfield"
                   name="password"
                   placeholder="Password"
                   type={visible ? 'text' : 'password'}
@@ -74,7 +68,6 @@ export default function LoginForm(props) {
               <InputGroup inside size="lg" style={{ width: '100%' }}>
                 <FormControl
                   size="lg"
-                  className="textfield"
                   name="verifyPassword"
                   placeholder="Repeat Password"
                   type={repeatVisible ? 'text' : 'password'}

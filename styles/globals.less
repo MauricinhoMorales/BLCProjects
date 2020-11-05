@@ -45,12 +45,16 @@ p {
 }
 
 .white-text {
-  color: white;
+  color: white !important;
 }
 
 .vertical-centered-items {
   display: flex !important;
   align-items: center !important;
+}
+
+.horizontal-centered-items {
+  justify-content: center !important;
 }
 
 .primary-text {
@@ -66,8 +70,13 @@ p {
 }
 
 .overlay {
+  height: 100vh;
   position: fixed;
-  overflow-y: scroll;
+  overflow-y: auto;
   top: 0;
   right: 0;
+}
+
+.container-padding {
+  padding: 2.5em !important;
 }

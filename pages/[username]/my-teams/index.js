@@ -13,7 +13,7 @@ export default function MyTeamsPage(props) {
   };
 
   return (
-    <div className="container-padding full-container">
+    <div className="full-container">
       <Head>
         <title>Mis Equipos</title>
       </Head>
