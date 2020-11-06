@@ -6,10 +6,21 @@ import '../styles/card.less';
 
 export default function TeamCard(props) {
   const router = useRouter();
+
+  const onClick = () => {
+    router.push(
+      `/${JSON.parse(localStorage.getItem('user'))._id}/my-teams/${
+        props.team._id
+      }`
+    );
+  };
+
   return (
     <>
       <Panel shaded bodyFill style={{ position: 'relative' }}>
-        <div className="card-body-container">
+        <div
+          className="card-body-container"
+          style={{ backgroundColor: props.team.color }}>
           <Grid fluid>
             <Row>
               <Col
@@ -17,6 +28,7 @@ export default function TeamCard(props) {
                 md={4}
                 style={{ marginRight: '1em', marginTop: '1em' }}>
                 <Dropdown
+                  appearance="subtle"
                   placement="bottomEnd"
                   renderTitle={() => {
                     return (
@@ -50,12 +62,12 @@ export default function TeamCard(props) {
             </Row>
           </Grid>
         </div>
-        <Panel onClick={() => router.push('/:username/my-teams/:team')}>
+        <Panel className="card-header" onClick={onClick}>
           <Grid fluid>
             <Row>
               <Col md={24} sm={24} xs={24}>
-                <h6>Departamento de Software</h6>
-                <p>6 miembros</p>
+                <h6>{props.team.nombre}</h6>
+                <p>{props.team.numberOfMembers} miembros</p>
               </Col>
             </Row>
           </Grid>

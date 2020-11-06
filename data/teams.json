@@ -1,0 +1,77 @@
+[
+  {
+    "nombre": "fermentum donec ut mauris eget",
+    "color": "#07c0c8",
+    "departamento": "Product Management",
+    "creador": { "$oid": "5fa4bd2afc13ae39a5000000" },
+    "members": [
+      { "$oid": "5fa4bd2afc13ae39a5000001" },
+      { "$oid": "5fa4bd2afc13ae39a5000002" }
+    ],
+    "numberOfMembers": 2,
+    "Proyectos": [
+      { "$oid": "5fa4bd2afc13ae39a5000003" },
+      { "$oid": "5fa4bd2afc13ae39a5000004" }
+    ]
+  },
+  {
+    "nombre": "vivamus vel nulla eget eros",
+    "color": "#952d77",
+    "departamento": "Engineering",
+    "creador": { "$oid": "5fa4bd2afc13ae39a5000005" },
+    "members": [
+      { "$oid": "5fa4bd2afc13ae39a5000006" },
+      { "$oid": "5fa4bd2afc13ae39a5000007" }
+    ],
+    "numberOfMembers": 2,
+    "Proyectos": [
+      { "$oid": "5fa4bd2afc13ae39a5000008" },
+      { "$oid": "5fa4bd2afc13ae39a5000009" }
+    ]
+  },
+  {
+    "nombre": "nonummy maecenas tincidunt lacus at velit vivamus vel nulla",
+    "color": "#751127",
+    "departamento": "Support",
+    "creador": { "$oid": "5fa4bd2afc13ae39a500000a" },
+    "members": [
+      { "$oid": "5fa4bd2afc13ae39a500000b" },
+      { "$oid": "5fa4bd2afc13ae39a500000c" }
+    ],
+    "numberOfMembers": 2,
+    "Proyectos": [
+      { "$oid": "5fa4bd2afc13ae39a500000d" },
+      { "$oid": "5fa4bd2afc13ae39a500000e" }
+    ]
+  },
+  {
+    "nombre": "suspendisse accumsan tortor quis turpis sed ante vivamus tortor",
+    "color": "#638256",
+    "departamento": "Sales",
+    "creador": { "$oid": "5fa4bd2afc13ae39a500000f" },
+    "members": [
+      { "$oid": "5fa4bd2afc13ae39a5000010" },
+      { "$oid": "5fa4bd2afc13ae39a5000011" }
+    ],
+    "numberOfMembers": 2,
+    "Proyectos": [
+      { "$oid": "5fa4bd2afc13ae39a5000012" },
+      { "$oid": "5fa4bd2afc13ae39a5000013" }
+    ]
+  },
+  {
+    "nombre": "congue vivamus metus arcu adipiscing molestie hendrerit at vulputate",
+    "color": "#277080",
+    "departamento": "Services",
+    "creador": { "$oid": "5fa4bd2afc13ae39a5000014" },
+    "members": [
+      { "$oid": "5fa4bd2afc13ae39a5000015" },
+      { "$oid": "5fa4bd2afc13ae39a5000016" }
+    ],
+    "numberOfMembers": 2,
+    "Proyectos": [
+      { "$oid": "5fa4bd2afc13ae39a5000017" },
+      { "$oid": "5fa4bd2afc13ae39a5000018" }
+    ]
+  }
+]

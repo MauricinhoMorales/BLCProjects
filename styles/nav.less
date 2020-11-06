@@ -5,10 +5,34 @@
 }
 
 .nav-item {
-  background-color: blue !important;
-  height: 50px;
+  height: 60px !important;
 }
 
-.nav-item:hover {
-  background-color: saturate(@base-color, 50%);
+.nav-item > a {
+  height: 60px !important;
+  padding-top: 20px !important;
+}
+
+.nav-item > a > i {
+  padding-top: 5px !important;
+}
+
+.nav-item > a:link {
+  color: #ffffff;
+  background: @secundary-color !important;
+}
+
+.nav-item > a:focus {
+  color: #ffffff;
+  background: @secundary-color !important;
+}
+
+.nav-item > a:active {
+  color: #ffffff;
+  background: @secundary-color !important;
+}
+
+.nav-item > a:host {
+  color: #ffffff;
+  background: @secundary-color !important;
 }

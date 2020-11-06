@@ -5,10 +5,10 @@ import { Sidenav, Nav, Icon } from 'rsuite';
 import '../styles/nav.less';
 
 export default function NavBar(props) {
-  const [activeKey, setActiveKey] = useState('1');
+  const [activeKey, setActiveKey] = useState('myTasks');
 
-  const handleSelect = (eventKey) => {
-    setActiveKey(eventKey);
+  const handleSelect = (activeKey) => {
+    setActiveKey(activeKey);
   };
   return (
     <div>
@@ -28,7 +28,8 @@ export default function NavBar(props) {
           <Nav className="nav full-container" justified>
             <Nav.Item
               style={{ margin: '1.5em' }}
-              eventKey="1"
+              className="nav-item"
+              eventKey="myTasks"
               icon={<Icon icon="list" style={{ color: 'white' }} />}
               renderItem={(item) => {
                 return <Link href="/my-tasks">{item}</Link>;
@@ -36,7 +37,9 @@ export default function NavBar(props) {
               Mis Tareas
             </Nav.Item>
             <Nav.Item
-              eventKey="2"
+              eventKey="myTeams"
+              className="nav-item"
+              active
               icon={<Icon icon="group" style={{ color: 'white' }} />}
               renderItem={(item) => {
                 return <Link href="/:username/my-teams">{item}</Link>;
@@ -44,7 +47,8 @@ export default function NavBar(props) {
               Equipos
             </Nav.Item>
             <Nav.Item
-              eventKey="3"
+              eventKey="myProjects"
+              className="nav-item"
               icon={<Icon icon="folder" style={{ color: 'white' }} />}
               renderItem={(item) => {
                 return <Link href="/:username/my-projects">{item}</Link>;
@@ -52,7 +56,8 @@ export default function NavBar(props) {
               Proyectos
             </Nav.Item>
             <Nav.Item
-              eventKey="4"
+              eventKey="conversations"
+              className="nav-item"
               icon={<Icon icon="commenting" style={{ color: 'white' }} />}
               renderItem={(item) => {
                 return <Link href="/:username/conversations">{item}</Link>;

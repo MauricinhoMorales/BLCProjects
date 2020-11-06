@@ -1,4 +1,5 @@
 import dbConnect from '../../../utils/dbConnect';
+import { ObjectId } from 'mongodb';
 
 export default async (req, res) => {
   const { method } = req;
@@ -7,23 +8,29 @@ export default async (req, res) => {
     case 'POST':
       try {
         const { db } = await dbConnect();
-        const result = await db.collection("equipos").insertOne({
+        const result = await db.collection('equipos').insertOne({
           nombre: req.body.nombre,
-          departamente: req.body.departamento,
+          color: req.body.color,
+          departamento: req.body.departamento,
+          creador: ObjectId(req.body.creador),
+          members: req.body.members,
+          numberOfMembers: req.body.members.length || 0,
+          proyectos: req.body.proyectos,
         });
-        res.status(201).json({ Success: "True", Data: result.ops[0] });
+        res.status(201).json({ success: true, data: result.ops[0] });
       } catch (e) {
-        res.status(400).json({ success: false });
+        res.status(400).json({ success: false, message: e });
       }
       break;
     case 'GET':
       try {
         const { db } = await dbConnect();
-        const result = await db.collection("equipos").find().toArray();
-        res.status(200).json({ Success: "True", Data: result });
+        const result = await db.collection('equipos').find().toArray();
+        res.status(200).json({ success: true, data: result });
       } catch (e) {
-        res.status(400).json({ success: false });
+        console.log(e);
+        res.status(400).json({ success: false, message: e });
       }
       break;
   }
-}
+};

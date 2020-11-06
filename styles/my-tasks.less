@@ -1,0 +1,53 @@
+@import 'globals.less';
+
+.my-dropdown {
+  height: 5em !important;
+  width: 100% !important;
+}
+
+.my-dropdown:hover {
+  background-color: lightgreen;
+  color: white;
+}
+
+.my-dropdown > a {
+  height: 5em !important;
+  display: flex;
+  align-items: center;
+  background-color: lightgreen;
+  color: white;
+}
+
+.my-dropdown > a:hover,
+a:focus,
+a:active,
+a:focus-visible {
+  background-color: lightgreen !important;
+  color: white !important;
+}
+
+.my-dropdown > a > span,
+span:hover,
+span:focus,
+span:active,
+span:focus-visible {
+  color: white !important;
+}
+
+.new-task-input {
+  border-radius: 0 !important;
+  border-left: 10px solid @base-color !important;
+}
+
+.new-task-input:hover {
+  border: 1px solid @base-color !important;
+  border-left: 10px solid @base-color !important;
+}
+
+.gray-background {
+  background-color: @gray-color1;
+  height: 5em !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

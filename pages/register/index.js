@@ -1,6 +1,7 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import { FlexboxGrid, Col, Schema, Button } from 'rsuite';
 import RegisterForm from '../../components/registerForm';
 
@@ -30,6 +31,7 @@ const errorStyles = (errorVisible) => {
 export default function RegisterPage(props) {
   const [formValue, setFormValue] = useState({ email: null, password: null });
   const [formError, setFormError] = useState('');
+  const router = useRouter();
   const formValueSet = { formValue, setFormValue };
   const formErrorSet = { formError, setFormError };
   let form = useRef(null);
@@ -50,6 +52,12 @@ export default function RegisterPage(props) {
     }
     console.log(formValue, 'Form Value');
   };
+
+  useEffect(() => {
+    if (props.loggedIn) {
+      router.push(`/my-tasks`);
+    }
+  });
 
   return (
     <>

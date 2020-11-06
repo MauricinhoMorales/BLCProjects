@@ -7,7 +7,7 @@ export default function MembersList(props) {
       <FlexboxGrid
         fluid
         style={{
-          padding: '1.5em 2.5em',
+          padding: '1em 2.5em',
           backgroundColor: '#ededef',
           borderRadius: '20px 20px 0 0',
         }}>
@@ -22,14 +22,58 @@ export default function MembersList(props) {
         </FlexboxGrid.Item>
         <FlexboxGrid.Item colspan={4}></FlexboxGrid.Item>
       </FlexboxGrid>
-      <List style={{ borderRadius: '0 0 20px 20px' }}>
-        <List.Item style={{ position: 'revert' }}>
           <FlexboxGrid
             fluid
             style={{
-              padding: '0 2.5em',
+              padding: '1em 2.5em',
               display: 'flex',
               alignItems: 'center',
+              borderBottom: "1px solid lightgrey"
+            }}>
+            <FlexboxGrid.Item colspan={8}>
+              <FlexboxGrid fluid>
+                <FlexboxGrid.Item colspan={4}>
+                  <Avatar size="md" circle>
+                    TG
+                  </Avatar>
+                </FlexboxGrid.Item>
+                <FlexboxGrid.Item colspan={20}>
+                  <h6>Tania Gutierrez</h6>
+                  <p>riobuenodevelops@gmail.com</p>
+                </FlexboxGrid.Item>
+              </FlexboxGrid>
+            </FlexboxGrid.Item>
+            <FlexboxGrid.Item colspan={6}>
+              <h6>Desarrollador</h6>
+            </FlexboxGrid.Item>
+            <FlexboxGrid.Item colspan={6}>
+              <Dropdown
+                title="Puede Editar"
+                style={{ border: '1px solid', borderRadius: '10px' }}>
+                <Dropdown.Item>Editar e Invitar</Dropdown.Item>
+                <Dropdown.Item>Solo Editar</Dropdown.Item>
+                <Dropdown.Item>Solo Comentar</Dropdown.Item>
+              </Dropdown>
+            </FlexboxGrid.Item>
+            <FlexboxGrid.Item colspan={4}>
+              <Dropdown
+                renderTitle={() => {
+                  return <IconButton circle icon={<Icon icon="more" />} />;
+                }}>
+                <Dropdown.Item>Item 1</Dropdown.Item>
+                <Dropdown.Item>Item 2</Dropdown.Item>
+                <Dropdown.Item>Item 3</Dropdown.Item>
+                <Dropdown.Item>Item 4</Dropdown.Item>
+              </Dropdown>
+            </FlexboxGrid.Item>
+          </FlexboxGrid>
+          <FlexboxGrid
+            fluid
+            style={{
+              padding: '1em 2.5em',
+              display: 'flex',
+              alignItems: 'center',
+              borderBottom: "1px solid lightgrey"
             }}>
             <FlexboxGrid.Item colspan={8}>
               <FlexboxGrid fluid>
@@ -69,55 +113,6 @@ export default function MembersList(props) {
               </Dropdown>
             </FlexboxGrid.Item>
           </FlexboxGrid>
-        </List.Item>
-        <List.Item>
-          <FlexboxGrid
-            fluid
-            style={{
-              padding: '0 2.5em',
-              display: 'flex',
-              alignItems: 'center',
-            }}>
-            <FlexboxGrid.Item colspan={8}>
-              <FlexboxGrid fluid>
-                <FlexboxGrid.Item colspan={4}>
-                  <Avatar size="md" circle>
-                    TG
-                  </Avatar>
-                </FlexboxGrid.Item>
-                <FlexboxGrid.Item colspan={20}>
-                  <h6>Tania Gutierrez</h6>
-                  <p>riobuenodevelops@gmail.com</p>
-                </FlexboxGrid.Item>
-              </FlexboxGrid>
-            </FlexboxGrid.Item>
-            <FlexboxGrid.Item colspan={6}>
-              <h6>Desarrollador</h6>
-            </FlexboxGrid.Item>
-            <FlexboxGrid.Item colspan={6}>
-              <Dropdown
-                title="Puede Editar"
-                preventOverflow
-                style={{ border: '1px solid', borderRadius: '10px' }}>
-                <Dropdown.Item>Editar e Invitar</Dropdown.Item>
-                <Dropdown.Item>Solo Editar</Dropdown.Item>
-                <Dropdown.Item>Solo Comentar</Dropdown.Item>
-              </Dropdown>
-            </FlexboxGrid.Item>
-            <FlexboxGrid.Item colspan={4}>
-              <Dropdown
-                renderTitle={() => {
-                  return <IconButton circle icon={<Icon icon="more" />} />;
-                }}>
-                <Dropdown.Item>Item 1</Dropdown.Item>
-                <Dropdown.Item>Item 2</Dropdown.Item>
-                <Dropdown.Item>Item 3</Dropdown.Item>
-                <Dropdown.Item>Item 4</Dropdown.Item>
-              </Dropdown>
-            </FlexboxGrid.Item>
-          </FlexboxGrid>
-        </List.Item>
-      </List>
     </>
   );
 }

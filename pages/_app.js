@@ -1,35 +1,38 @@
-import { FlexboxGrid } from 'rsuite';
-import { useRouter } from 'next/router';
+import React, { useState } from 'react';
+import { FlexboxGrid, Loader } from 'rsuite';
 import Navbar from '../components/nav';
 import '../styles/globals.less';
-import { useEffect } from 'react';
 
-const useUser = () => ({ user: true, loading: false });
+const useUser = () => {
+  return { user: { _id: 'hola' }, loggedIn: true, loading: false };
+};
 
 function MyApp({ Component, pageProps }) {
-  const { user, loading } = useUser();
-  const router = useRouter();
+  const [loggedIn, setLoggedIn] = useState(false);
 
-  useEffect(() => {
-    if (!(user || loading)) {
-      router.push('/login');
-    }
-  }, [user, loading]);
-
-  if (!user) {
-    return <Component {...pageProps} />;
-  } else {
+  if (true && JSON.parse(localStorage.getItem('user'))._id) {
     return (
       <FlexboxGrid className="full-container" fluid>
         <FlexboxGrid.Item colspan={4}>
           <Navbar />
         </FlexboxGrid.Item>
         <FlexboxGrid.Item colspan={20} className="overlay container-padding">
-          <Component {...pageProps} />
+          <Component
+            {...pageProps}
+            loggedIn={loggedIn}
+            setLoggedIn={(value) => setLoggedIn(value)}
+          />
         </FlexboxGrid.Item>
       </FlexboxGrid>
     );
   }
+  return (
+    <Component
+      {...pageProps}
+      loggedIn={loggedIn}
+      setLoggedIn={(value) => setLoggedIn(value)}
+    />
+  );
 }
 
 export default MyApp;

@@ -1,15 +1,49 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { Grid, Col, Row, Icon, IconButton, Dropdown, Tag, Panel } from 'rsuite';
+import {
+  Grid,
+  Col,
+  Row,
+  Icon,
+  IconButton,
+  Dropdown,
+  Tag,
+  Panel,
+  Alert,
+} from 'rsuite';
+import Axios from 'axios';
 
 import '../styles/card.less';
 
 export default function ProjectCard(props) {
+  const [equipo, setEquipo] = useState({});
   const router = useRouter();
+
+  const onClick = () => {
+    router.push({
+      pathname: '/[username]/my-projects/[project]',
+      query: {
+        username: `${JSON.parse(localStorage.getItem('user'))._id}`,
+        project: props.project._id,
+      },
+    });
+  };
+
+  useEffect(async () => {
+    try {
+      const result = await Axios.get(`/api/equipos/${props.project.equipo_id}`);
+      setEquipo(result.data.data);
+    } catch (e) {
+      Alert.error('Hubo un error al cargar la info.', 8000);
+    }
+  });
+
   return (
     <>
       <Panel shaded bodyFill>
-        <div className="card-body-container">
+        <div
+          className="card-body-container"
+          style={{ backgroundColor: props.project.color }}>
           <Grid fluid>
             <Row
               style={{
@@ -19,12 +53,17 @@ export default function ProjectCard(props) {
                 padding: 0,
               }}>
               <Col mdOffset={11} md={9}>
-                <Tag color="green" className="bold-text tag-padding">
+                {/* <Tag color="green" className="bold-text tag-padding">
                   Desarrollo
-                </Tag>
+                </Tag> */}
               </Col>
               <Col md={4}>
                 <Dropdown
+                  appearance="subtle"
+                  style={{
+                    backgroundColor: 'transparent',
+                    background: 'transparent',
+                  }}
                   placement="bottomEnd"
                   renderTitle={() => {
                     return (
@@ -58,12 +97,12 @@ export default function ProjectCard(props) {
             </Row>
           </Grid>
         </div>
-        <Panel onClick={() => router.push('/:username/my-projects/:project')}>
+        <Panel onClick={onClick} className="card-header">
           <Grid fluid>
             <Row>
               <Col md={24} sm={24} xs={24}>
-                <h6>Departamento de Software</h6>
-                <p>6 miembros</p>
+                <h6>{props.project.nombre}</h6>
+                <p>{equipo.nombre}</p>
               </Col>
             </Row>
           </Grid>

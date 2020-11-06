@@ -1,25 +1,26 @@
 import React, { useState } from 'react';
 import Head from 'next/head';
-import { FlexboxGrid, Button, Table, IconButton, Icon } from 'rsuite';
-import TasksMock from '../../data/TaskMock.json';
+import { FlexboxGrid, IconButton, Icon, Dropdown, Input } from 'rsuite';
+import TaskItem from '../../components/TaskItem';
+import NewTask from '../../components/newTask';
+import TaskListHeader from '../../components/TaskListHeader';
+import TaskDetail from '../../components/taskDetail';
 
-import '../../styles/globals.less';
+import '../../styles/my-tasks.less';
 
 export default function MyTasks(props) {
+  const [show, setShow] = useState(false);
+
+  const handleOpen = () => {
+    setShow(true);
+  };
+
+  const handleClose = () => {
+    setShow(false);
+  };
+
   const today = new Date(Date.now);
   const aDayInMillis = 8.64e7;
-
-  const NameCell = ({ rowData, dataKey, ...props }) => (
-    <Table.Cell {...props} style={{ padding: 0 }}>
-      <div>
-        <div>
-          {rowData[dataKey]}
-          <br />
-          Departamento de Informatica
-        </div>
-      </div>
-    </Table.Cell>
-  );
 
   return (
     <>
@@ -43,40 +44,35 @@ export default function MyTasks(props) {
           icon={<Icon icon="arrow-right" />}
         />
       </div>
-      <div>
-        <Table autoHeight data={TasksMock} rowHeight={40}>
-          <Table.Column width={400} resizable>
-            <Table.HeaderCell style={{ padding: 0, margin: 0 }}>
-              <h3 style={{ padding: 0, margin: 0 }}>Pasada</h3>
-            </Table.HeaderCell>
-            <NameCell dataKey="nombre" />
-          </Table.Column>
-          <Table.Column width={200} resizable>
-            <Table.HeaderCell>
-              <h5>Fecha de Entrega</h5>
-            </Table.HeaderCell>
-            <Table.Cell dataKey="fecha_entrega" />
-          </Table.Column>
-          <Table.Column width={200} resizable>
-            <Table.HeaderCell>
-              <h5>Estado</h5>
-            </Table.HeaderCell>
-            <Table.Cell dataKey="estado" />
-          </Table.Column>
-          <Table.Column width={200} resizable>
-            <Table.HeaderCell>
-              <h5 style={{ padding: 0, margin: 0 }}>Prioridad</h5>
-            </Table.HeaderCell>
-            <Table.Cell dataKey="prioridad" />
-          </Table.Column>
-          <Table.Column width={50} align="center">
-            <Table.HeaderCell>
-              <IconButton size="xs" icon={<Icon icon="plus" />} circle />
-            </Table.HeaderCell>
-            <Table.Cell dataKey="" />
-          </Table.Column>
-        </Table>
+      <div style={{ marginTop: '5em' }}>
+        <FlexboxGrid fluid align="middle">
+          <TaskListHeader listTitle="Pasada" />
+          <TaskItem handleOpen={handleOpen} />
+          <NewTask />
+        </FlexboxGrid>
       </div>
+      <div style={{ marginTop: '5em' }}>
+        <FlexboxGrid fluid align="middle">
+          <TaskListHeader listTitle="Hoy" />
+          <TaskItem />
+          <NewTask />
+        </FlexboxGrid>
+      </div>
+      <div style={{ marginTop: '5em' }}>
+        <FlexboxGrid fluid align="middle">
+          <TaskListHeader listTitle="Mañana" />
+          <TaskItem />
+          <NewTask />
+        </FlexboxGrid>
+      </div>
+      <div style={{ marginTop: '5em' }}>
+        <FlexboxGrid fluid align="middle">
+          <TaskListHeader listTitle="Próximo" />
+          <TaskItem />
+          <NewTask />
+        </FlexboxGrid>
+      </div>
+      <TaskDetail show={show} handleClose={handleClose} />
     </>
   );
 }

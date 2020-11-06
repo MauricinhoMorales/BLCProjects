@@ -1,6 +1,9 @@
 @import '~rsuite/lib/styles/themes/default/index.less';
 @import (css) url('https://fonts.googleapis.com/css2?family=Cabin&display=swap');
 @base-color: #a42419;
+@secundary-color: #bb8377;
+@gray-color1: #f5f5f5;
+@gray-color2: #c4c4c4;
 
 html,
 body {
@@ -62,11 +65,11 @@ p {
 }
 
 .black-text {
-  color: black;
+  color: black !important;
 }
 
 .bold-text {
-  font-weight: bold;
+  font-weight: bold !important;
 }
 
 .overlay {
@@ -79,4 +82,15 @@ p {
 
 .container-padding {
   padding: 2.5em !important;
+}
+
+.small-text {
+  font-size: small !important;
+  padding-bottom: 0;
+}
+
+.tag-padding {
+  padding-left: 1.5em !important;
+  padding-right: 1.5em !important;
+  border-radius: 20px !important;
 }

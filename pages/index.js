@@ -1,10 +1,15 @@
-import Head from 'next/head';
-import styles from '../styles/globals.less';
+import '../styles/globals.less';
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 
 export default function Home(props) {
-  return (
-    <div>
-      <h1>Home Page</h1>
-    </div>
-  );
+  const router = useRouter();
+
+  useEffect(() => {
+    if (props.loggedIn) {
+      router.push(`/my-tasks`);
+    }
+    router.push('/login');
+  });
+  return null;
 }

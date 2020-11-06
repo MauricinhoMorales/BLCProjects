@@ -1,7 +1,9 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
-import { FlexboxGrid, Col, Button, Schema } from 'rsuite';
+import { useRouter } from 'next/router';
+import { FlexboxGrid, Col, Button, Schema, Alert } from 'rsuite';
+import Axios from 'axios';
 
 import LoginForm from '../../components/loginForm';
 
@@ -19,9 +21,11 @@ const errorStyles = (errorVisible) => {
   return { visible: errorVisible ? true : false };
 };
 
-export default function Login() {
+export default function Login(props) {
   const [formValue, setFormValue] = useState({ email: null, password: null });
   const [formError, setFormError] = useState('');
+  const [loggedIn, setLoggedIn] = useState(false);
+  const router = useRouter();
   const formValueSet = { formValue, setFormValue };
   const formErrorSet = { formError, setFormError };
   let form = useRef(null);
@@ -35,13 +39,34 @@ export default function Login() {
     checkData(form);
   };
 
-  const checkData = (form) => {
+  const checkData = async (form) => {
     if (!form.check()) {
-      console.error('Form Error');
+      Alert.error('El correo y la contraseña no coinciden', 5000);
       return;
     }
-    console.log(formValue, 'Form Value');
+    console.log(formValue, 'formValue');
+    try {
+      const result = await Axios.post('/api/auth/login', {
+        correo: formValue.email,
+        contrasena: formValue.password,
+      });
+      let data = result.data.data;
+      delete data['contrasena'];
+
+      localStorage.setItem('user', JSON.stringify(data));
+      props.setLoggedIn(true);
+      router.push('/my-tasks');
+    } catch (e) {
+      console.log(e);
+      Alert.error('Se ha producido un error', 5000);
+    }
   };
+
+  useEffect(() => {
+    if (loggedIn) {
+      router.push(`/`);
+    }
+  });
 
   return (
     <>

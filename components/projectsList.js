@@ -10,6 +10,8 @@ import {
   Button,
 } from 'rsuite';
 
+import "../styles/globals.less";
+
 export default function ProjectsList(props) {
   return (
     <>
@@ -42,10 +44,10 @@ export default function ProjectsList(props) {
                 alignItems: 'flex-end',
                 justifyContent: 'center',
               }}>
-              <Tag color="green">Desarrollo</Tag>
+              <Tag color="green" className="tag-padding">Desarrollo</Tag>
               <Dropdown
                 renderTitle={() => {
-                  return <IconButton icon={<Icon icon="more" circle />} />;
+                  return <IconButton circle appearance="subtle" icon={<Icon icon="more" circle />} />;
                 }}>
                 <Dropdown.Item>Item 1</Dropdown.Item>
                 <Dropdown.Item>Item 1</Dropdown.Item>
@@ -83,10 +85,10 @@ export default function ProjectsList(props) {
                 alignItems: 'flex-end',
                 justifyContent: 'center',
               }}>
-              <Tag color="green">Desarrollo</Tag>
+              <Tag color="green" className="tag-padding">Desarrollo</Tag>
               <Dropdown
                 renderTitle={() => {
-                  return <IconButton icon={<Icon icon="more" circle />} />;
+                  return <IconButton circle appearance="subtle" icon={<Icon icon="more" circle />} />;
                 }}>
                 <Dropdown.Item>Item 1</Dropdown.Item>
                 <Dropdown.Item>Item 1</Dropdown.Item>
@@ -123,10 +125,10 @@ export default function ProjectsList(props) {
                 alignItems: 'flex-end',
                 justifyContent: 'center',
               }}>
-              <Tag color="green">Desarrollo</Tag>
+              <Tag color="green" className="tag-padding">Desarrollo</Tag>
               <Dropdown
                 renderTitle={() => {
-                  return <IconButton icon={<Icon icon="more" circle />} />;
+                  return <IconButton circle appearance="subtle" icon={<Icon icon="more" circle />} />;
                 }}>
                 <Dropdown.Item>Item 1</Dropdown.Item>
                 <Dropdown.Item>Item 1</Dropdown.Item>
@@ -164,10 +166,10 @@ export default function ProjectsList(props) {
                 alignItems: 'flex-end',
                 justifyContent: 'center',
               }}>
-              <Tag color="green">Desarrollo</Tag>
+              <Tag color="green" className="tag-padding">Desarrollo</Tag>
               <Dropdown
                 renderTitle={() => {
-                  return <IconButton icon={<Icon icon="more" circle />} />;
+                  return <IconButton circle appearance="subtle" icon={<Icon icon="more" circle />} />;
                 }}>
                 <Dropdown.Item>Item 1</Dropdown.Item>
                 <Dropdown.Item>Item 1</Dropdown.Item>
@@ -180,7 +182,7 @@ export default function ProjectsList(props) {
           colspan={11}
           style={{
             borderRadius: '10px',
-            padding: '1.5em',
+            height: "8em",
             border: '1px solid grey',
             display: 'flex',
             alignItems: 'center',
@@ -188,9 +190,10 @@ export default function ProjectsList(props) {
           }}>
           <Button
             appearance="default"
-            size={{ backgroundColor: 'white', width: '100%' }}>
-            <p style={{ marginBottom: '1em' }}>Crear nuevo proyecto</p>
-            <Icon icon="plus" />
+            block
+            size={{ backgroundColor: 'white', width: '100%', margin: "0 3em" }}>
+            <p style={{ marginBottom: '0.5em' }}>Crear nuevo proyecto</p>
+            <Icon icon="plus-circle" size="2x" />
           </Button>
         </FlexboxGrid.Item>
       </FlexboxGrid>

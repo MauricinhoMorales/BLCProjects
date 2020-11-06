@@ -1,0 +1,448 @@
+webpackHotUpdate_N_E("pages/my-tasks",{
+
+/***/ "./pages/my-tasks/index.js":
+/*!*********************************!*\
+  !*** ./pages/my-tasks/index.js ***!
+  \*********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* WEBPACK VAR INJECTION */(function(module) {/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return MyTasks; });
+/* harmony import */ var react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-dev-runtime */ "./node_modules/react/jsx-dev-runtime.js");
+/* harmony import */ var react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var next_head__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! next/head */ "./node_modules/next/dist/next-server/lib/head.js");
+/* harmony import */ var next_head__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(next_head__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var rsuite__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! rsuite */ "./node_modules/rsuite/es/index.js");
+/* harmony import */ var _data_TaskMock_json__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../data/TaskMock.json */ "./data/TaskMock.json");
+var _data_TaskMock_json__WEBPACK_IMPORTED_MODULE_4___namespace = /*#__PURE__*/__webpack_require__.t(/*! ../../data/TaskMock.json */ "./data/TaskMock.json", 1);
+/* harmony import */ var _styles_globals_less__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../styles/globals.less */ "./styles/globals.less");
+/* harmony import */ var _styles_globals_less__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_styles_globals_less__WEBPACK_IMPORTED_MODULE_5__);
+
+
+var _jsxFileName = "/mnt/c/Users/tania/OneDrive/Documentos/Projects/Javascript/BLCProjects/pages/my-tasks/index.js";
+
+
+
+
+
+function MyTasks(props) {
+  var _this = this;
+
+  var today = new Date(Date.now);
+  var aDayInMillis = 8.64e7;
+  return /*#__PURE__*/Object(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__["jsxDEV"])(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__["Fragment"], {
+    children: [/*#__PURE__*/Object(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__["jsxDEV"])(next_head__WEBPACK_IMPORTED_MODULE_2___default.a, {
+      children: /*#__PURE__*/Object(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__["jsxDEV"])("title", {
+        children: "Mis Tareas"
+      }, void 0, false, {
+        fileName: _jsxFileName,
+        lineNumber: 24,
+        columnNumber: 9
+      }, this)
+    }, void 0, false, {
+      fileName: _jsxFileName,
+      lineNumber: 23,
+      columnNumber: 7
+    }, this), /*#__PURE__*/Object(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__["jsxDEV"])("div", {
+      className: "vertical-centered-items horizontal-centered-items",
+      style: {
+        marginBottom: '2.5em'
+      },
+      children: [/*#__PURE__*/Object(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__["jsxDEV"])(rsuite__WEBPACK_IMPORTED_MODULE_3__["IconButton"], {
+        appearance: "primary",
+        size: "xs",
+        icon: /*#__PURE__*/Object(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__["jsxDEV"])(rsuite__WEBPACK_IMPORTED_MODULE_3__["Icon"], {
+          icon: "arrow-left"
+        }, void 0, false, {
+          fileName: _jsxFileName,
+          lineNumber: 32,
+          columnNumber: 17
+        }, this)
+      }, void 0, false, {
+        fileName: _jsxFileName,
+        lineNumber: 29,
+        columnNumber: 9
+      }, this), /*#__PURE__*/Object(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__["jsxDEV"])("h4", {
+        style: {
+          display: 'inline',
+          margin: '0 1em'
+        },
+        children: "Sep. 14 - Sep. 20"
+      }, void 0, false, {
+        fileName: _jsxFileName,
+        lineNumber: 34,
+        columnNumber: 9
+      }, this), /*#__PURE__*/Object(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__["jsxDEV"])(rsuite__WEBPACK_IMPORTED_MODULE_3__["IconButton"], {
+        appearance: "primary",
+        size: "xs",
+        icon: /*#__PURE__*/Object(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__["jsxDEV"])(rsuite__WEBPACK_IMPORTED_MODULE_3__["Icon"], {
+          icon: "arrow-right"
+        }, void 0, false, {
+          fileName: _jsxFileName,
+          lineNumber: 40,
+          columnNumber: 17
+        }, this)
+      }, void 0, false, {
+        fileName: _jsxFileName,
+        lineNumber: 37,
+        columnNumber: 9
+      }, this)]
+    }, void 0, true, {
+      fileName: _jsxFileName,
+      lineNumber: 26,
+      columnNumber: 7
+    }, this), /*#__PURE__*/Object(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__["jsxDEV"])("div", {
+      children: /*#__PURE__*/Object(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__["jsxDEV"])(rsuite__WEBPACK_IMPORTED_MODULE_3__["FlexboxGrid"], {
+        fluid: true,
+        align: "bottom",
+        children: [/*#__PURE__*/Object(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__["jsxDEV"])(rsuite__WEBPACK_IMPORTED_MODULE_3__["FlexboxGrid"].Item, {
+          colspan: 10,
+          style: {
+            marginBottom: '0.3em'
+          },
+          children: /*#__PURE__*/Object(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__["jsxDEV"])("h3", {
+            children: "Pasada"
+          }, void 0, false, {
+            fileName: _jsxFileName,
+            lineNumber: 46,
+            columnNumber: 13
+          }, this)
+        }, void 0, false, {
+          fileName: _jsxFileName,
+          lineNumber: 45,
+          columnNumber: 11
+        }, this), /*#__PURE__*/Object(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__["jsxDEV"])(rsuite__WEBPACK_IMPORTED_MODULE_3__["FlexboxGrid"].Item, {
+          className: "text-centered",
+          colspan: 5,
+          style: {
+            marginBottom: '0.3em'
+          },
+          children: /*#__PURE__*/Object(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__["jsxDEV"])("h5", {
+            children: "Fecha de Entrega"
+          }, void 0, false, {
+            fileName: _jsxFileName,
+            lineNumber: 52,
+            columnNumber: 13
+          }, this)
+        }, void 0, false, {
+          fileName: _jsxFileName,
+          lineNumber: 48,
+          columnNumber: 11
+        }, this), /*#__PURE__*/Object(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__["jsxDEV"])(rsuite__WEBPACK_IMPORTED_MODULE_3__["FlexboxGrid"].Item, {
+          className: "text-centered",
+          colspan: 4,
+          style: {
+            marginBottom: '0.3em'
+          },
+          children: /*#__PURE__*/Object(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__["jsxDEV"])("h5", {
+            children: "Estado"
+          }, void 0, false, {
+            fileName: _jsxFileName,
+            lineNumber: 58,
+            columnNumber: 13
+          }, this)
+        }, void 0, false, {
+          fileName: _jsxFileName,
+          lineNumber: 54,
+          columnNumber: 11
+        }, this), /*#__PURE__*/Object(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__["jsxDEV"])(rsuite__WEBPACK_IMPORTED_MODULE_3__["FlexboxGrid"].Item, {
+          className: "text-centered",
+          colspan: 4,
+          style: {
+            marginBottom: '0.3em'
+          },
+          children: /*#__PURE__*/Object(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__["jsxDEV"])("h5", {
+            children: "Prioridad"
+          }, void 0, false, {
+            fileName: _jsxFileName,
+            lineNumber: 64,
+            columnNumber: 13
+          }, this)
+        }, void 0, false, {
+          fileName: _jsxFileName,
+          lineNumber: 60,
+          columnNumber: 11
+        }, this), /*#__PURE__*/Object(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__["jsxDEV"])(rsuite__WEBPACK_IMPORTED_MODULE_3__["FlexboxGrid"].Item, {
+          className: "text-centered",
+          colspan: 1,
+          style: {
+            marginBottom: '0.3em'
+          },
+          children: /*#__PURE__*/Object(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__["jsxDEV"])(rsuite__WEBPACK_IMPORTED_MODULE_3__["Dropdown"], {
+            renderTitle: function renderTitle() {
+              return /*#__PURE__*/Object(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__["jsxDEV"])(rsuite__WEBPACK_IMPORTED_MODULE_3__["IconButton"], {
+                icon: /*#__PURE__*/Object(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__["jsxDEV"])(rsuite__WEBPACK_IMPORTED_MODULE_3__["Icon"], {
+                  icon: "plus"
+                }, void 0, false, {
+                  fileName: _jsxFileName,
+                  lineNumber: 73,
+                  columnNumber: 37
+                }, _this),
+                circle: true,
+                size: "sm"
+              }, void 0, false, {
+                fileName: _jsxFileName,
+                lineNumber: 73,
+                columnNumber: 19
+              }, _this);
+            }
+          }, void 0, false, {
+            fileName: _jsxFileName,
+            lineNumber: 70,
+            columnNumber: 13
+          }, this)
+        }, void 0, false, {
+          fileName: _jsxFileName,
+          lineNumber: 66,
+          columnNumber: 11
+        }, this), /*#__PURE__*/Object(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__["jsxDEV"])(rsuite__WEBPACK_IMPORTED_MODULE_3__["FlexboxGrid"].Item, {
+          colspan: 10,
+          style: {
+            display: 'inline',
+            padding: '0.5em 0 0.5em 0',
+            border: '20px 0 0 0 solid red',
+            backgroundColor: 'lightgray'
+          },
+          children: [/*#__PURE__*/Object(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__["jsxDEV"])("div", {
+            style: {
+              width: '20px',
+              height: '100%'
+            },
+            children: /*#__PURE__*/Object(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__["jsxDEV"])("div", {
+              style: {
+                width: '100%',
+                height: '100%',
+                backgroundColor: 'red'
+              }
+            }, void 0, false, {
+              fileName: _jsxFileName,
+              lineNumber: 90,
+              columnNumber: 15
+            }, this)
+          }, void 0, false, {
+            fileName: _jsxFileName,
+            lineNumber: 85,
+            columnNumber: 13
+          }, this), /*#__PURE__*/Object(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__["jsxDEV"])("div", {
+            children: [/*#__PURE__*/Object(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__["jsxDEV"])("p", {
+              className: "black-text bold-text small-text",
+              children: "Inicio de Proyecto"
+            }, void 0, false, {
+              fileName: _jsxFileName,
+              lineNumber: 98,
+              columnNumber: 15
+            }, this), /*#__PURE__*/Object(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__["jsxDEV"])("p", {
+              className: "gray-text small-text",
+              children: ["Departamento de Software ", '>', " GE365"]
+            }, void 0, true, {
+              fileName: _jsxFileName,
+              lineNumber: 101,
+              columnNumber: 15
+            }, this)]
+          }, void 0, true, {
+            fileName: _jsxFileName,
+            lineNumber: 97,
+            columnNumber: 13
+          }, this)]
+        }, void 0, true, {
+          fileName: _jsxFileName,
+          lineNumber: 77,
+          columnNumber: 11
+        }, this), /*#__PURE__*/Object(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__["jsxDEV"])(rsuite__WEBPACK_IMPORTED_MODULE_3__["FlexboxGrid"].Item, {
+          colspan: 5
+        }, void 0, false, {
+          fileName: _jsxFileName,
+          lineNumber: 106,
+          columnNumber: 11
+        }, this), /*#__PURE__*/Object(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__["jsxDEV"])(rsuite__WEBPACK_IMPORTED_MODULE_3__["FlexboxGrid"].Item, {
+          colspan: 4,
+          children: /*#__PURE__*/Object(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__["jsxDEV"])(rsuite__WEBPACK_IMPORTED_MODULE_3__["Dropdown"], {
+            title: "En Progreso",
+            placement: "bottomEnd",
+            style: {
+              minHeight: '100%',
+              minWidth: '100%'
+            },
+            children: [/*#__PURE__*/Object(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__["jsxDEV"])(rsuite__WEBPACK_IMPORTED_MODULE_3__["Dropdown"].Item, {
+              children: "En Progreso"
+            }, void 0, false, {
+              fileName: _jsxFileName,
+              lineNumber: 112,
+              columnNumber: 15
+            }, this), /*#__PURE__*/Object(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__["jsxDEV"])(rsuite__WEBPACK_IMPORTED_MODULE_3__["Dropdown"].Item, {
+              children: "Retrasado"
+            }, void 0, false, {
+              fileName: _jsxFileName,
+              lineNumber: 113,
+              columnNumber: 15
+            }, this), /*#__PURE__*/Object(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__["jsxDEV"])(rsuite__WEBPACK_IMPORTED_MODULE_3__["Dropdown"].Item, {
+              children: "Completado"
+            }, void 0, false, {
+              fileName: _jsxFileName,
+              lineNumber: 114,
+              columnNumber: 15
+            }, this)]
+          }, void 0, true, {
+            fileName: _jsxFileName,
+            lineNumber: 108,
+            columnNumber: 13
+          }, this)
+        }, void 0, false, {
+          fileName: _jsxFileName,
+          lineNumber: 107,
+          columnNumber: 11
+        }, this), /*#__PURE__*/Object(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__["jsxDEV"])(rsuite__WEBPACK_IMPORTED_MODULE_3__["FlexboxGrid"].Item, {
+          colspan: 4,
+          children: /*#__PURE__*/Object(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__["jsxDEV"])(rsuite__WEBPACK_IMPORTED_MODULE_3__["Dropdown"], {
+            title: "Alta",
+            placement: "bottomEnd",
+            style: {
+              minHeight: '100%',
+              minWidth: '100%'
+            },
+            children: [/*#__PURE__*/Object(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__["jsxDEV"])(rsuite__WEBPACK_IMPORTED_MODULE_3__["Dropdown"].Item, {
+              children: "Alta"
+            }, void 0, false, {
+              fileName: _jsxFileName,
+              lineNumber: 122,
+              columnNumber: 15
+            }, this), /*#__PURE__*/Object(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__["jsxDEV"])(rsuite__WEBPACK_IMPORTED_MODULE_3__["Dropdown"].Item, {
+              children: "Media"
+            }, void 0, false, {
+              fileName: _jsxFileName,
+              lineNumber: 123,
+              columnNumber: 15
+            }, this), /*#__PURE__*/Object(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__["jsxDEV"])(rsuite__WEBPACK_IMPORTED_MODULE_3__["Dropdown"].Item, {
+              children: "Baja"
+            }, void 0, false, {
+              fileName: _jsxFileName,
+              lineNumber: 124,
+              columnNumber: 15
+            }, this)]
+          }, void 0, true, {
+            fileName: _jsxFileName,
+            lineNumber: 118,
+            columnNumber: 13
+          }, this)
+        }, void 0, false, {
+          fileName: _jsxFileName,
+          lineNumber: 117,
+          columnNumber: 11
+        }, this), /*#__PURE__*/Object(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__["jsxDEV"])(rsuite__WEBPACK_IMPORTED_MODULE_3__["FlexboxGrid"].Item, {
+          colspan: 1,
+          children: /*#__PURE__*/Object(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__["jsxDEV"])("div", {
+            style: {
+              backgroundColor: 'lightgray',
+              width: '100%',
+              height: '100%'
+            }
+          }, void 0, false, {
+            fileName: _jsxFileName,
+            lineNumber: 128,
+            columnNumber: 13
+          }, this)
+        }, void 0, false, {
+          fileName: _jsxFileName,
+          lineNumber: 127,
+          columnNumber: 11
+        }, this), /*#__PURE__*/Object(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__["jsxDEV"])(rsuite__WEBPACK_IMPORTED_MODULE_3__["FlexboxGrid"].Item, {
+          colspan: 24,
+          children: /*#__PURE__*/Object(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__["jsxDEV"])(rsuite__WEBPACK_IMPORTED_MODULE_3__["Input"], {
+            style: {
+              borderRadius: 0,
+              opacity: 60
+            },
+            placeholder: "+ Crear Tarea"
+          }, void 0, false, {
+            fileName: _jsxFileName,
+            lineNumber: 136,
+            columnNumber: 13
+          }, this)
+        }, void 0, false, {
+          fileName: _jsxFileName,
+          lineNumber: 135,
+          columnNumber: 11
+        }, this)]
+      }, void 0, true, {
+        fileName: _jsxFileName,
+        lineNumber: 44,
+        columnNumber: 9
+      }, this)
+    }, void 0, false, {
+      fileName: _jsxFileName,
+      lineNumber: 43,
+      columnNumber: 7
+    }, this)]
+  }, void 0, true);
+}
+_c = MyTasks;
+
+var _c;
+
+$RefreshReg$(_c, "MyTasks");
+
+;
+    var _a, _b;
+    // Legacy CSS implementations will `eval` browser code in a Node.js context
+    // to extract CSS. For backwards compatibility, we need to check we're in a
+    // browser context before continuing.
+    if (typeof self !== 'undefined' &&
+        // AMP / No-JS mode does not inject these helpers:
+        '$RefreshHelpers$' in self) {
+        var currentExports = module.__proto__.exports;
+        var prevExports = (_b = (_a = module.hot.data) === null || _a === void 0 ? void 0 : _a.prevExports) !== null && _b !== void 0 ? _b : null;
+        // This cannot happen in MainTemplate because the exports mismatch between
+        // templating and execution.
+        self.$RefreshHelpers$.registerExportsForReactRefresh(currentExports, module.i);
+        // A module can be accepted automatically based on its exports, e.g. when
+        // it is a Refresh Boundary.
+        if (self.$RefreshHelpers$.isReactRefreshBoundary(currentExports)) {
+            // Save the previous exports on update so we can compare the boundary
+            // signatures.
+            module.hot.dispose(function (data) {
+                data.prevExports = currentExports;
+            });
+            // Unconditionally accept an update to this module, we'll check if it's
+            // still a Refresh Boundary later.
+            module.hot.accept();
+            // This field is set when the previous version of this module was a
+            // Refresh Boundary, letting us know we need to check for invalidation or
+            // enqueue an update.
+            if (prevExports !== null) {
+                // A boundary can become ineligible if its exports are incompatible
+                // with the previous exports.
+                //
+                // For example, if you add/remove/change exports, we'll want to
+                // re-execute the importing modules, and force those components to
+                // re-render. Similarly, if you convert a class component to a
+                // function, we want to invalidate the boundary.
+                if (self.$RefreshHelpers$.shouldInvalidateReactRefreshBoundary(prevExports, currentExports)) {
+                    module.hot.invalidate();
+                }
+                else {
+                    self.$RefreshHelpers$.scheduleUpdate();
+                }
+            }
+        }
+        else {
+            // Since we just executed the code for the module, it's possible that the
+            // new exports made it ineligible for being a boundary.
+            // We only care about the case when we were _previously_ a boundary,
+            // because we already accepted this update (accidental side effect).
+            var isNoLongerABoundary = prevExports !== null;
+            if (isNoLongerABoundary) {
+                module.hot.invalidate();
+            }
+        }
+    }
+
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../node_modules/webpack/buildin/harmony-module.js */ "./node_modules/webpack/buildin/harmony-module.js")(module)))
+
+/***/ })
+
+})
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly9fTl9FLy4vcGFnZXMvbXktdGFza3MvaW5kZXguanMiXSwibmFtZXMiOlsiTXlUYXNrcyIsInByb3BzIiwidG9kYXkiLCJEYXRlIiwibm93IiwiYURheUluTWlsbGlzIiwibWFyZ2luQm90dG9tIiwiZGlzcGxheSIsIm1hcmdpbiIsInBhZGRpbmciLCJib3JkZXIiLCJiYWNrZ3JvdW5kQ29sb3IiLCJ3aWR0aCIsImhlaWdodCIsIm1pbkhlaWdodCIsIm1pbldpZHRoIiwiYm9yZGVyUmFkaXVzIiwib3BhY2l0eSJdLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7QUFBQTtBQUNBO0FBQ0E7QUFVQTtBQUVBO0FBRWUsU0FBU0EsT0FBVCxDQUFpQkMsS0FBakIsRUFBd0I7QUFBQTs7QUFDckMsTUFBTUMsS0FBSyxHQUFHLElBQUlDLElBQUosQ0FBU0EsSUFBSSxDQUFDQyxHQUFkLENBQWQ7QUFDQSxNQUFNQyxZQUFZLEdBQUcsTUFBckI7QUFFQSxzQkFDRTtBQUFBLDRCQUNFLHFFQUFDLGdEQUFEO0FBQUEsNkJBQ0U7QUFBQTtBQUFBO0FBQUE7QUFBQTtBQUFBO0FBQUE7QUFERjtBQUFBO0FBQUE7QUFBQTtBQUFBLFlBREYsZUFJRTtBQUNFLGVBQVMsRUFBQyxtREFEWjtBQUVFLFdBQUssRUFBRTtBQUFFQyxvQkFBWSxFQUFFO0FBQWhCLE9BRlQ7QUFBQSw4QkFHRSxxRUFBQyxpREFBRDtBQUNFLGtCQUFVLEVBQUMsU0FEYjtBQUVFLFlBQUksRUFBQyxJQUZQO0FBR0UsWUFBSSxlQUFFLHFFQUFDLDJDQUFEO0FBQU0sY0FBSSxFQUFDO0FBQVg7QUFBQTtBQUFBO0FBQUE7QUFBQTtBQUhSO0FBQUE7QUFBQTtBQUFBO0FBQUEsY0FIRixlQVFFO0FBQUksYUFBSyxFQUFFO0FBQUVDLGlCQUFPLEVBQUUsUUFBWDtBQUFxQkMsZ0JBQU0sRUFBRTtBQUE3QixTQUFYO0FBQUE7QUFBQTtBQUFBO0FBQUE7QUFBQTtBQUFBLGNBUkYs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QUFBO0FBQUE7QUFBQTtBQUFBO0FBQUEsb0JBSkYsZUFLRSxxRUFBQywrQ0FBRCxDQUFVLElBQVY7QUFBQTtBQUFBO0FBQUE7QUFBQTtBQUFBO0FBQUEsb0JBTEYsZUFNRSxxRUFBQywrQ0FBRCxDQUFVLElBQVY7QUFBQTtBQUFBO0FBQUE7QUFBQTtBQUFBO0FBQUEsb0JBTkY7QUFBQTtBQUFBO0FBQUE7QUFBQTtBQUFBO0FBREY7QUFBQTtBQUFBO0FBQUE7QUFBQSxnQkF6RUYsZUFtRkUscUVBQUMsa0RBQUQsQ0FBYSxJQUFiO0FBQWtCLGlCQUFPLEVBQUUsQ0FBM0I7QUFBQSxpQ0FDRTtBQUNFLGlCQUFLLEVBQUU7QUFDTEosNkJBQWUsRUFBRSxXQURaO0FBRUxDLG1CQUFLLEVBQUUsTUFGRjtBQUdMQyxvQkFBTSxFQUFFO0FBSEg7QUFEVDtBQUFBO0FBQUE7QUFBQTtBQUFBO0FBREY7QUFBQTtBQUFBO0FBQUE7QUFBQSxnQkFuRkYsZUEyRkUscUVBQUMsa0RBQUQsQ0FBYSxJQUFiO0FBQWtCLGlCQUFPLEVBQUUsRUFBM0I7QUFBQSxpQ0FDRSxxRUFBQyw0Q0FBRDtBQUNFLGlCQUFLLEVBQUU7QUFBRUcsMEJBQVksRUFBRSxDQUFoQjtBQUFtQkMscUJBQU8sRUFBRTtBQUE1QixhQURUO0FBRUUsdUJBQVcsRUFBQztBQUZkO0FBQUE7QUFBQTtBQUFBO0FBQUE7QUFERjtBQUFBO0FBQUE7QUFBQTtBQUFBLGdCQTNGRjtBQUFBO0FBQUE7QUFBQTtBQUFBO0FBQUE7QUFERjtBQUFBO0FBQUE7QUFBQTtBQUFBLFlBckJGO0FBQUEsa0JBREY7QUE0SEQ7S0FoSXVCakIsTyIsImZpbGUiOiJzdGF0aWMvd2VicGFjay9wYWdlcy9teS10YXNrcy40YmU5MjAwZDJiODhkM2UxZjA0Yi5ob3QtdXBkYXRlLmpzIiwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IFJlYWN0LCB7IHVzZVN0YXRlIH0gZnJvbSAncmVhY3QnO1xuaW1wb3J0IEhlYWQgZnJvbSAnbmV4dC9oZWFkJztcbmltcG9ydCB7XG4gIEZsZXhib3hHcmlkLFxuICBCdXR0b24sXG4gIFRhYmxlLFxuICBJY29uQnV0dG9uLFxuICBJY29uLFxuICBMaXN0LFxuICBEcm9wZG93bixcbiAgSW5wdXQsXG59IGZyb20gJ3JzdWl0ZSc7XG5pbXBvcnQgVGFza3NNb2NrIGZyb20gJy4uLy4uL2RhdGEvVGFza01vY2suanNvbic7XG5cbmltcG9ydCAnLi4vLi4vc3R5bGVzL2dsb2JhbHMubGVzcyc7XG5cbmV4cG9ydCBkZWZhdWx0IGZ1bmN0aW9uIE15VGFza3MocHJvcHMpIHtcbiAgY29uc3QgdG9kYXkgPSBuZXcgRGF0ZShEYXRlLm5vdyk7XG4gIGNvbnN0IGFEYXlJbk1pbGxpcyA9IDguNjRlNztcblxuICByZXR1cm4gKFxuICAgIDw+XG4gICAgICA8SGVhZD5cbiAgICAgICAgPHRpdGxlPk1pcyBUYXJlYXM8L3RpdGxlPlxuICAgICAgPC9IZWFkPlxuICAgICAgPGRpdlxuICAgICAgICBjbGFzc05hbWU9XCJ2ZXJ0aWNhbC1jZW50ZXJlZC1pdGVtcyBob3Jpem9udGFsLWNlbnRlcmVkLWl0ZW1zXCJcbiAgICAgICAgc3R5bGU9e3sgbWFyZ2luQm90dG9tOiAnMi41ZW0nIH19PlxuICAgICAgICA8SWNvbkJ1dHRvblxuICAgICAgICAgIGFwcGVhcmFuY2U9XCJwcmltYXJ5XCJcbiAgICAgICAgICBzaXplPVwieHNcIlxuICAgICAgICAgIGljb249ezxJY29uIGljb249XCJhcnJvdy1sZWZ0XCIgLz59XG4gICAgICAgIC8+XG4gICAgICAgIDxoNCBzdHlsZT17eyBkaXNwbGF5OiAnaW5saW5lJywgbWFyZ2luOiAnMCAxZW0nIH19PlxuICAgICAgICAgIFNlcC4gMTQgLSBTZXAuIDIwXG4gICAgICAgIDwvaDQ+XG4gICAgICAgIDxJY29uQnV0dG9uXG4gICAgICAgICAgYXBwZWFyYW5jZT1cInByaW1hcnlcIlxuICAgICAgICAgIHNpemU9XCJ4c1wiXG4gICAgICAgICAgaWNvbj17PEljb24gaWNvbj1cImFycm93LXJpZ2h0XCIgLz59XG4gICAgICAgIC8+XG4gICAgICA8L2Rpdj5cbiAgICAgIDxkaXY+XG4gICAgICAgIDxGbGV4Ym94R3JpZCBmbHVpZCBhbGlnbj1cImJvdHRvbVwiPlxuICAgICAgICAgIDxGbGV4Ym94R3JpZC5JdGVtIGNvbHNwYW49ezEwfSBzdHlsZT17eyBtYXJnaW5Cb3R0b206ICcwLjNlbScgfX0+XG4gICAgICAgICAgICA8aDM+UGFzYWRhPC9oMz5cbiAgICAgICAgICA8L0ZsZXhib3hHcmlkLkl0ZW0+XG4gICAgICAgICAgPEZsZXhib3hHcmlkLkl0ZW1cbiAgICAgICAgICAgIGNsYXNzTmFtZT1cInRleHQtY2VudGVyZWRcIlxuICAgICAgICAgICAgY29sc3Bhbj17NX1cbiAgICAgICAgICAgIHN0eWxlPXt7IG1hcmdpbkJvdHRvbTogJzAuM2VtJyB9fT5cbiAgICAgICAgICAgIDxoNT5GZWNoYSBkZSBFbnRyZWdhPC9oNT5cbiAgICAgICAgICA8L0ZsZXhib3hHcmlkLkl0ZW0+XG4gICAgICAgICAgPEZsZXhib3hHcmlkLkl0ZW1cbiAgICAgICAgICAgIGNsYXNzTmFtZT1cInRleHQtY2VudGVyZWRcIlxuICAgICAgICAgICAgY29sc3Bhbj17NH1cbiAgICAgICAgICAgIHN0eWxlPXt7IG1hcmdpbkJvdHRvbTogJzAuM2VtJyB9fT5cbiAgICAgICAgICAgIDxoNT5Fc3RhZG88L2g1PlxuICAgICAgICAgIDwvRmxleGJveEdyaWQuSXRlbT5cbiAgICAgICAgICA8RmxleGJveEdyaWQuSXRlbVxuICAgICAgICAgICAgY2xhc3NOYW1lPVwidGV4dC1jZW50ZXJlZFwiXG4gICAgICAgICAgICBjb2xzcGFuPXs0fVxuICAgICAgICAgICAgc3R5bGU9e3sgbWFyZ2luQm90dG9tOiAnMC4zZW0nIH19PlxuICAgICAgICAgICAgPGg1PlByaW9yaWRhZDwvaDU+XG4gICAgICAgICAgPC9GbGV4Ym94R3JpZC5JdGVtPlxuICAgICAgICAgIDxGbGV4Ym94R3JpZC5JdGVtXG4gICAgICAgICAgICBjbGFzc05hbWU9XCJ0ZXh0LWNlbnRlcmVkXCJcbiAgICAgICAgICAgIGNvbHNwYW49ezF9XG4gICAgICAgICAgICBzdHlsZT17eyBtYXJnaW5Cb3R0b206ICcwLjNlbScgfX0+XG4gICAgICAgICAgICA8RHJvcGRvd25cbiAgICAgICAgICAgICAgcmVuZGVyVGl0bGU9eygpID0+IHtcbiAgICAgICAgICAgICAgICByZXR1cm4gKFxuICAgICAgICAgICAgICAgICAgPEljb25CdXR0b24gaWNvbj17PEljb24gaWNvbj1cInBsdXNcIiAvPn0gY2lyY2xlIHNpemU9XCJzbVwiIC8+XG4gICAgICAgICAgICAgICAgKTtcbiAgICAgICAgICAgICAgfX0+PC9Ecm9wZG93bj5cbiAgICAgICAgICA8L0ZsZXhib3hHcmlkLkl0ZW0+XG4gICAgICAgICAgPEZsZXhib3hHcmlkLkl0ZW1cbiAgICAgICAgICAgIGNvbHNwYW49ezEwfVxuICAgICAgICAgICAgc3R5bGU9e3tcbiAgICAgICAgICAgICAgZGlzcGxheTogJ2lubGluZScsXG4gICAgICAgICAgICAgIHBhZGRpbmc6ICcwLjVlbSAwIDAuNWVtIDAnLFxuICAgICAgICAgICAgICBib3JkZXI6ICcyMHB4IDAgMCAwIHNvbGlkIHJlZCcsXG4gICAgICAgICAgICAgIGJhY2tncm91bmRDb2xvcjogJ2xpZ2h0Z3JheScsXG4gICAgICAgICAgICB9fT5cbiAgICAgICAgICAgIDxkaXZcbiAgICAgICAgICAgICAgc3R5bGU9e3tcbiAgICAgICAgICAgICAgICB3aWR0aDogJzIwcHgnLFxuICAgICAgICAgICAgICAgIGhlaWdodDogJzEwMCUnLFxuICAgICAgICAgICAgICB9fT5cbiAgICAgICAgICAgICAgPGRpdlxuICAgICAgICAgICAgICAgIHN0eWxlPXt7XG4gICAgICAgICAgICAgICAgICB3aWR0aDogJzEwMCUnLFxuICAgICAgICAgICAgICAgICAgaGVpZ2h0OiAnMTAwJScsXG4gICAgICAgICAgICAgICAgICBiYWNrZ3JvdW5kQ29sb3I6ICdyZWQnLFxuICAgICAgICAgICAgICAgIH19PjwvZGl2PlxuICAgICAgICAgICAgPC9kaXY+XG4gICAgICAgICAgICA8ZGl2PlxuICAgICAgICAgICAgICA8cCBjbGFzc05hbWU9XCJibGFjay10ZXh0IGJvbGQtdGV4dCBzbWFsbC10ZXh0XCI+XG4gICAgICAgICAgICAgICAgSW5pY2lvIGRlIFByb3llY3RvXG4gICAgICAgICAgICAgIDwvcD5cbiAgICAgICAgICAgICAgPHAgY2xhc3NOYW1lPVwiZ3JheS10ZXh0IHNtYWxsLXRleHRcIj5cbiAgICAgICAgICAgICAgICBEZXBhcnRhbWVudG8gZGUgU29mdHdhcmUgeyc+J30gR0UzNjVcbiAgICAgICAgICAgICAgPC9wPlxuICAgICAgICAgICAgPC9kaXY+XG4gICAgICAgICAgPC9GbGV4Ym94R3JpZC5JdGVtPlxuICAgICAgICAgIDxGbGV4Ym94R3JpZC5JdGVtIGNvbHNwYW49ezV9PjwvRmxleGJveEdyaWQuSXRlbT5cbiAgICAgICAgICA8RmxleGJveEdyaWQuSXRlbSBjb2xzcGFuPXs0fT5cbiAgICAgICAgICAgIDxEcm9wZG93blxuICAgICAgICAgICAgICB0aXRsZT1cIkVuIFByb2dyZXNvXCJcbiAgICAgICAgICAgICAgcGxhY2VtZW50PVwiYm90dG9tRW5kXCJcbiAgICAgICAgICAgICAgc3R5bGU9e3sgbWluSGVpZ2h0OiAnMTAwJScsIG1pbldpZHRoOiAnMTAwJScgfX0+XG4gICAgICAgICAgICAgIDxEcm9wZG93bi5JdGVtPkVuIFByb2dyZXNvPC9Ecm9wZG93bi5JdGVtPlxuICAgICAgICAgICAgICA8RHJvcGRvd24uSXRlbT5SZXRyYXNhZG88L0Ryb3Bkb3duLkl0ZW0+XG4gICAgICAgICAgICAgIDxEcm9wZG93bi5JdGVtPkNvbXBsZXRhZG88L0Ryb3Bkb3duLkl0ZW0+XG4gICAgICAgICAgICA8L0Ryb3Bkb3duPlxuICAgICAgICAgIDwvRmxleGJveEdyaWQuSXRlbT5cbiAgICAgICAgICA8RmxleGJveEdyaWQuSXRlbSBjb2xzcGFuPXs0fT5cbiAgICAgICAgICAgIDxEcm9wZG93blxuICAgICAgICAgICAgICB0aXRsZT1cIkFsdGFcIlxuICAgICAgICAgICAgICBwbGFjZW1lbnQ9XCJib3R0b21FbmRcIlxuICAgICAgICAgICAgICBzdHlsZT17eyBtaW5IZWlnaHQ6ICcxMDAlJywgbWluV2lkdGg6ICcxMDAlJyB9fT5cbiAgICAgICAgICAgICAgPERyb3Bkb3duLkl0ZW0+QWx0YTwvRHJvcGRvd24uSXRlbT5cbiAgICAgICAgICAgICAgPERyb3Bkb3duLkl0ZW0+TWVkaWE8L0Ryb3Bkb3duLkl0ZW0+XG4gICAgICAgICAgICAgIDxEcm9wZG93bi5JdGVtPkJhamE8L0Ryb3Bkb3duLkl0ZW0+XG4gICAgICAgICAgICA8L0Ryb3Bkb3duPlxuICAgICAgICAgIDwvRmxleGJveEdyaWQuSXRlbT5cbiAgICAgICAgICA8RmxleGJveEdyaWQuSXRlbSBjb2xzcGFuPXsxfT5cbiAgICAgICAgICAgIDxkaXZcbiAgICAgICAgICAgICAgc3R5bGU9e3tcbiAgICAgICAgICAgICAgICBiYWNrZ3JvdW5kQ29sb3I6ICdsaWdodGdyYXknLFxuICAgICAgICAgICAgICAgIHdpZHRoOiAnMTAwJScsXG4gICAgICAgICAgICAgICAgaGVpZ2h0OiAnMTAwJScsXG4gICAgICAgICAgICAgIH19PjwvZGl2PlxuICAgICAgICAgIDwvRmxleGJveEdyaWQuSXRlbT5cbiAgICAgICAgICA8RmxleGJveEdyaWQuSXRlbSBjb2xzcGFuPXsyNH0+XG4gICAgICAgICAgICA8SW5wdXRcbiAgICAgICAgICAgICAgc3R5bGU9e3sgYm9yZGVyUmFkaXVzOiAwLCBvcGFjaXR5OiA2MCB9fVxuICAgICAgICAgICAgICBwbGFjZWhvbGRlcj1cIisgQ3JlYXIgVGFyZWFcIlxuICAgICAgICAgICAgLz5cbiAgICAgICAgICA8L0ZsZXhib3hHcmlkLkl0ZW0+XG4gICAgICAgIDwvRmxleGJveEdyaWQ+XG4gICAgICA8L2Rpdj5cbiAgICA8Lz5cbiAgKTtcbn1cbiJdLCJzb3VyY2VSb290IjoiIn0=
