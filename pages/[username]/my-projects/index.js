@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import ProjectCard from '../../../components/projectCard';
-import { IconButton, Icon, Alert } from 'rsuite';
+import { IconButton, Icon, Alertm, Loader } from 'rsuite';
 
 import '../../../styles/cards-container.less';
 import Axios from 'axios';

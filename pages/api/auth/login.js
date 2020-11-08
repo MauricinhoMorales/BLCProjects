@@ -7,7 +7,10 @@ export default async (req, res) => {
     case 'POST':
       try {
         const { db } = await dbConnect();
-        const result = await db.collection('usuarios').find(query).toArray();
+        const result = await db
+          .collection('usuarios')
+          .find(query.correo)
+          .toArray();
         if (result) {
           if (result[0].contrasena === req.body.contrasena) {
             res.status(201).json({ success: true, data: result[0] });

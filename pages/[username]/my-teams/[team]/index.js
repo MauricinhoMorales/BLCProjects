@@ -45,10 +45,3 @@ export default function TeamPage(props) {
     </>
   );
 }
-
-export async function getServerSideProps(context) {
-  console.log(context.req.body);
-  return {
-    props: {},
-  };
-}

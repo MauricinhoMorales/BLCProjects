@@ -1,16 +1,12 @@
 import React, { useState } from 'react';
 import { FlexboxGrid, Loader } from 'rsuite';
 import Navbar from '../components/nav';
-import '../styles/globals.less';
 
-const useUser = () => {
-  return { user: { _id: 'hola' }, loggedIn: true, loading: false };
-};
+import '../styles/globals.less';
 
 function MyApp({ Component, pageProps }) {
   const [loggedIn, setLoggedIn] = useState(false);
-
-  if (true && JSON.parse(localStorage.getItem('user'))._id) {
+  if (loggedIn && JSON.parse(localStorage.getItem('user'))._id) {
     return (
       <FlexboxGrid className="full-container" fluid>
         <FlexboxGrid.Item colspan={4}>
@@ -20,18 +16,14 @@ function MyApp({ Component, pageProps }) {
           <Component
             {...pageProps}
             loggedIn={loggedIn}
-            setLoggedIn={(value) => setLoggedIn(value)}
+            setLoggedIn={setLoggedIn}
           />
         </FlexboxGrid.Item>
       </FlexboxGrid>
     );
   }
   return (
-    <Component
-      {...pageProps}
-      loggedIn={loggedIn}
-      setLoggedIn={(value) => setLoggedIn(value)}
-    />
+    <Component {...pageProps} loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
   );
 }
 

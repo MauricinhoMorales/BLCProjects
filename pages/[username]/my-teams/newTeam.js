@@ -34,7 +34,7 @@ export default function NewTeamPage(props) {
     router.push({
       pathname: `/:username/my-teams`,
       query: {
-        username: JSON.parse(localStorage.getItem('user')._id),
+        username: "5fa4bd2afc13ae39a5000014",
       },
     });
   };
@@ -42,7 +42,7 @@ export default function NewTeamPage(props) {
   const onClick = async (e) => {
     setNewTeam({
       ...newTeam,
-      creador: JSON.parse(localStorage.getItem('user'))._id,
+      creador: "5fa4bd2afc13ae39a5000014"
     });
     try {
       const result = await Axios.post('/api/equipos', newTeam);
