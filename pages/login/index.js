@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { FlexboxGrid, Col, Button, Schema, Alert } from 'rsuite';
+import { FlexboxGrid, Col, Button, Schema, Alert, Loader } from 'rsuite';
 import Axios from 'axios';
 
 import LoginForm from '../../components/loginForm';
@@ -25,6 +25,7 @@ export default function Login(props) {
   const [formValue, setFormValue] = useState({ email: null, password: null });
   const [formError, setFormError] = useState('');
   const [loggedIn, setLoggedIn] = useState(false);
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
   const formValueSet = { formValue, setFormValue };
   const formErrorSet = { formError, setFormError };
@@ -40,6 +41,7 @@ export default function Login(props) {
   };
 
   const checkData = async (form) => {
+    setLoading(true);
     if (!form.check()) {
       Alert.error('El correo y la contraseña no coinciden', 5000);
       return;
@@ -55,6 +57,7 @@ export default function Login(props) {
 
       localStorage.setItem('user', JSON.stringify(data));
       props.setLoggedIn(true);
+      setLoading(false);
       router.push('/my-tasks');
     } catch (e) {
       console.log(e);
@@ -86,6 +89,7 @@ export default function Login(props) {
               className="login-form-container vertical-centered-items"
               colspan={24}>
               <LoginForm
+                loading={loading}
                 model={model}
                 formValueSet={formValueSet}
                 formErrorSet={formErrorSet}

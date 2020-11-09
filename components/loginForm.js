@@ -8,6 +8,7 @@ import {
   Icon,
   FlexboxGrid,
   Checkbox,
+  Loader,
 } from 'rsuite';
 
 import '../styles/loginForm.less';
@@ -93,7 +94,11 @@ export default function LoginForm(props) {
               className="login-button login-text-2"
               appearance="ghost"
               onClick={props.handleSubmit}>
-              INICIAR SESIÓN
+              {props.loading ? (
+                <Loader speed="fast" size="small" />
+              ) : (
+                'INICIAR SESIÓN'
+              )}
             </Button>
           </Form>
         </FlexboxGrid.Item>
