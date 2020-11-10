@@ -7,9 +7,10 @@ function validate(data, schema) {
 }
 
 function validationHandler(schema, check = 'body', req, res, fn) {
-  const error = req[check].id
-    ? validate(req[check].id, schema)
-    : validate(req[check], schema);
+  const error =
+    req[check].id || req[check]._id
+      ? validate(req[check].id || req[check]._id, schema)
+      : validate(req[check], schema);
   error ? errorHandler(boom.badRequest(error), req, res) : fn(req, res);
 }
 
