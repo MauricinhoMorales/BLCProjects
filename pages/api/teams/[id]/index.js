@@ -14,14 +14,21 @@ export default authenticated(async function handler(req, res) {
 
   switch (method) {
     case 'GET':
-      try {
-        const team = await teamService.getTeam({
-          _id: req.query.id,
+      validationHandler(teamIdSchema, 'query', req, res, function (req, res) {
+        scopeValidationHandler(['read:teams'], req, res, async function (
+          req,
+          res
+        ) {
+          try {
+            const team = await teamService.getTeam({
+              id: req.query.id,
+            });
+            res.status(200).json(team);
+          } catch (err) {
+            errorHandler(boom.internal(err), req, res);
+          }
         });
-        res.status(200).json(team);
-      } catch (err) {
-        errorHandler(boom.boomify(err, { statusCode: 500 }), req, res);
-      }
+      });
       break;
     case 'PUT':
       validationHandler(teamIdSchema, 'query', req, res, function (req, res) {

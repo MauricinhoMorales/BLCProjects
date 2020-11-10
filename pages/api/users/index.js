@@ -1,6 +1,5 @@
 import boom from 'boom';
 import authenticated from '../../../utils/auth/authenticatedWrapper';
-import { validationHandler } from '../../../utils/middlewares/validationHandlers';
 import { errorHandler } from '../../../utils/middlewares/errorHandlers';
 import scopeValidationHandler from '../../../utils/middlewares/scopesValidationHandler';
 import UserService from '../../../services/user';
@@ -23,10 +22,6 @@ export default authenticated(async function (req, res) {
       }
     });
   } else {
-    errorHandler(
-      boom.badRequest('This endpoint only supports GET requests'),
-      req,
-      res
-    );
+    errorHandler(boom.methodNotAllowed(), req, res);
   }
 });
