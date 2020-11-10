@@ -17,11 +17,19 @@ class UserService {
     });
 
     const users = await this.MongoDB.getAll(this.collection, query);
+    if (users) {
+      for (let i = 0; i < users.length; i++) {
+        delete users[i]['password'];
+      }
+    }
     return users || [];
   }
 
   async getUser({ id }) {
     const user = await this.MongoDB.get(this.collection, id);
+    if (user) {
+      delete user['password'];
+    }
     return user || [];
   }
 
