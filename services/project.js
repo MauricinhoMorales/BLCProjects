@@ -116,52 +116,60 @@ class ProjectService {
       throw Error('El proyecto no existe');
     }
   }
-  /* async getTeamMembersDetails({ id }) {
-    const team = await this.getTeam({
-      id,
-    });
-    if (team.length) {
-      throw new Error('El equipo no existe');
-    } else {
-      let membersDetails = [];
-      for (let i = 0; i < team.members.length; i++) {
-        let member = await this.userService.getUser({
-          id: team.members[i].member_id,
-        });
-        member = {
-          ...member,
-          ...team.members[i],
-        };
-        delete member['password'];
-        delete member['isAdmin'];
-        membersDetails.push(member);
+
+  async addTaskToSection({ id, sectionName, taskId }) {
+    const exist = await this.getProject({ id });
+    if (exist) {
+      let sections = exist.sections;
+      for (let i = 0; i < sections.length; i++) {
+        if (sections[i].name === sectionName) {
+          sections[i].tasks.push(taskId);
+          break;
+        }
       }
-      return membersDetails;
+      return await this.updateProject({ id, project: { sections } });
+    } else {
+      throw Error('El proyecto no existe');
     }
   }
 
-  async addNewMember({ id, member }) {
-    let team = await this.getTeam({ id });
-    if (team.length) {
-      throw new Error('El equipo no existe');
+  async deleteTaskFromSection({ id, sectionName, taskId }) {
+    const exist = await this.getProject({ id });
+    if (exist) {
+      let sections = exist.sections;
+      for (let i = 0; i < sections.length; i++) {
+        if (sections[i].name === sectionName) {
+          let newTaskList = sections[i].tasks.filter((task) => task !== taskId);
+          sections[i].tasks = newTaskList;
+          break;
+        }
+      }
+      return await this.updateProject({ id, project: { sections } });
     } else {
-      team.members.push(member);
-      return await this.updateTeam({ id, team });
+      throw Error('El proyecto no existe');
     }
   }
 
-  async addProject({ id, project }) {
-    let team = await this.getTeam({ id });
-    if (team.length) {
-      throw new Error('El equipo no existe');
+  async changeTaskSection({ id, changeTaskSection }) {
+    const exist = await this.getProject({ id });
+    if (exist) {
+      let sections = exist.sections;
+      for (let i = 0; i < sections.length; i++) {
+        if (sections[i].name === changeTaskSection.actual_section_name) {
+          let newTaskList = sections[i].tasks.filter(
+            (task) => task !== changeTaskSection.task_id
+          );
+          sections[i].tasks = newTaskList;
+        }
+        if (sections[i].name === changeTaskSection.new_section_name) {
+          sections[i].tasks.push(changeTaskSection.task_id);
+        }
+      }
+      return await this.updateProject({ id, project: { sections } });
     } else {
-      team = {
-        ...team,
-        projects: team.projects.push(project) || [project],
-      };
-      return await this.updateTeam({ id, team });
+      throw Error('El proyecto no existe');
     }
-  } */
+  }
 }
 
 module.exports = ProjectService;
