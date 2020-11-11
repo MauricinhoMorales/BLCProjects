@@ -1,1 +1,1 @@
-web: next start -p $PORT
+web: (next build) && (next start -p $PORT)
