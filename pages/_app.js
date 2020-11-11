@@ -6,7 +6,8 @@ import '../styles/globals.less';
 
 function MyApp({ Component, pageProps }) {
   const [loggedIn, setLoggedIn] = useState(false);
-  if (loggedIn && JSON.parse(localStorage.getItem('user'))._id) {
+  const [user, setUser] = useState(null);
+  if (loggedIn && user._id) {
     return (
       <FlexboxGrid className="full-container" fluid>
         <FlexboxGrid.Item colspan={4}>
@@ -15,6 +16,8 @@ function MyApp({ Component, pageProps }) {
         <FlexboxGrid.Item colspan={20} className="overlay container-padding">
           <Component
             {...pageProps}
+            user={user}
+            setUser={setUser}
             loggedIn={loggedIn}
             setLoggedIn={setLoggedIn}
           />

@@ -91,6 +91,7 @@ export default function LoginForm(props) {
               </FlexboxGrid>
             </FormGroup>
             <Button
+              block
               className="login-button login-text-2"
               appearance="ghost"
               onClick={props.handleSubmit}>

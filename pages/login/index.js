@@ -49,13 +49,12 @@ export default function Login(props) {
     console.log(formValue, 'formValue');
     try {
       const result = await Axios.post('/api/auth/login', {
-        correo: formValue.email,
-        contrasena: formValue.password,
+        email: formValue.email,
+        password: formValue.password,
       });
       let data = result.data.data;
-      delete data['contrasena'];
 
-      localStorage.setItem('user', JSON.stringify(data));
+      props.setUser(data);
       props.setLoggedIn(true);
       setLoading(false);
       router.push('/my-tasks');

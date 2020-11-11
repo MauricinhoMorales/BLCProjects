@@ -1,15 +1,19 @@
 const withLess = require('@zeit/next-less');
 module.exports = withLess({
   env: {
-    MONGO_URL:
-      'mongodb+srv://blcprojects:blcprojects@cluster0.jyqkp.mongodb.net/test?retryWrites=true&w=majority',
-    secret: 'D4A2CC53A683D869B3ED14655B9AB',
-    pusher: {
-      app_id: '1102464',
-      key: '537acd329f9297458cfe',
-      secret: '250bf38023cec903f83e',
-      cluster: 'us2',
-    },
+    DEV: 'dev',
+    CORS: '*',
+    DB_USER: 'blcprojects',
+    DB_PASSWORD: 'blcprojects',
+    DB_HOST: 'cluster0.jyqkp.mongodb.net',
+    DB_NAME: 'blcprojects',
+    DB_PORT: null,
+    EMAIL: '',
+    EMAIL_PASSWORD: '',
+    AUTH_JWT_SECRET: 'lm7Etue9W4IUDfGchLnjXdOv6ZpBV0K8',
+    PUBLIC_API_KEY_TOKEN:
+      '2e119f7eb1aa1c95e4ece5737d211a80f8bd6e1db50a7f804b9cdf11083653ed',
+    ADMIN_API_KEY_TOKEN: '',
   },
   lessLoaderOptions: {
     javascriptEnabled: true,
