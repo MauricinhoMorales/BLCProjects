@@ -1,14 +1,19 @@
 const MongoLib = require('../lib/db');
 const bcrypt = require('bcrypt');
+const crypto = require('crypto');
+const EmailValidatorService = require('./deBounceEmailValidator');
+const MailGunService = require('./mailGun');
 
 class UserService {
   constructor() {
     this.MongoDB = new MongoLib();
     this.collection = 'users';
+    this.emailValidatorService = new EmailValidatorService();
+    this.mailGun = new MailGunService();
   }
 
-  async getUsers({ email }) {
-    const query = { email };
+  async getUsers({ email, name, accountActivated, activationCode }) {
+    const query = { email, name, accountActivated, activationCode };
 
     Object.keys(query).forEach((key) => {
       if (query[key] === undefined) {
@@ -26,14 +31,35 @@ class UserService {
   }
 
   async createUser({ user }) {
+    const mailGun = this.mailGun;
+    const mongoDB = this.MongoDB;
+    const collection = this.collection;
     const exist = await this.getUsers({ email: user.email });
     if (exist.length) {
       throw new Error('El usuario ya existe');
     } else {
+      const response = await this.emailValidatorService.validateEmail({
+        email: user.email,
+      });
+      if (!response) {
+        throw new Error('El email no es valido');
+      }
       const hashedPassword = await bcrypt.hash(user.password, 10);
-      return await this.MongoDB.create(this.collection, {
+      const activationCode = crypto.randomBytes(20);
+      const activationCodeExpires = Date.now() + 24 * 3600 * 1000;
+      const link =
+        'http://localhost:3000/auth/activate/' + activationCode.toString('hex');
+      const body = await mailGun.sendActivationEmail({
+        userEmail: user.email,
+        link,
+      });
+      console.log(body);
+      return await mongoDB.create(collection, {
         ...user,
         password: hashedPassword,
+        accountActivated: false,
+        activationCode: activationCode.toString('hex'),
+        activationCodeExpires,
       });
     }
   }
