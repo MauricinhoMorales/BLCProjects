@@ -6,6 +6,9 @@ const nameSchema = joi.string().min(2).max(20);
 const emailSchema = joi.string();
 const passwordSchema = joi.string().max(30);
 const isAdminSchema = joi.boolean();
+const accountActivatedSchema = joi.boolean().default(false);
+const activationCodeSchema = joi.string().min(20).max(20);
+const activationCodeExpiresSchema = joi.date();
 
 const createUserSchema = joi.object({
   firstName: nameSchema.required(),
@@ -14,6 +17,9 @@ const createUserSchema = joi.object({
   password: passwordSchema.required(),
   repeatPassword: joi.ref('password'),
   isAdmin: isAdminSchema.required(),
+  accountActivated: accountActivatedSchema,
+  activationCode: activationCodeSchema,
+  activationCodeExpires: activationCodeExpiresSchema,
 });
 
 const updateUserSchema = joi.object({
@@ -23,6 +29,9 @@ const updateUserSchema = joi.object({
   password: passwordSchema,
   repeatPassword: joi.ref('password'),
   isAdmin: isAdminSchema,
+  accountActivated: accountActivatedSchema,
+  activationCode: activationCodeSchema,
+  activationCodeExpires: activationCodeExpiresSchema,
 });
 
 module.exports = {
