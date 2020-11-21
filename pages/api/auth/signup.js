@@ -4,10 +4,9 @@ import { errorHandler } from '../../../utils/middlewares/errorHandlers';
 import { validationHandler } from '../../../utils/middlewares/validationHandlers';
 import { createUserSchema } from '../../../utils/models/user';
 
-const userService = new UserService();
-
 export default async function handler(req, res) {
   const { method } = req;
+  const userService = new UserService();
 
   if (method === 'POST') {
     validationHandler(createUserSchema, 'body', req, res, async function (
@@ -21,7 +20,7 @@ export default async function handler(req, res) {
         });
         res.status(200).json(createdUserId);
       } catch (err) {
-        errorHandler(boom.internal(), req, res);
+        errorHandler(boom.internal(err), req, res);
       }
     });
   } else {

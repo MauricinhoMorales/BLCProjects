@@ -10,7 +10,7 @@ export default authenticated(async function (req, res) {
 
   if (method === 'GET') {
     const {
-      query: { email },
+      query: { email, name, activatedAccount, activationCode },
     } = req;
 
     scopeValidationHandler(['read:users'], req, res, async function (req, res) {
