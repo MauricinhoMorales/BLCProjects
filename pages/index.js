@@ -1,15 +1,16 @@
-import '../styles/globals.less';
+import { Heading } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 
-export default function Home(props) {
-  const router = useRouter();
-
+export default function HomePage({ user }) {
+  const Router = useRouter();
   useEffect(() => {
-    if (props.loggedIn) {
-      router.push(`/my-tasks`);
+    if (user !== null) {
+      Router.replace(`${user.user.id}/my-tasks`);
+    } else {
+      Router.replace('/login');
     }
-    router.push('/login');
-  });
+  }, [user]);
+
   return null;
 }

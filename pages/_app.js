@@ -1,32 +1,30 @@
-import React, { useState } from 'react';
-import { FlexboxGrid, Loader } from 'rsuite';
-import Navbar from '../components/nav';
+import React, { useEffect, useState } from 'react';
+import { ChakraProvider } from '@chakra-ui/react';
 
-import '../styles/globals.less';
+import Layout from '../components/layout';
+import theme from '../theme/index';
+
+import '../styles/globals.css';
 
 function MyApp({ Component, pageProps }) {
-  const [loggedIn, setLoggedIn] = useState(false);
-  const [user, setUser] = useState(null);
-  if (loggedIn && user._id) {
-    return (
-      <FlexboxGrid className="full-container" fluid>
-        <FlexboxGrid.Item colspan={4}>
-          <Navbar />
-        </FlexboxGrid.Item>
-        <FlexboxGrid.Item colspan={20} className="overlay container-padding">
-          <Component
-            {...pageProps}
-            user={user}
-            setUser={setUser}
-            loggedIn={loggedIn}
-            setLoggedIn={setLoggedIn}
-          />
-        </FlexboxGrid.Item>
-      </FlexboxGrid>
-    );
-  }
+  const [user, setUser] = useState(
+    /* {
+      jwtToken: '',
+      user: {
+        firstName: '',
+        lastName: '',
+        email: '',
+        isAdmin: '',
+      },
+    } */ null
+  );
+
   return (
-    <Component {...pageProps} loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
+    <ChakraProvider theme={theme}>
+      <Layout user={user} setUser={setUser}>
+        <Component {...pageProps} user={user} setUser={setUser} />
+      </Layout>
+    </ChakraProvider>
   );
 }
 
