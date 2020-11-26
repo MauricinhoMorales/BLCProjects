@@ -16,7 +16,7 @@ export default function ActivationPage({ isActivated }) {
 export async function getServerSideProps(context) {
   try {
     const response = await Axios.get(
-      `http://localhost:3000/api/auth/activate/${context.params.activationCode}`
+      `${process.env.URL}/api/auth/activate/${context.params.activationCode}`
     );
     if (response.status === 200) {
       return {
