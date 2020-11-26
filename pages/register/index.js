@@ -1,122 +1,32 @@
-import React, { useState, useRef, useEffect } from 'react';
-import Link from 'next/link';
-import Head from 'next/head';
-import { useRouter } from 'next/router';
-import { FlexboxGrid, Col, Schema, Button } from 'rsuite';
+import { Center, Flex, Heading, Box, Image, Stack } from '@chakra-ui/react';
+import { useEffect, useState } from 'react';
+
+import LoginRegisterSlider from '../../components/loginRegisterSlide';
 import RegisterForm from '../../components/registerForm';
 
-import '../../styles/loginPage.less';
-
-const { StringType } = Schema.Types;
-const model = Schema.Model({
-  email: StringType()
-    .isEmail('Introduzca un email válido')
-    .isRequired('Este campo es requerido'),
-  password: StringType().isRequired('Este campo es requerido'),
-  verifyPassword: StringType()
-    .addRule((value, data) => {
-      if (value !== data.password) {
-        return false;
-      }
-
-      return true;
-    }, 'Las contraseñas no coinciden')
-    .isRequired('Este campo es requerido'),
-});
-
-const errorStyles = (errorVisible) => {
-  return { visible: errorVisible ? true : false };
-};
-
-export default function RegisterPage(props) {
-  const [formValue, setFormValue] = useState({ email: null, password: null });
-  const [formError, setFormError] = useState('');
-  const router = useRouter();
-  const formValueSet = { formValue, setFormValue };
-  const formErrorSet = { formError, setFormError };
-  let form = useRef(null);
-
-  const setRef = (ref) => {
-    form = ref;
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    checkData(form);
-  };
-
-  const checkData = (form) => {
-    if (!form.check()) {
-      console.error('Form Error');
-      return;
-    }
-    console.log(formValue, 'Form Value');
-  };
-
-  useEffect(() => {
-    if (props.loggedIn) {
-      router.push(`/my-tasks`);
-    }
-  });
-
+export default function RegisterPage({ setUser }) {
   return (
     <>
-      <Head>
-        <title>Register</title>
-      </Head>
-      <FlexboxGrid fluid className="full-container">
-        <FlexboxGrid.Item
-          className="full-container container vertical-centered-items"
-          componentClass={Col}
-          colspan={9}
-          smHidden
-          mdHidden>
-          <FlexboxGrid fluid justify="center">
-            <FlexboxGrid.Item
-              className="text-centered padding-bottom"
-              colspan={24}>
-              <h2 className="white-text">¿Ya tienes cuenta?</h2>
-            </FlexboxGrid.Item>
-            <FlexboxGrid.Item
-              className="text-centered padding-bottom"
-              colspan={24}>
-              <p className="white-text login-text">
-                Inicia sesión y empieza a ser productivo
-              </p>
-            </FlexboxGrid.Item>
-            <FlexboxGrid.Item>
-              <Link href="/login">
-                <Button
-                  className="login-text-2 login-ghost-button"
-                  appearance="ghost">
-                  INICIAR SESIÓN
-                </Button>
-              </Link>
-            </FlexboxGrid.Item>
-          </FlexboxGrid>
-        </FlexboxGrid.Item>
-        <FlexboxGrid.Item
-          className="full-container"
-          componentClass={Col}
-          colspan={15}>
-          <FlexboxGrid fluid className="full-container">
-            <FlexboxGrid.Item className="logo-container" colspan={24}>
-              <img src="/logo.gif" alt="BLC Vevezuela Logo" />
-            </FlexboxGrid.Item>
-            <FlexboxGrid.Item
-              className="login-form-container vertical-centered-items"
-              colspan={24}>
-              <RegisterForm
-                model={model}
-                formValueSet={formValueSet}
-                formErrorSet={formErrorSet}
-                handleSubmit={handleSubmit}
-                setRef={setRef}
-              />
-            </FlexboxGrid.Item>
-          </FlexboxGrid>
-        </FlexboxGrid.Item>
-      </FlexboxGrid>
+      <Flex w="100%" h="100%">
+        <LoginRegisterSlider
+          title="¿Ya tienes cuenta?"
+          message="Inicia Sesión y Empieza a ser productivo"
+          buttonText="Iniciar Sesión"
+          route="login"
+        />
+        <Stack flex={1} padding="2em" spacing="0" align="center">
+          <Image
+            src="/logo.gif"
+            alt="BLCProjects Logo"
+            w="18em"
+            h="3em"
+            alignSelf="start"
+          />
+          <Center h="100%" w="25em">
+            <RegisterForm setUser={setUser} />
+          </Center>
+        </Stack>
+      </Flex>
     </>
   );
 }
