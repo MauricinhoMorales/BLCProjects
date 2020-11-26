@@ -1,109 +1,160 @@
 import React, { useState } from 'react';
+import { useRouter } from 'next/router';
 import {
-  Form,
-  FormGroup,
-  FormControl,
-  Button,
+  Heading,
+  VStack,
+  Input,
   InputGroup,
+  InputRightElement,
+  IconButton,
   Icon,
-  FlexboxGrid,
+  Flex,
   Checkbox,
-  Loader,
-} from 'rsuite';
+  Button,
+  Spacer,
+  HStack,
+  FormControl,
+  FormErrorMessage,
+  useToast,
+} from '@chakra-ui/react';
+import { Mail, Eye, EyeOff } from 'react-feather';
+import { useForm } from 'react-hook-form';
+import Axios from 'axios';
 
-import '../styles/loginForm.less';
+export default function LoginForm({ apiToken, setUser }) {
+  const [isLoading, setIsLoading] = useState(false);
+  const { register, handleSubmit, errors } = useForm();
+  const Router = useRouter();
+  const toast = useToast();
 
-export default function LoginForm(props) {
-  const [visible, setVisible] = useState(false);
-
-  const handleFormValue = (formValue) => {
-    props.formValueSet.setFormValue(formValue);
+  const onSubmit = async (data) => {
+    console.log('LoginForm', apiToken);
+    setIsLoading(true);
+    try {
+      const loginResponse = await Axios.post('api/auth/login', {
+        email: data.email,
+        password: data.password,
+        apiKeyToken: apiToken,
+      });
+      if (loginResponse.status === 200) {
+        console.log(loginResponse.data);
+        setUser(loginResponse.data);
+        Router.replace(`${loginResponse.data.user.id}/my-tasks`);
+      } else {
+        toast({
+          title: 'Ha ocurrido un error.',
+          description: 'Intente más tarde.',
+          status: 'error',
+          duration: 9000,
+          isClosable: true,
+        });
+      }
+    } catch (err) {
+      console.log(err);
+      toast({
+        title: 'Ha ocurrido un error.',
+        description: 'Intente más tarde.',
+        status: 'error',
+        duration: 9000,
+        isClosable: true,
+      });
+    }
+    setIsLoading(false);
+  };
+  const handleForgot = () => {
+    Router.replace(`/recoveryPassword`);
   };
 
-  const handleFormError = (formError) => {
-    props.formErrorSet.setFormError(formError);
-  };
+  const [show, setShow] = React.useState(false);
+  const handleClick = () => setShow(!show);
 
   return (
-    <>
-      <FlexboxGrid fluid>
-        <FlexboxGrid.Item
-          colspan={24}
-          className="padding-bottom"
-          style={{ textAlign: 'center' }}>
-          <h3 className="primary-text">Iniciar Sesión en BLCProjects</h3>
-        </FlexboxGrid.Item>
-        <FlexboxGrid.Item colspan={24}>
-          <Form
-            fluid
-            layout="vertical"
-            model={props.model}
-            formValue={props.formValueSet.formValue}
-            formError={props.formErrorSet.formError}
-            onChange={handleFormValue}
-            onCheck={handleFormError}
-            ref={(ref) => props.setRef(ref)}
-            style={{ textAlign: 'center' }}>
-            <FormGroup className="padding-bottom">
-              <InputGroup style={{ width: '100%' }} size="lg">
-                <FormControl
-                  className="textfield"
-                  size="lg"
-                  name="email"
-                  placeholder="Email"
+    <VStack spacing="2em">
+      <Heading as="h3" size="lg" color="rufous.500">
+        Iniciar Sesión en BLCProjects
+      </Heading>
+      <form onSubmit={handleSubmit(onSubmit)} style={{ width: '100%' }}>
+        <VStack spacing="2em">
+          <FormControl isInvalid={errors.email}>
+            <InputGroup>
+              <Input
+                size="lg"
+                name="email"
+                ref={register({ required: true })}
+                type="email"
+                placeholder="Correo Electronico"
+                w="100%"
+                className="input"
+              />
+              <InputRightElement
+                paddingTop="0.5em"
+                pointerEvents="none"
+                children={
+                  <Icon as={Mail} color="romanSilver.900" w={5} h={5} />
+                }
+              />
+            </InputGroup>
+            {errors.email?.type === 'required' && (
+              <FormErrorMessage>El campo es requerido</FormErrorMessage>
+            )}
+          </FormControl>
+          <FormControl isInvalid={errors.password}>
+            <InputGroup>
+              <Input
+                size="lg"
+                w="100%"
+                name="password"
+                ref={register({ required: true })}
+                className="input"
+                type={show ? 'text' : 'password'}
+                placeholder="Contraseña"
+              />
+              <InputRightElement>
+                <IconButton
+                  marginTop="0.5em"
+                  marginRight="0.5em"
+                  className="password-button"
+                  aria-label="Show Password"
+                  alignSelf="center"
+                  size="md"
+                  icon={
+                    <Icon as={!show ? EyeOff : Eye} color="romanSilver.900" />
+                  }
+                  onClick={handleClick}
                 />
-                <InputGroup.Addon style={{ backgroundColor: '#ededef' }}>
-                  <Icon icon="envelope" />
-                </InputGroup.Addon>
-              </InputGroup>
-            </FormGroup>
-            <FormGroup>
-              <InputGroup inside size="lg" style={{ width: '100%' }}>
-                <FormControl
-                  size="lg"
-                  className="textfield"
-                  name="password"
-                  placeholder="Password"
-                  type={visible ? 'text' : 'password'}
-                />
-                <InputGroup.Button onClick={() => setVisible(!visible)}>
-                  <Icon icon={visible ? 'eye' : 'eye-slash'} />
-                </InputGroup.Button>
-              </InputGroup>
-            </FormGroup>
-            <FormGroup>
-              <FlexboxGrid fluid justify="space-between">
-                <FlexboxGrid.Item colspan={6}>
-                  <Checkbox
-                    className="login-text-2 black-text"
-                    style={{ padding: 0, margin: 0 }}>
-                    Recuérdame
-                  </Checkbox>
-                </FlexboxGrid.Item>
-                <FlexboxGrid.Item colspan={11}>
-                  <Button
-                    appearance="link"
-                    className="login-text-2"
-                    style={{ fontWeight: 'bold', color: 'black' }}>
-                    ¿Olvidaste tu contraseña?
-                  </Button>
-                </FlexboxGrid.Item>
-              </FlexboxGrid>
-            </FormGroup>
-            <Button
-              block
-              className="login-button login-text-2"
-              appearance="ghost"
-              onClick={props.handleSubmit}>
-              {props.loading ? (
-                <Loader speed="fast" size="small" />
-              ) : (
-                'INICIAR SESIÓN'
-              )}
+              </InputRightElement>
+            </InputGroup>
+            {errors.password?.type === 'required' && (
+              <FormErrorMessage>El campo es requerido</FormErrorMessage>
+            )}
+          </FormControl>
+          <HStack justify="start" spacing="2em">
+            <Checkbox
+              size="md"
+              colorScheme="red"
+              defaultIsChecked
+              ref={register()}
+              name="rememberme">
+              Recuérdame
+            </Checkbox>
+            <Spacer />
+            <Button variant="link" color="richBlack.500" onClick={handleForgot}>
+              ¿Olvidaste tu Contraseña?
             </Button>
-          </Form>
-        </FlexboxGrid.Item>
-      </FlexboxGrid>
-    </>
+          </HStack>
+          <Button
+            bgColor="rufous.500"
+            borderRadius="30px"
+            padding="1.5em"
+            w="100%"
+            isLoading={isLoading}
+            className="button"
+            type="submit"
+            color="white">
+            INICIAR SESIÓN
+          </Button>
+        </VStack>
+      </form>
+    </VStack>
   );
 }
