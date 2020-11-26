@@ -1,6 +1,7 @@
 const MongoLib = require('../lib/db');
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
+const { config } = require('../config/index');
 const EmailValidatorService = require('./deBounceEmailValidator');
 const MailGunService = require('./mailGun');
 
@@ -12,8 +13,20 @@ class UserService {
     this.mailGun = new MailGunService();
   }
 
-  async getUsers({ email, name, accountActivated, activationCode }) {
-    const query = { email, name, accountActivated, activationCode };
+  async getUsers({
+    email,
+    name,
+    accountActivated,
+    activationCode,
+    recoveryCode,
+  }) {
+    const query = {
+      email,
+      name,
+      accountActivated,
+      activationCode,
+      recoveryCode,
+    };
 
     Object.keys(query).forEach((key) => {
       if (query[key] === undefined) {
@@ -31,9 +44,6 @@ class UserService {
   }
 
   async createUser({ user }) {
-    const mailGun = this.mailGun;
-    const mongoDB = this.MongoDB;
-    const collection = this.collection;
     const exist = await this.getUsers({ email: user.email });
     if (exist.length) {
       throw new Error('El usuario ya existe');
@@ -47,14 +57,15 @@ class UserService {
       const hashedPassword = await bcrypt.hash(user.password, 10);
       const activationCode = crypto.randomBytes(20);
       const activationCodeExpires = Date.now() + 24 * 3600 * 1000;
-      const link =
-        'http://localhost:3000/auth/activate/' + activationCode.toString('hex');
-      const body = await mailGun.sendActivationEmail({
+      const link = `http://${config.url}/activation/${activationCode.toString(
+        'hex'
+      )}`;
+      const body = await this.mailGun.sendActivationEmail({
         userEmail: user.email,
         link,
       });
       console.log(body);
-      return await mongoDB.create(collection, {
+      return await this.MongoDB.create(this.collection, {
         ...user,
         password: hashedPassword,
         accountActivated: false,
