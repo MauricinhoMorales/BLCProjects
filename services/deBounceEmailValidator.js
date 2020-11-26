@@ -1,5 +1,4 @@
 const { config } = require('../config/index');
-
 const Axios = require('axios');
 
 class EmailValidatorService {
