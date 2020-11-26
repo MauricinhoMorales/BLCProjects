@@ -15,10 +15,14 @@ export default async function handler(req, res) {
   if (method === 'POST') {
     const { apiKeyToken, email, password } = req.body;
     if (!apiKeyToken) {
-      errorHandler(boom.unauthorized('ApiKeyToekn es requerido'), req, res);
+      return errorHandler(
+        boom.unauthorized('ApiKeyToekn es requerido'),
+        req,
+        res
+      );
     }
     if (!email || !password) {
-      errorHandler(
+      return errorHandler(
         boom.unauthorized('Email y contraseña requeridos'),
         req,
         res
@@ -27,10 +31,10 @@ export default async function handler(req, res) {
     try {
       const apiKey = await apiKeysService.getApiKey({ token: apiKeyToken });
       if (!apiKey) {
-        errorHandler(boom.unauthorized(), req, res);
+        return errorHandler(boom.unauthorized(), req, res);
       }
-      const user = await userService.getUsers({ email: req.body.email });
-      compare(req.body.password, user[0].password, function (err, result) {
+      const user = await userService.getUsers({ email });
+      compare(password, user[0].password, function (err, result) {
         if (!err && result) {
           const { _id: id, firstName, lastName, email } = user[0];
           const claims = {
@@ -45,18 +49,18 @@ export default async function handler(req, res) {
           const jwtToken = jwt.sign(claims, config.authJwtSecret, {
             expiresIn: '1h',
           });
-          res
+          return res
             .status(200)
             .json({ jwtToken, user: { id, email, firstName, lastName } });
         } else {
-          errorHandler(boom.unauthorized(), req, res);
+          return errorHandler(boom.unauthorized(), req, res);
         }
       });
     } catch (err) {
-      errorHandler(boom.internal(err), req, res);
+      return errorHandler(boom.internal(err), req, res);
     }
   } else {
-    errorHandler(
+    return errorHandler(
       boom.methodNotAllowed('This endpoint only supports POST requests'),
       req,
       res

@@ -9,22 +9,25 @@ export default async function handler(req, res) {
   const userService = new UserService();
 
   if (method === 'POST') {
-    validationHandler(createUserSchema, 'body', req, res, async function (
+    validationHandler(
+      createUserSchema,
+      'body',
       req,
-      res
-    ) {
-      const { body: user } = req;
-      try {
-        const createdUserId = await userService.createUser({
-          user,
-        });
-        res.status(200).json(createdUserId);
-      } catch (err) {
-        errorHandler(boom.internal(err), req, res);
+      res,
+      async function (req, res) {
+        const { body: user } = req;
+        try {
+          const createdUserId = await userService.createUser({
+            user,
+          });
+          return res.status(200).json(createdUserId);
+        } catch (err) {
+          return errorHandler(boom.internal(err), req, res);
+        }
       }
-    });
+    );
   } else {
-    errorHandler(
+    return errorHandler(
       boom.badRequest(
         new Error('This endpoints only supports POST requests'),
         req,
