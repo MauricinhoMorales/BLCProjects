@@ -1,0 +1,53 @@
+@import url('https://fonts.googleapis.com/css2?family=Cabin&display=swap');
+
+.navItem {
+  background-color: #a42419;
+}
+
+.navItem:hover {
+  background-color: #8e2017;
+  cursor: pointer;
+}
+
+.navItem-selected {
+  background-color: #bb8377;
+  cursor: default;
+}
+
+.button:hover {
+  background-color: #8e2017 !important;
+}
+
+.input,
+.input:focus,
+.input:focus-visible,
+.input:focus-within,
+.input:hover {
+  background-color: #d5d8d9 !important;
+  color: #424246 !important;
+}
+
+.input::placeholder {
+  color: #84838c !important;
+}
+
+.password-button {
+  background-color: #d5d8d9 !important;
+}
+
+.password-button:hover {
+  background-color: #c5c8ca !important;
+}
+
+.settings-button {
+  background-color: #641812 !important;
+}
+
+.settings-button:hover {
+  background-color: #50140f !important;
+}
+
+.popover:hover {
+  background-color: #50140f !important;
+  cursor: pointer;
+}
