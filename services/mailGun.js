@@ -14,8 +14,29 @@ class MaiLGunService {
       'h:X-Mailgun-Variables': `{"link": "${link}"}`,
     };
 
-    const body = await mailGun.messages().send(data);
-    return body;
+    mailGun
+      .messages()
+      .send(data)
+      .then((body) => {
+        console.log(body);
+      });
+  }
+
+  async sendRecoveryEmail({ userEmail, link }) {
+    let data = {
+      from: `BLCProjects <no-reply.blcprojects@${config.mailGunDomain}>`,
+      to: userEmail,
+      subject: 'Recuperación de Contraseña',
+      template: 'recovery-password',
+      'h:X-Mailgun-Variables': `{"link": "${link}"}`,
+    };
+
+    mailGun
+      .messages()
+      .send(data)
+      .then((body) => {
+        console.log(body);
+      });
   }
 }
 
