@@ -1,4 +1,5 @@
 import { Center, Stack } from '@chakra-ui/react';
+import { config } from '../../config/index';
 import React from 'react';
 import RecoveryForm from '../../components/recoveryForm';
 import CodeInvalid from '../../components/codeInvalid';
@@ -15,7 +16,7 @@ export default function RecoveryPasswordPage({ isValid, userId }) {
 export async function getServerSideProps(context) {
   try {
     const response = await Axios.get(
-      `${process.env.URL}/api/auth/recovery/${context.query.id}`
+      `http://${config.url}/api/auth/recovery/${context.query.id}`
     );
     return {
       props: {
