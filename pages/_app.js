@@ -21,12 +21,10 @@ function MyApp({ Component, pageProps }) {
   const [error, setError] = React.useState(false);
   useEffect(() => {
     const start = () => {
-      console.log('start');
       setError(false);
       setLoading(true);
     };
     const end = () => {
-      console.log('findished');
       setLoading(false);
     };
 

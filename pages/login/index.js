@@ -7,12 +7,17 @@ import LoginRegisterSlider from '../../components/loginRegisterSlide';
 import LoginForm from '../../components/loginForm';
 import { parseCookies } from '../../lib/parseCookies';
 
-export default function LoginPage({ apiToken, setUser, user, setShow }) {
+export default function LoginPage({
+  apiToken,
+  setUser,
+  user,
+  setShow,
+  initialUser,
+}) {
   const Router = useRouter();
   useEffect(() => {
     setShow(false);
-    console.log('Loading Login');
-    if (user.user.id !== '') {
+    if (initialUser) {
       Router.replace(`/${user.user.id}/my-tasks`);
     }
   });
@@ -46,10 +51,19 @@ export default function LoginPage({ apiToken, setUser, user, setShow }) {
   );
 }
 
-export async function getServerSideProps() {
+export async function getServerSideProps({ req }) {
+  const userCookie = parseCookies(req);
+  let user;
+  if (typeof userCookie === 'object') {
+    user = null;
+  } else {
+    user = JSON.parse(userCookie.user);
+  }
+
   return {
     props: {
       apiToken: config.publicApiKeyToken,
+      initialUser: user,
     },
   };
 }

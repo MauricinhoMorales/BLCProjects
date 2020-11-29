@@ -30,7 +30,7 @@ import NavItem from './navItem';
 import { useCookies } from 'react-cookie';
 
 export default function NavBar({ user, setUser, setShow, initial }) {
-  const [removeCookie] = useCookies(['user']);
+  const [cookie, setCookie, removeCookie] = useCookies(['user']);
   const [selectionState, setSelectionState] = useState([
     true,
     false,
@@ -69,8 +69,9 @@ export default function NavBar({ user, setUser, setShow, initial }) {
         Router.replace(`/${user.user.id}/settings`);
         break;
       case 'logout':
-        if (user.user.id !=== "") {
-          removeCookie('user');
+        setShow(false);
+        if (user.user.id !== '') {
+          removeCookie('user', { expires: 0 });
           setUser({
             jwtToken: '',
             user: { id: '', firstName: '', lastName: '' },

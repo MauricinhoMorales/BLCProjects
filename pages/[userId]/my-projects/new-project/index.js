@@ -231,7 +231,7 @@ export default function NewProjectPage({
           </form>
         </VStack>
       </Center>
-      <Flex w="100%" padding="0 2em 1.5em 2em" bg="tyrianPurple.200">
+      <Flex w="100%" padding="0 2em 1.5em 2em">
         <Button
           bgColor="gray"
           borderRadius="30px"
