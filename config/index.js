@@ -15,8 +15,8 @@ const config = {
   authJwtSecret: process.env.AUTH_JWT_SECRET,
   publicApiKeyToken: process.env.PUBLIC_API_KEY_TOKEN,
   adminApiKeyToken: process.env.ADMIN_API_KEY_TOKEN,
-  mailGunApiKey: process.env.MAILGUN_API_KEY,
-  mailGunDomain: process.env.MAILGUN_DOMAIN,
+  mjApikeyPublic: process.env.MJ_APIKEY_PUBLIC,
+  mjApikeyPrivate: process.env.MJ_APIKEY_PRIVATE,
   deBounceApiKey: process.env.DEBOUNCE_API_KEY,
   deBounceApiUrl: process.env.DEBOUNCE_API_URL,
 };
