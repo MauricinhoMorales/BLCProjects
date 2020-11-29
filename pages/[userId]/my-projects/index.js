@@ -13,10 +13,7 @@ import { Plus } from 'react-feather';
 import ProjectsListItem from '../../../components/projectsListItem';
 import { parseCookies } from '../../../lib/parseCookies';
 import { useRouter } from 'next/router';
-<<<<<<< HEAD
-=======
 import { config } from '../../../config/index';
->>>>>>> main
 
 export default function MyProjectsPage({
   user,
@@ -28,10 +25,6 @@ export default function MyProjectsPage({
   const Router = useRouter();
 
   useEffect(async () => {
-<<<<<<< HEAD
-    console.log('Projects Page', projects);
-=======
->>>>>>> main
     if (initialUser) {
       setUser(initialUser);
     }
@@ -40,11 +33,7 @@ export default function MyProjectsPage({
 
   const handleAddProjectClick = () => {
     console;
-<<<<<<< HEAD
-    Router.replace(`${user.user.id}/my-projects/new-project`);
-=======
     Router.replace(`/${user.user.id}/my-projects/new-project`);
->>>>>>> main
   };
 
   return (
@@ -89,11 +78,7 @@ export async function getServerSideProps({ req }) {
   const userCookie = parseCookies(req);
   const user = JSON.parse(userCookie.user);
   try {
-<<<<<<< HEAD
-    const projects = await Axios.get(`http://localhost:3000/api/projects`, {
-=======
     const projects = await Axios.get(`http://${config.url}/api/projects`, {
->>>>>>> main
       params: {
         creator: user.user.id,
       },
