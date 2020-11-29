@@ -5,12 +5,15 @@ import { config } from '../../config/index';
 
 import LoginRegisterSlider from '../../components/loginRegisterSlide';
 import LoginForm from '../../components/loginForm';
+import { parseCookies } from '../../lib/parseCookies';
 
-export default function LoginPage({ apiToken, setUser, user }) {
+export default function LoginPage({ apiToken, setUser, user, setShow }) {
   const Router = useRouter();
   useEffect(() => {
-    if (user !== null) {
-      Router.replace('/:username/my-tasks');
+    setShow(false);
+    console.log('Loading Login');
+    if (user.user.id !== '') {
+      Router.replace(`/${user.user.id}/my-tasks`);
     }
   });
   return (
@@ -25,7 +28,11 @@ export default function LoginPage({ apiToken, setUser, user }) {
             alignSelf="start"
           />
           <Center h="100%" w="25em">
-            <LoginForm apiToken={apiToken} setUser={setUser} />
+            <LoginForm
+              apiToken={apiToken}
+              setUser={setUser}
+              setShowNav={setShow}
+            />
           </Center>
         </Stack>
         <LoginRegisterSlider

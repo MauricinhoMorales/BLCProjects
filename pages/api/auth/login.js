@@ -16,7 +16,7 @@ export default async function handler(req, res) {
     const { apiKeyToken, email, password } = req.body;
     if (!apiKeyToken) {
       return errorHandler(
-        boom.unauthorized('ApiKeyToekn es requerido'),
+        boom.unauthorized('ApiKeyToken es requerido'),
         req,
         res
       );
@@ -47,7 +47,7 @@ export default async function handler(req, res) {
             scopes: apiKey.scopes || null,
           };
           const jwtToken = jwt.sign(claims, config.authJwtSecret, {
-            expiresIn: '1h',
+            expiresIn: '7d',
           });
           return res
             .status(200)
