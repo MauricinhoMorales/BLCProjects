@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import {
   Flex,
@@ -27,8 +27,10 @@ import {
   LogOut,
 } from 'react-feather';
 import NavItem from './navItem';
+import { useCookies } from 'react-cookie';
 
-export default function NavBar({ user, setUser }) {
+export default function NavBar({ user, setUser, setShow, initial }) {
+  const [removeCookie] = useCookies(['user']);
   const [selectionState, setSelectionState] = useState([
     true,
     false,
@@ -37,12 +39,26 @@ export default function NavBar({ user, setUser }) {
   ]);
   const Router = useRouter();
 
-  const handleSelected = (option, route) => {
-    let newSelection = [false, false, false, false];
-    newSelection[option] = true;
-    setSelectionState(newSelection);
+  const handleSelected = (route) => {
     Router.replace(`/${user.user.id}/${route}`);
   };
+
+  useEffect(() => {
+    switch (Router.pathname) {
+      case '/[userId]/my-tasks':
+        setSelectionState([true, false, false, false]);
+        break;
+      case '/[userId]/my-teams':
+        setSelectionState([false, true, false, false]);
+        break;
+      case '/[userId]/my-projects':
+        setSelectionState([false, false, true, false]);
+        break;
+      case '/[userId]/conversations':
+        setSelectionState([false, false, false, true]);
+        break;
+    }
+  }, [Router]);
 
   const handleSelect = (name) => {
     switch (name) {
@@ -53,7 +69,14 @@ export default function NavBar({ user, setUser }) {
         Router.replace(`/${user.user.id}/settings`);
         break;
       case 'logout':
-        setUser(null);
+        if (user.user.id !=== "") {
+          removeCookie('user');
+          setUser({
+            jwtToken: '',
+            user: { id: '', firstName: '', lastName: '' },
+          });
+        }
+        setShow(false);
         Router.replace('/login');
         break;
     }
@@ -105,19 +128,21 @@ export default function NavBar({ user, setUser }) {
           <HStack
             className="popover"
             spacing="12px"
+            align="center"
+            justify="center"
             w="100%"
             h="4em"
             padding="0.5em 1em"
             bg="rufous.800">
             <Avatar
               name={`${user.user.firstName} ${user.user.lastName}`}
-              bg="romanSilver.50"
+              bg="romanSilver.300"
               color="white"
               size="sm"
             />
-            <Text
-              fontWeight="medium"
-              color="white">{`${user.user.firstName} ${user.user.lastName}`}</Text>
+            <Text fontWeight="medium" color="white">
+              {`${user.user.firstName} ${user.user.lastName}`}
+            </Text>
           </HStack>
         </MenuButton>
         <MenuList minWidth="10em">

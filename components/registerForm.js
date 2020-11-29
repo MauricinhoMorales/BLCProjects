@@ -21,7 +21,7 @@ import { Mail, Eye, EyeOff, User } from 'react-feather';
 import { useForm } from 'react-hook-form';
 import Axios from 'axios';
 
-export default function RegisterForm({ setUser }) {
+export default function RegisterForm() {
   const [isLoading, setIsLoading] = useState(false);
   const { register, handleSubmit, getValues, errors } = useForm();
   const Router = useRouter();
@@ -48,6 +48,7 @@ export default function RegisterForm({ setUser }) {
           status: 'error',
           duration: 9000,
           isClosable: true,
+          position: 'top',
         });
         setIsLoading(false);
       }
