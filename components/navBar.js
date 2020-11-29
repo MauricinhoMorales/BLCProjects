@@ -69,7 +69,7 @@ export default function NavBar({ user, setUser, setShow, initial }) {
         Router.replace(`/${user.user.id}/settings`);
         break;
       case 'logout':
-        if (user.user.id !=== "") {
+        if (user.user.id !== '') {
           removeCookie('user');
           setUser({
             jwtToken: '',
