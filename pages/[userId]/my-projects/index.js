@@ -13,6 +13,7 @@ import { Plus } from 'react-feather';
 import ProjectsListItem from '../../../components/projectsListItem';
 import { parseCookies } from '../../../lib/parseCookies';
 import { useRouter } from 'next/router';
+import { config } from '../../../config/index';
 
 export default function MyProjectsPage({
   user,
@@ -24,7 +25,6 @@ export default function MyProjectsPage({
   const Router = useRouter();
 
   useEffect(async () => {
-    console.log('Projects Page', projects);
     if (initialUser) {
       setUser(initialUser);
     }
@@ -33,7 +33,7 @@ export default function MyProjectsPage({
 
   const handleAddProjectClick = () => {
     console;
-    Router.replace(`${user.user.id}/my-projects/new-project`);
+    Router.replace(`/${user.user.id}/my-projects/new-project`);
   };
 
   return (
@@ -42,32 +42,18 @@ export default function MyProjectsPage({
         <Heading as="h3" color="richBlack.500">
           Mis Projectos
         </Heading>
-        <Flex w="100%" h="100vh" flexWrap="wrap">
-          {projects.map((project, index) => {
-            if ((index + 1) % 3 === 0) {
-              return (
-                <ProjectsListItem
-                  key={project._id}
-                  jwtToken={user.jwtToken}
-                  project={project}
-                  creatorName={`${user.user.firstName} ${user.user.lastName}`}
-                  userName={`${user.user.firstName} ${user.user.lastName}`}
-                  userId={user.user.id}
-                />
-              );
-            }
+        <Flex w="100%" h="100vh" justify="space-between" flexWrap="wrap">
+          {projects.map((project) => {
             return (
-              <>
-                <ProjectsListItem
-                  key={project._id}
-                  jwtToken={user.jwtToken}
-                  project={project}
-                  creatorName={`${user.user.firstName} ${user.user.lastName}`}
-                  userName={`${user.user.firstName} ${user.user.lastName}`}
-                  userId={user.user.id}
-                />
-                <Spacer />
-              </>
+              <ProjectsListItem
+                Flex={1}
+                key={project._id}
+                jwtToken={user.jwtToken}
+                project={project}
+                creatorName={`${user.user.firstName} ${user.user.lastName}`}
+                userName={`${user.user.firstName} ${user.user.lastName}`}
+                userId={user.user.id}
+              />
             );
           })}
         </Flex>
@@ -92,7 +78,7 @@ export async function getServerSideProps({ req }) {
   const userCookie = parseCookies(req);
   const user = JSON.parse(userCookie.user);
   try {
-    const projects = await Axios.get(`http://localhost:3000/api/projects`, {
+    const projects = await Axios.get(`http://${config.url}/api/projects`, {
       params: {
         creator: user.user.id,
       },

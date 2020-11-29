@@ -37,13 +37,11 @@ export default function LoginForm({ apiToken, setUser, setShowNav }) {
         password: data.password,
         apiKeyToken: apiToken,
       });
-      if (data.rememberme) {
-        setCookie('user', JSON.stringify(loginResponse.data), {
-          path: '/',
-          expires: new Date(new Date().getTime() + 7 * 24 * 60 * 60 * 1000),
-          sameSite: true,
-        });
-      }
+      setCookie('user', JSON.stringify(loginResponse.data), {
+        path: '/',
+        expires: new Date(new Date().getTime() + 7 * 24 * 60 * 60 * 1000),
+        sameSite: true,
+      });
       setIsLoading(false);
       setUser(loginResponse.data);
       setShowNav(true);
