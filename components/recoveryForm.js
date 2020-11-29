@@ -39,6 +39,7 @@ export default function LoginForm({ userId }) {
         status: 'success',
         duration: 9000,
         isClosable: true,
+        position: 'top',
       });
       Router.replace(`/login`);
     } catch (err) {
@@ -50,6 +51,7 @@ export default function LoginForm({ userId }) {
         status: 'error',
         duration: 9000,
         isClosable: true,
+        position: 'top',
       });
     }
   };

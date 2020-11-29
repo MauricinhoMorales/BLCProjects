@@ -8,7 +8,6 @@ import {
   InputRightElement,
   IconButton,
   Icon,
-  Flex,
   Checkbox,
   Button,
   Spacer,
@@ -20,8 +19,10 @@ import {
 import { Mail, Eye, EyeOff } from 'react-feather';
 import { useForm } from 'react-hook-form';
 import Axios from 'axios';
+import { useCookies } from 'react-cookie';
 
-export default function LoginForm({ apiToken, setUser }) {
+export default function LoginForm({ apiToken, setUser, setShowNav }) {
+  const [cookie, setCookie] = useCookies(['user']);
   const [isLoading, setIsLoading] = useState(false);
   const { register, handleSubmit, errors } = useForm();
   const Router = useRouter();
@@ -36,30 +37,29 @@ export default function LoginForm({ apiToken, setUser }) {
         password: data.password,
         apiKeyToken: apiToken,
       });
-      if (loginResponse.status === 200) {
-        console.log(loginResponse.data);
-        setUser(loginResponse.data);
-        Router.replace(`${loginResponse.data.user.id}/my-tasks`);
-      } else {
-        toast({
-          title: 'Ha ocurrido un error.',
-          description: 'Intente más tarde.',
-          status: 'error',
-          duration: 9000,
-          isClosable: true,
+      if (data.rememberme) {
+        setCookie('user', JSON.stringify(loginResponse.data), {
+          path: '/',
+          expires: new Date(new Date().getTime() + 7 * 24 * 60 * 60 * 1000),
+          sameSite: true,
         });
       }
+      setIsLoading(false);
+      setUser(loginResponse.data);
+      setShowNav(true);
+      Router.replace(`${loginResponse.data.user.id}/my-tasks`);
     } catch (err) {
       console.log(err);
+      setIsLoading(false);
       toast({
         title: 'Ha ocurrido un error.',
         description: 'Intente más tarde.',
         status: 'error',
         duration: 9000,
         isClosable: true,
+        position: 'top',
       });
     }
-    setIsLoading(false);
   };
   const handleForgot = () => {
     Router.replace(`/recoveryPassword`);
