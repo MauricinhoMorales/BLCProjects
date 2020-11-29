@@ -16,12 +16,12 @@ class ProjectService {
       if (team.length) {
         creator = {
           creator_id: creator,
-          isTeam: false,
+          isTeam: true,
         };
       } else {
         creator = {
           creator_id: creator,
-          isTeam: true,
+          isTeam: false,
         };
       }
     }
