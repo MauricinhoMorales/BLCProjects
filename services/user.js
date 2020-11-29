@@ -3,14 +3,14 @@ const bcrypt = require('bcrypt');
 const crypto = require('crypto');
 const { config } = require('../config/index');
 const EmailValidatorService = require('./deBounceEmailValidator');
-const MailGunService = require('./mailGun');
+const MailjetService = require('./mailjet');
 
 class UserService {
   constructor() {
     this.MongoDB = new MongoLib();
     this.collection = 'users';
     this.emailValidatorService = new EmailValidatorService();
-    this.mailGun = new MailGunService();
+    this.mailjet = new MailjetService();
   }
 
   async getUsers({
@@ -60,11 +60,11 @@ class UserService {
       const link = `http://${config.url}/activation/${activationCode.toString(
         'hex'
       )}`;
-      const body = await this.mailGun.sendActivationEmail({
+      this.mailjet.sendActivationEmail({
         userEmail: user.email,
+        userName: `${user.firstName} ${user.lastName}`,
         link,
       });
-      console.log(body);
       return await this.MongoDB.create(this.collection, {
         ...user,
         password: hashedPassword,
