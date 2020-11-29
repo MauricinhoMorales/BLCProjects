@@ -3,13 +3,13 @@ const crypto = require('crypto');
 const { config } = require('../../../../config/index');
 const { errorHandler } = require('../../../../utils/middlewares/errorHandlers');
 const UserService = require('../../../../services/user');
-const MailGunService = require('../../../../services/mailGun');
+const MailjetService = require('../../../../services/mailjet');
 
 export default async function handler(req, res) {
   debugger;
   const { method } = req;
   const userService = new UserService();
-  const mailGunService = new MailGunService();
+  const mailjetService = new MailjetService();
 
   if (method === 'POST') {
     const {
@@ -23,8 +23,9 @@ export default async function handler(req, res) {
       const activationCodeExpires = Date.now() + 24 * 3600 * 1000;
       const link = `http://${config.url}/activation/${activationCode}`;
       const user = await userService.getUser({ id });
-      mailGunService.sendActivationEmail({
+      mailjetService.sendActivationEmail({
         userEmail: user.email,
+        userName: `${user.firstName} ${user.lastName}`,
         link,
       });
       const updatedUserId = await userService.updateUser({
