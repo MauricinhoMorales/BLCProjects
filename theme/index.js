@@ -2,8 +2,12 @@ import { extendTheme } from '@chakra-ui/react';
 
 const theme = extendTheme({
   global: {
+    html: {
+      overflow: 'hdden',
+    },
     body: {
-      overflow: 'none',
+      overflow: 'hidden',
+      height: '100vh',
     },
   },
   fonts: {
