@@ -19,6 +19,8 @@ const currentStatusSchema = joi.object({
   color: joi.string().min(4).max(7),
 });
 
+const colorSchema = joi.string().min(4).max(7);
+
 const statusesSchema = joi.array().items(currentStatusSchema);
 
 const currentPrioritySchema = joi.object({
@@ -49,12 +51,13 @@ const createProjectSchema = joi.object({
   name: nameSchema.required(),
   description: descriptionSchema.required(),
   creator: creatorSchema.required(),
-  currentStatus: currentStatusSchema.required(),
-  currentPriority: currentPrioritySchema.required(),
-  progress: progressSchema.required(),
-  sections: sectionsSchema.required(),
-  projectStatuses: statusesSchema.required(),
-  projectPriorities: prioritiesSchema.required(),
+  currentStatus: currentStatusSchema,
+  currentPriority: currentPrioritySchema,
+  progress: progressSchema,
+  sections: sectionsSchema,
+  projectStatuses: statusesSchema,
+  projectPriorities: prioritiesSchema,
+  color: colorSchema.required(),
 });
 
 const updateProjectSchema = joi.object({
@@ -67,6 +70,7 @@ const updateProjectSchema = joi.object({
   sections: sectionsSchema,
   projectStatuses: statusesSchema,
   projectPriorities: prioritiesSchema,
+  color: colorSchema,
 });
 
 module.exports = {
