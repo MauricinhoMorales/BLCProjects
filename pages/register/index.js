@@ -1,5 +1,6 @@
-import { Center, Flex, Heading, Box, Image, Stack } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
+import { Center, Flex, Heading, Box, Image, Stack } from '@chakra-ui/react';
+import Head from 'next/head';
 
 import LoginRegisterSlider from '../../components/loginRegisterSlide';
 import RegisterForm from '../../components/registerForm';
@@ -7,6 +8,9 @@ import RegisterForm from '../../components/registerForm';
 export default function RegisterPage({ setUser }) {
   return (
     <>
+      <Head>
+        <title>Registrate en BLCProjects</title>
+      </Head>
       <Flex w="100%" h="100%">
         <LoginRegisterSlider
           title="¿Ya tienes cuenta?"

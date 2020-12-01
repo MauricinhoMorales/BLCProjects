@@ -1,18 +1,12 @@
 import React from 'react';
-import {
-  Heading,
-  Icon,
-  IconButton,
-  VStack,
-  Flex,
-  Spacer,
-} from '@chakra-ui/react';
+import { Heading, Icon, IconButton, VStack, Flex } from '@chakra-ui/react';
 import Axios from 'axios';
 import { useEffect } from 'react';
 import { Plus } from 'react-feather';
 import ProjectsListItem from '../../../components/projectsListItem';
 import { parseCookies } from '../../../lib/parseCookies';
 import { useRouter } from 'next/router';
+import Head from 'next/head';
 import { config } from '../../../config/index';
 
 export default function MyProjectsPage({
@@ -38,6 +32,9 @@ export default function MyProjectsPage({
 
   return (
     <>
+      <Head>
+        <title>Mis Proyectos - BLCProjects</title>
+      </Head>
       <VStack spacing="2em" padding="3em" h="100vh" w="100%" align="start">
         <Heading as="h3" color="richBlack.500">
           Mis Projectos

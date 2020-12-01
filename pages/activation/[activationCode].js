@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import Head from 'next/head';
 import { config } from '../../config/index';
 import Axios from 'axios';
 import { Stack } from '@chakra-ui/react';
@@ -8,9 +9,14 @@ import CodeInvalid from '../../components/codeInvalid';
 export default function ActivationPage({ isActivated }) {
   /* return <h1>{isActivated ? 'Account Active' : 'Code Invalid'}</h1>; */
   return (
-    <Stack spacing="2em" align="center" justify="center" w="100%" h="100vh">
-      {isActivated ? <ActivatedAccount /> : <CodeInvalid />}
-    </Stack>
+    <>
+      <Head>
+        <title>Activacion de Cuenta</title>
+      </Head>
+      <Stack spacing="2em" align="center" justify="center" w="100%" h="100vh">
+        {isActivated ? <ActivatedAccount /> : <CodeInvalid />}
+      </Stack>
+    </>
   );
 }
 

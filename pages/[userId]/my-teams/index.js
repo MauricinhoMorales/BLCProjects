@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import Head from 'next/head';
 import InConstruction from '../../../components/inConstruction';
 import { parseCookies } from '../../../lib/parseCookies';
 
@@ -9,7 +10,14 @@ export default function MyTeamsPage({ setUser, initialUser, setShow }) {
     }
     setShow(true);
   });
-  return <InConstruction />;
+  return (
+    <>
+      <Head>
+        <title>Mis Equipos - BLCProjects</title>
+      </Head>
+      <InConstruction />
+    </>
+  );
 }
 
 export async function getServerSideProps({ req }) {

@@ -1,5 +1,13 @@
+import Head from 'next/head';
 import InConstruction from '../../../components/inConstruction';
 
 export default function ConversationPage(props) {
-  return <InConstruction />;
+  return (
+    <>
+      <Head>
+        <title>Conversaciones - BLCProjects</title>
+      </Head>
+      <InConstruction />;
+    </>
+  );
 }

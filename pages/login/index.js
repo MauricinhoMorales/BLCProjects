@@ -1,5 +1,6 @@
 import { Center, Flex, Heading, Box, Image, Stack } from '@chakra-ui/react';
 import { useRouter, userRouter } from 'next/router';
+import Head from 'next/head';
 import { useEffect, useState } from 'react';
 import { config } from '../../config/index';
 
@@ -23,6 +24,9 @@ export default function LoginPage({
   });
   return (
     <>
+      <Head>
+        <title>Iniciar Sesión</title>
+      </Head>
       <Flex w="100%" h="100%">
         <Stack flex={1} padding="2em" spacing="0" align="center">
           <Image

@@ -1,5 +1,6 @@
-import { Heading } from '@chakra-ui/react';
 import { useEffect } from 'react';
+import { Heading } from '@chakra-ui/react';
+import Head from 'next/head';
 import { parseCookies } from '../../../lib/parseCookies';
 
 export default function MyTasksPage({ setUser, initialUser, setShow }) {
@@ -9,7 +10,14 @@ export default function MyTasksPage({ setUser, initialUser, setShow }) {
     }
     setShow(true);
   });
-  return <Heading as="h1">My Tasks</Heading>;
+  return (
+    <>
+      <Head>
+        <title>Mis Tareas - BLCProjects</title>
+      </Head>
+      <Heading as="h1">My Tasks</Heading>
+    </>
+  );
 }
 
 export async function getServerSideProps({ req }) {
