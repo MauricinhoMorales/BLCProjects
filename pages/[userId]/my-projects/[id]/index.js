@@ -23,6 +23,7 @@ export default function ProjectPage({
   initialUser,
   project,
   setUser,
+  isError,
   user,
   setShow,
 }) {
