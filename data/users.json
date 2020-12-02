@@ -1,32 +1,41 @@
-[
-  {
-    "_id": "5fa4bd2afc13ae39a5000014",
-    "correo": "bpinwill0@exblog.jp",
-    "contrasena": "8kuRJqtYFB",
-    "nombre": "Burch Pinwill"
+[{
+  "_id": {
+    "$oid": "5fbf18c448ca1425575b43fb"
   },
-  {
-    "_id": "5fa4bd2afc13ae39a500000f",
-    "correo": "aridgers1@npr.org",
-    "contrasena": "N69YNopxGv3",
-    "nombre": "Amos Ridgers"
+  "email": "blcprojectsteam@gmail.com",
+  "password": "$2b$10$O8t0B5uNU1WQyiJjtqCK1.UeR634Bri4q9I95cfF4sDCRXCeiFVYW",
+  "firstName": "BLCProjects",
+  "lastName": "Team",
+  "isAdmin": false,
+  "accountActivated": true,
+  "activationCode": "e927d9e3b303a2f69455c871f738cf466e6de54c",
+  "activationCodeExpires": 1606445636818,
+  "recoveryCode": "ce0b5111a1f524033f32818365ad231e4096acf8",
+  "recoveryCodeExpires": 1606445664589
+},{
+  "_id": {
+    "$oid": "5fbf31a3524d68000488f256"
   },
-  {
-    "_id": "5fa4bd2afc13ae39a500000a",
-    "correo": "gstribbling2@abc.net.au",
-    "contrasena": "LopnsA",
-    "nombre": "Gerrie Stribbling"
+  "email": "riobuenodevelops@gmail.com",
+  "password": "$2b$10$uJ9S/l6a.XBzzxZZHx2a0u9r3S/HJiAFda9G8.rXYijsGXirTYCzi",
+  "firstName": "Tania",
+  "lastName": "Gutierrez",
+  "isAdmin": false,
+  "accountActivated": false,
+  "activationCode": "f2d9f8cf8554db992fe4935c272dfd92748e6186",
+  "activationCodeExpires": 1606452003579,
+  "recoveryCode": "36910e4ac5684ce5c2313fdb6ee4c4527bca5a6f",
+  "recoveryCodeExpires": 1606489898965
+},{
+  "_id": {
+    "$oid": "5fc2084a2013e302d3dd042e"
   },
-  {
-    "_id": "5fa4bd2afc13ae39a5000005",
-    "correo": "jcatley3@google.es",
-    "contrasena": "sGWNAfT4z",
-    "nombre": "Jase Catley"
-  },
-  {
-    "_id": "5fa4bd2afc13ae39a5000000",
-    "correo": "wmatveyev4@wix.com",
-    "contrasena": "WBPqW3rGyos",
-    "nombre": "Weider Matveyev"
-  }
-]
+  "email": "tanialita2308@gmail.com",
+  "password": "$2b$10$In7cDc/r2zsHfhuZHjXWE.lSX89sy/NaIICvCozlaVXxJytB5nG2.",
+  "firstName": "Tania",
+  "lastName": "Gutierrez",
+  "isAdmin": false,
+  "accountActivated": true,
+  "activationCode": "c54758f1ae1017d46a95acd5c107d8f45cebbb04",
+  "activationCodeExpires": 1606638026605
+}]

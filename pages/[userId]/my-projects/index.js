@@ -83,6 +83,7 @@ export async function getServerSideProps({ req }) {
         Authorization: user.jwtToken,
       },
     });
+    console.log(projects.data);
     return {
       props: {
         projects: projects.data,
@@ -90,6 +91,7 @@ export async function getServerSideProps({ req }) {
       },
     };
   } catch (err) {
+    console.log(error.response);
     return {
       props: {
         projects: [],

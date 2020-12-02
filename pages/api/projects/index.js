@@ -7,6 +7,7 @@ import { createProjectSchema } from '../../../utils/models/project';
 import ProjectService from '../../../services/project';
 
 export default authenticated(async function (req, res) {
+  debugger;
   const { method } = req;
   const projectService = new ProjectService();
 

@@ -19,6 +19,9 @@ const config = {
   mjApikeyPrivate: process.env.MJ_APIKEY_PRIVATE,
   deBounceApiKey: process.env.DEBOUNCE_API_KEY,
   deBounceApiUrl: process.env.DEBOUNCE_API_URL,
+  mesiboAccessToken: process.env.MESIBO_ACCESS_TOKEN,
+  mesiboAppId: process.env.MESIBO_APP_ID,
+  mesiboApiUrl: process.env.MESIBO_API_URL,
 };
 
 module.exports = { config };

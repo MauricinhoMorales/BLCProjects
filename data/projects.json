@@ -1,0 +1,82 @@
+[{
+  "_id": {
+    "$oid": "5fab1773860f404343030ff0"
+  },
+  "name": "GE365",
+  "description": "Contability Project",
+  "creator": {
+    "creator_id": "5fbf31a3524d68000488f256",
+    "isTeam": false
+  },
+  "currentPriority": {
+    "value": "Alta",
+    "color": "#adfdfa"
+  },
+  "currentStatus": {
+    "value": "Sin Empezar",
+    "color": "#002004"
+  },
+  "progress": 0,
+  "sections": [
+    {
+      "name": "Planification",
+      "tasks": [
+        {
+          "$oid": "5fab82b9fc40974474279611"
+        }
+      ]
+    },
+    {
+      "name": "Design",
+      "tasks": [
+        "5fab82b9fc40974474279611"
+      ]
+    }
+  ],
+  "projectStatuses": [],
+  "projectPriorities": []
+},{
+  "_id": {
+    "$oid": "5fc2a598afb2090164d27ee9"
+  },
+  "name": "Prueba",
+  "description": "Esto es una prueba",
+  "creator": {
+    "creator_id": "5fbf31a3524d68000488f256",
+    "isTeam": false
+  },
+  "color": "#56bbe8"
+},{
+  "_id": {
+    "$oid": "5fc2a8ffafb2090164d27eea"
+  },
+  "name": "Innovación y Marketing",
+  "description": "asdasdasd",
+  "creator": {
+    "creator_id": "5fbf31a3524d68000488f256",
+    "isTeam": false
+  },
+  "color": "#531ea2"
+},{
+  "_id": {
+    "$oid": "5fc41d08cdb1411e7066c273"
+  },
+  "name": "Prueba 2",
+  "description": "Esto es un prueba",
+  "creator": {
+    "creator_id": "5fbf31a3524d68000488f256",
+    "isTeam": false
+  },
+  "color": "#935d77"
+},{
+  "_id": {
+    "$oid": "5fc4225fa2528400049afee5"
+  },
+  "name": "INNOVA",
+  "description": "No pude estar vacio",
+  "creator": {
+    "creator_id": "5fbf31a3524d68000488f256",
+    "isTeam": false
+  },
+  "color": "#db39b6"
+}]

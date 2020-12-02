@@ -47,7 +47,7 @@ export default async function handler(req, res) {
             scopes: apiKey.scopes || null,
           };
           const jwtToken = jwt.sign(claims, config.authJwtSecret, {
-            expiresIn: '7d',
+            expiresIn: '168h',
           });
           return res
             .status(200)

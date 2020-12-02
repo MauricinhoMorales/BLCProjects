@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { ChakraProvider } from '@chakra-ui/react';
+import Router from 'next/router';
+import Head from 'next/head';
 import { CookiesProvider } from 'react-cookie';
 import { parseCookies } from '../lib/parseCookies';
-import Router from 'next/router';
-
-import Layout from '../components/layout';
+import { config } from '../config/index';
 import theme from '../theme/index';
 
+import Layout from '../components/layout';
 import '../styles/globals.css';
 
 function MyApp({ Component, pageProps }) {
@@ -41,25 +42,52 @@ function MyApp({ Component, pageProps }) {
     };
   }, []);
   return (
-    <ChakraProvider theme={theme}>
-      <Layout
-        user={user}
-        setUser={setUser}
-        setShow={setShow}
-        show={show}
-        loading={loading}
-        error={error}>
-        <CookiesProvider>
-          <Component
-            {...pageProps}
-            user={user}
-            setUser={setUser}
-            setShow={setShow}
-          />
-        </CookiesProvider>
-      </Layout>
-    </ChakraProvider>
+    <>
+      {/* <Head>
+        <script>
+          <script
+            type="text/javascript"
+            src="https://api.mesibo.com/mesibo.js"></script>
+        </script>
+      </Head> */}
+      <ChakraProvider theme={theme}>
+        <Layout
+          user={user}
+          setUser={setUser}
+          setShow={setShow}
+          show={show}
+          loading={loading}
+          error={error}>
+          <CookiesProvider>
+            <Component
+              {...pageProps}
+              user={user}
+              setUser={setUser}
+              setShow={setShow}
+            />
+          </CookiesProvider>
+        </Layout>
+      </ChakraProvider>
+    </>
   );
+}
+
+export async function getStaticProps() {
+  const accessToken = config.mesiboAccessToken;
+  const appId = config.mesiboAppId;
+
+  const mesiboApi = new Mesibo();
+  mesiboApi.setListener(new MesiboListener());
+  mesiboApi.setAppName(appId);
+  mesiboApi.setCredentials(accessToken);
+
+  mesiboApi.start();
+
+  return {
+    props: {
+      mesiboApi,
+    },
+  };
 }
 
 export async function getInitialProps({ req }) {

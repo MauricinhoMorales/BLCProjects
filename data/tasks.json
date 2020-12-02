@@ -1,0 +1,24 @@
+[{
+  "_id": {
+    "$oid": "5fab82b9fc40974474279611"
+  },
+  "name": "Create Github reposotory",
+  "description": "",
+  "assignedTo": "",
+  "currentPriority": {
+    "value": "Alta",
+    "color": "#000000"
+  },
+  "currentStatus": {
+    "value": "Sin Empezar",
+    "color": "#000000"
+  },
+  "dueDate": {},
+  "progress": 0,
+  "projects": [
+    {
+      "project_id": "5fab1773860f404343030ff0",
+      "section_name": "Planification"
+    }
+  ]
+}]

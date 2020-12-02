@@ -1,77 +1,42 @@
-[
-  {
-    "nombre": "fermentum donec ut mauris eget",
-    "color": "#07c0c8",
-    "departamento": "Product Management",
-    "creador": { "$oid": "5fa4bd2afc13ae39a5000000" },
-    "members": [
-      { "$oid": "5fa4bd2afc13ae39a5000001" },
-      { "$oid": "5fa4bd2afc13ae39a5000002" }
-    ],
-    "numberOfMembers": 2,
-    "Proyectos": [
-      { "$oid": "5fa4bd2afc13ae39a5000003" },
-      { "$oid": "5fa4bd2afc13ae39a5000004" }
-    ]
+[{
+  "_id": {
+    "$oid": "5faaa2f11d8fff35c71e75b1"
   },
-  {
-    "nombre": "vivamus vel nulla eget eros",
-    "color": "#952d77",
-    "departamento": "Engineering",
-    "creador": { "$oid": "5fa4bd2afc13ae39a5000005" },
-    "members": [
-      { "$oid": "5fa4bd2afc13ae39a5000006" },
-      { "$oid": "5fa4bd2afc13ae39a5000007" }
-    ],
-    "numberOfMembers": 2,
-    "Proyectos": [
-      { "$oid": "5fa4bd2afc13ae39a5000008" },
-      { "$oid": "5fa4bd2afc13ae39a5000009" }
-    ]
+  "name": "Departamento de Operaciones",
+  "creator": "5fa9a2f59027530bb07435eb",
+  "members": [
+    {
+      "member_id": "5fa9a2f59027530bb07435eb",
+      "permissions": [
+        "Puede Editar"
+      ],
+      "role": "Director"
+    },
+    {
+      "member_id": "5faab3a5b8718f38c36c84df",
+      "permissions": [
+        "Puede comentar"
+      ],
+      "role": "Programador"
+    }
+  ],
+  "color": "000000",
+  "areaConocimiento": "Operaciones"
+},{
+  "_id": {
+    "$oid": "5fabf84735144b0004a524ec"
   },
-  {
-    "nombre": "nonummy maecenas tincidunt lacus at velit vivamus vel nulla",
-    "color": "#751127",
-    "departamento": "Support",
-    "creador": { "$oid": "5fa4bd2afc13ae39a500000a" },
-    "members": [
-      { "$oid": "5fa4bd2afc13ae39a500000b" },
-      { "$oid": "5fa4bd2afc13ae39a500000c" }
-    ],
-    "numberOfMembers": 2,
-    "Proyectos": [
-      { "$oid": "5fa4bd2afc13ae39a500000d" },
-      { "$oid": "5fa4bd2afc13ae39a500000e" }
-    ]
-  },
-  {
-    "nombre": "suspendisse accumsan tortor quis turpis sed ante vivamus tortor",
-    "color": "#638256",
-    "departamento": "Sales",
-    "creador": { "$oid": "5fa4bd2afc13ae39a500000f" },
-    "members": [
-      { "$oid": "5fa4bd2afc13ae39a5000010" },
-      { "$oid": "5fa4bd2afc13ae39a5000011" }
-    ],
-    "numberOfMembers": 2,
-    "Proyectos": [
-      { "$oid": "5fa4bd2afc13ae39a5000012" },
-      { "$oid": "5fa4bd2afc13ae39a5000013" }
-    ]
-  },
-  {
-    "nombre": "congue vivamus metus arcu adipiscing molestie hendrerit at vulputate",
-    "color": "#277080",
-    "departamento": "Services",
-    "creador": { "$oid": "5fa4bd2afc13ae39a5000014" },
-    "members": [
-      { "$oid": "5fa4bd2afc13ae39a5000015" },
-      { "$oid": "5fa4bd2afc13ae39a5000016" }
-    ],
-    "numberOfMembers": 2,
-    "Proyectos": [
-      { "$oid": "5fa4bd2afc13ae39a5000017" },
-      { "$oid": "5fa4bd2afc13ae39a5000018" }
-    ]
-  }
-]
+  "name": "Departamento de Marketing",
+  "creator": "5fa9a2f59027530bb07435eb",
+  "members": [
+    {
+      "member_id": "5fa9a2f59027530bb07435eb",
+      "permissions": [
+        "Puede Editar"
+      ],
+      "role": "Director"
+    }
+  ],
+  "color": "000000",
+  "areaConocimiento": "Operaciones"
+}]

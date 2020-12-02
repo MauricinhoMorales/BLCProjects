@@ -23,41 +23,43 @@ export default function projectsListItem({
   project,
   creatorName,
   userName,
-  jwtToken,
   userId,
+  jwtToken,
 }) {
   const [isLoading, setIsLoading] = useState(false);
   const Router = useRouter();
   const toast = useToast();
   const handleClick = async (e) => {
-    if (e.target.id !== 'menuButton') {
-      setIsLoading(true);
-      debugger;
+    if (e.target.id !== 'menuButton' && !e.target.id.includes('menuitem')) {
+      Router.replace(`/${userId}/my-projects/${project._id}`);
+    }
+  };
+
+  const onSelect = async (selection) => {
+    console.log('Selection', selection);
+    if (selection.target.innerText === 'Eliminar Proyecto') {
       try {
-        const response = await Axios.get(`/api/projects/${project._id}`, {
-          headers: {
-            Authorization: jwtToken,
-          },
-        });
-        setIsLoading(false);
-        Router.replace(`/${userId}/my-projects/${response.data._id}`);
+        await Axios.delete(
+          `http://localhost:3000/api/projects/${project._id}`,
+          {
+            headers: {
+              Authorization: jwtToken,
+            },
+          }
+        );
+        Router.replace(Router.asPath);
       } catch (err) {
         console.log(err);
-        setIsLoading(false);
         toast({
-          title: 'Ha ocurrido un error.',
-          description: 'Intente de nuevo.',
-          isClosable: true,
-          status: 'error',
+          title: 'Error.',
+          description: 'Ha ocurrido un error al intentar eliminar el proyecto.',
           duration: 9000,
+          status: 'error',
+          isClosable: true,
           position: 'top',
         });
       }
     }
-  };
-
-  const onSelect = (selection) => {
-    console.log(selection);
   };
   return (
     <>
@@ -94,7 +96,7 @@ export default function projectsListItem({
               {creatorName === userName ? 'Personal' : creatorName}
             </Text>
           </Stack>
-          <Menu isLazy onClose={onSelect}>
+          <Menu isLazy>
             <MenuButton
               as={IconButton}
               isRound
@@ -117,6 +119,7 @@ export default function projectsListItem({
               </MenuItem>
               <MenuDivider />
               <MenuItem
+                onClick={(e) => onSelect(e)}
                 iconSpacing="8px"
                 color="red.500"
                 icon={<Icon as={Trash} color="red.500" />}

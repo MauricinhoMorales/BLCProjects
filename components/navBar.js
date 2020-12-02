@@ -44,19 +44,14 @@ export default function NavBar({ user, setUser, setShow, initial }) {
   };
 
   useEffect(() => {
-    switch (Router.pathname) {
-      case '/[userId]/my-tasks':
-        setSelectionState([true, false, false, false]);
-        break;
-      case '/[userId]/my-teams':
-        setSelectionState([false, true, false, false]);
-        break;
-      case '/[userId]/my-projects':
-        setSelectionState([false, false, true, false]);
-        break;
-      case '/[userId]/conversations':
-        setSelectionState([false, false, false, true]);
-        break;
+    if (Router.pathname.includes('/[userId]/my-tasks')) {
+      setSelectionState([true, false, false, false]);
+    } else if (Router.pathname.includes('/[userId]/my-teams')) {
+      setSelectionState([false, true, false, false]);
+    } else if (Router.pathname.includes('/[userId]/my-projects')) {
+      setSelectionState([false, false, true, false]);
+    } else {
+      setSelectionState([false, false, false, true]);
     }
   }, [Router]);
 
