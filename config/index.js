@@ -2,7 +2,7 @@ require('dotenv').config({ path: __dirname + '/./../.env' });
 
 const config = {
   dev: process.env.NODE_ENV !== 'production',
-  url: process.env.URL || 'localhost:3000',
+  url: process.env.URL || 'http://localhost:3000',
   cors: process.env.CORS,
   dbUser: process.env.DB_USER,
   dbPassword: process.env.DB_PASSWORD,
