@@ -1,6 +1,8 @@
 const MongoLib = require('../lib/db');
 const TeamService = require('./teams');
 const UserService = require('./user');
+const TaskService = require('./task');
+const project = require('../utils/models/project');
 
 class ProjectService {
   constructor() {
@@ -8,6 +10,7 @@ class ProjectService {
     this.collection = 'projects';
     this.userService = new UserService();
     this.teamService = new TeamService();
+    this.taskService = new TaskService();
   }
 
   async getProjects({ name, creator, status }) {
@@ -54,6 +57,9 @@ class ProjectService {
   async deleteProject({ id }) {
     const exist = await this.getProject({ id });
     if (exist._id) {
+      exist.sections.map(async (section) => {
+        await this.deleteSection({ id, sectionName: section.name });
+      });
       return await this.MongoDB.delete(this.collection, id);
     } else {
       throw new Error('El proyecto no existe');
@@ -85,6 +91,9 @@ class ProjectService {
     const project = await this.getProject({ id });
     if (project) {
       let { sections } = project;
+      if (!sections) {
+        sections = [];
+      }
       for (let i = 0; i < sections.length; i++) {
         if (sections[i].name === section.name) {
           throw Error('La seccion ya existe');
@@ -101,9 +110,37 @@ class ProjectService {
     }
   }
 
+  async changeSectionName({ id, oldSectionName, newSectionName }) {
+    const exist = await this.getProject({ id });
+    if (!exist) {
+      throw Error('El proyecto no existe');
+    }
+    let projectSections = exist.sections;
+    let sections = [];
+    if (!projectSections) {
+      throw Error('El proyecto no tiene secciones');
+    }
+    projectSections.map((section, index) => {
+      let newSection = section;
+      if (section.name === oldSectionName) {
+        newSection.name = newSectionName;
+      }
+      sections.push(newSection);
+    });
+    return await this.updateProject({
+      id,
+      project: { sections },
+    });
+  }
+
   async deleteSection({ id, name }) {
     const project = await this.getProject({ id });
     if (project) {
+      project.sections.map(async (section) => {
+        section.tasks.map(async (task) => {
+          await this.taskService.deleteTask({ id: task });
+        });
+      });
       let newSections = project.sections.filter(function (value) {
         return value.name !== name;
       });
@@ -169,6 +206,33 @@ class ProjectService {
     } else {
       throw Error('El proyecto no existe');
     }
+  }
+
+  async getSectionTask({ id, sectionName }) {
+    const project = await this.getProject({ id });
+    if (!project) {
+      throw new Error('El proyecto no existe');
+    }
+    if (!project.sections) {
+      throw new Error('El proyecto no tiene secciones');
+    }
+    let sections = {};
+    for (let j = 0; j < project.sections.length; j++) {
+      if (project.sections[j].name === sectionName) {
+        sections = { name: sectionName, tasks: [] };
+        for (let i = 0; i < project.sections[j].tasks.length; i++) {
+          const sectionTask = await this.taskService.getTask({
+            id: project.sections[j].tasks[i],
+          });
+          sections.tasks.push(sectionTask);
+        }
+        return sections;
+      }
+    }
+    if (!sections.name) {
+      throw Error('La seccion no existe');
+    }
+    return {};
   }
 }
 
