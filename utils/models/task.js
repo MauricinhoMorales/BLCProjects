@@ -1,6 +1,5 @@
 const joi = require('joi');
 const { userIdSchema } = require('./user');
-const { projectIdSchema } = require('./project');
 
 const taskIdSchema = joi.string().regex(/^[0-9a-fA-F]{24}$/);
 
@@ -20,8 +19,8 @@ const currentPrioritySchema = joi.object({
 const progressSchema = joi.number().min(0).max(100);
 
 const dueDateSchema = joi.object({
-  start: joi.string().min(10).max(10),
-  end: joi.string().min(10).max(10),
+  start: joi.date(),
+  end: joi.date(),
 });
 
 const projectSchema = joi.object({
@@ -58,7 +57,6 @@ const updateTaskSchema = joi.object({
 
 module.exports = {
   taskIdSchema,
-  projectSchema,
   createTaskSchema,
   updateTaskSchema,
 };

@@ -69,6 +69,12 @@ export default function NewProjectPage({
               ? { creator_id: user.user.id, isTeam: false }
               : '',
           color: color,
+          currentPriority: {},
+          currentStatus: {},
+          progress: 0,
+          sections: [],
+          projectStatuses: [],
+          projectPriorities: [],
         },
         {
           headers: {
@@ -123,7 +129,7 @@ export default function NewProjectPage({
             padding="2em"
             w="50%"
             h="100%"
-            boxShadow="1px 1px 3px 0px rgba(0, 0, 0, 0.3);"
+            boxShadow="-2px 2px 8px 2px rgba(0,0,0,0.10)"
             borderRadius="10px"
             margin="2em">
             <Heading as="h3" color="richBlack.500">

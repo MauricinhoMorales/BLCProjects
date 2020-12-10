@@ -1,17 +1,15 @@
 import boom from 'boom';
 import authenticated from '../../../../utils/auth/authenticatedWrapper';
-import { validationHandler } from '../../../../utils/middlewares/validationHandlers';
 import { errorHandler } from '../../../../utils/middlewares/errorHandlers';
 import scopeValidationHandler from '../../../../utils/middlewares/scopesValidationHandler';
 import ProjectService from '../../../../services/project';
-
 import {
-  updateProjectSchema,
+  sectionSchema,
   projectIdSchema,
 } from '../../../../utils/models/project';
+import { validationHandler } from '../../../../utils/middlewares/validationHandlers';
 
 export default authenticated(async function (req, res) {
-  debugger;
   const { method } = req;
   const projectService = new ProjectService();
 
@@ -28,14 +26,57 @@ export default authenticated(async function (req, res) {
             req,
             res,
             async function (req, res) {
+              const {
+                query: { id },
+              } = req;
               try {
-                const project = await projectService.getProject({
-                  id: req.query.id,
+                const sections = await projectService.getProjectSections({
+                  id,
                 });
-                res.status(200).json(project);
+                res.status(200).json(sections);
               } catch (err) {
                 errorHandler(boom.internal(err), req, res);
               }
+            }
+          );
+        }
+      );
+      break;
+    case 'POST':
+      validationHandler(
+        projectIdSchema,
+        'query',
+        req,
+        res,
+        function (req, res) {
+          validationHandler(
+            sectionSchema,
+            'body',
+            req,
+            res,
+            function (req, res) {
+              scopeValidationHandler(
+                ['update:projects'],
+                req,
+                res,
+                async function (req, res) {
+                  const {
+                    query: { id },
+                  } = req;
+                  const { body: section } = req;
+                  try {
+                    const updatedProjectId = await projectService.addNewSection(
+                      {
+                        id,
+                        section,
+                      }
+                    );
+                    res.status(201).json(updatedProjectId);
+                  } catch (err) {
+                    errorHandler(boom.internal(err), req, res);
+                  }
+                }
+              );
             }
           );
         }
@@ -48,30 +89,29 @@ export default authenticated(async function (req, res) {
         req,
         res,
         function (req, res) {
-          validationHandler(
-            updateProjectSchema,
-            'body',
+          scopeValidationHandler(
+            ['update:projects'],
             req,
             res,
-            function (req, res) {
-              scopeValidationHandler(
-                ['update:projects'],
-                req,
-                res,
-                async function (req, res) {
-                  try {
-                    const updatedProjectId = await projectService.updateProject(
-                      {
-                        id: req.query.id,
-                        project: req.body,
-                      }
-                    );
-                    res.status(200).json(updatedProjectId);
-                  } catch (err) {
-                    errorHandler(boom.internal(err), req, res);
+            async function (req, res) {
+              const {
+                query: { id },
+              } = req;
+              const {
+                body: { oldSectionName, newSectionName },
+              } = req;
+              try {
+                const updatedProjectId = await projectService.changeSectionName(
+                  {
+                    id,
+                    oldSectionName,
+                    newSectionName,
                   }
-                }
-              );
+                );
+                res.status(201).json(updatedProjectId);
+              } catch (err) {
+                errorHandler(boom.internal(err), req, res);
+              }
             }
           );
         }
@@ -90,13 +130,14 @@ export default authenticated(async function (req, res) {
             res,
             async function (req, res) {
               const {
-                query: { id },
+                query: { id, name },
               } = req;
               try {
-                const deletedProjectId = await projectService.deleteProject({
+                const updatedProjectId = await projectService.deleteSection({
                   id,
+                  name,
                 });
-                res.status(200).json(deletedProjectId);
+                res.status(200).json(updatedProjectId);
               } catch (err) {
                 errorHandler(boom.internal(err), req, res);
               }
