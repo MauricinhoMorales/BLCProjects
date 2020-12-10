@@ -6,7 +6,6 @@ const UserService = require('../../../../services/user');
 const MailjetService = require('../../../../services/mailjet');
 
 export default async function handler(req, res) {
-  debugger;
   const { method } = req;
   const userService = new UserService();
   const mailjetService = new MailjetService();
