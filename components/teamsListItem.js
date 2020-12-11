@@ -18,10 +18,9 @@ import Axios from 'axios';
 import { MoreVertical, Trash, UserPlus } from 'react-feather';
 import { useRouter } from 'next/router';
 
-export default function projectsListItem({
-  project,
-  creatorName,
-  userName,
+export default function TeamsListItem({
+  team,
+  membersCount,
   userId,
   jwtToken,
   url,
@@ -34,14 +33,14 @@ export default function projectsListItem({
       e.target.tagName !== 'svg' &&
       e.target.tagName !== 'circle'
     ) {
-      Router.replace(`/${userId}/my-projects/${project._id}`);
+      Router.replace(`/${userId}/my-teams/${team._id}`);
     }
   };
 
   const onSelect = async (selection) => {
-    if (selection.target.innerText === 'Eliminar Proyecto') {
+    if (selection.target.innerText === 'Eliminar Equipo') {
       try {
-        await Axios.delete(`${url}/api/projects/${project._id}`, {
+        await Axios.delete(`${url}/api/teams/${team._id}`, {
           headers: {
             Authorization: jwtToken,
           },
@@ -51,7 +50,7 @@ export default function projectsListItem({
         console.log(err);
         toast({
           title: 'Error.',
-          description: 'Ha ocurrido un error al intentar eliminar el proyecto.',
+          description: 'Ha ocurrido un error al intentar eliminar el equipo.',
           duration: 9000,
           status: 'error',
           isClosable: true,
@@ -73,7 +72,7 @@ export default function projectsListItem({
         <Box
           w="100%"
           h="11em"
-          bg={project.color || 'green.500'}
+          bg={team.color || 'green.500'}
           borderRadius="10px 10px 0px 0px"
           padding="1em"></Box>
         <HStack
@@ -85,10 +84,10 @@ export default function projectsListItem({
           h="6em">
           <Stack spacing="0.3em" align="start" justify="center" w="90%">
             <Text fontWeight="bold" color="richBlack.500" fontSize="lg">
-              {project.name}
+              {team.name}
             </Text>
             <Text color="richBlack.200" fontSize="md">
-              {creatorName === userName ? 'Personal' : creatorName}
+              {`${membersCount} ${membersCount === 1 ? 'miembro' : 'miembros'}`}
             </Text>
           </Stack>
           <Menu isLazy>
@@ -114,7 +113,7 @@ export default function projectsListItem({
                 color="red.500"
                 icon={<Icon as={Trash} color="red.500" />}
                 _hover={{ bg: 'red.100' }}>
-                Eliminar Proyecto
+                Eliminar Equipo
               </MenuItem>
             </MenuList>
           </Menu>
