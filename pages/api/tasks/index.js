@@ -29,20 +29,22 @@ export default authenticated(async function (req, res) {
     });
   } else if (method === 'POST') {
     validationHandler(createTaskSchema, 'body', req, res, function (req, res) {
-      scopeValidationHandler(['create:tasks'], req, res, async function (
+      scopeValidationHandler(
+        ['create:tasks'],
         req,
-        res
-      ) {
-        const { body: task } = req;
-        try {
-          const createdTaskId = await taskService.createTask({ task });
-          res.status(201).json(createdTaskId);
-        } catch (err) {
-          errorHandler(boom.internal(err), req, res);
+        res,
+        async function (req, res) {
+          const { body: task } = req;
+          try {
+            const createdTaskId = await taskService.createTask({ task });
+            res.status(201).json(createdTaskId);
+          } catch (err) {
+            errorHandler(boom.internal(err), req, res);
+          }
         }
-      });
+      );
     });
   } else {
-    errorHandler(boom.methodNotAllowed(), req, res);
+    errorHandler(boom.methodNotAllowed('Metodo no permitido'), req, res);
   }
 });

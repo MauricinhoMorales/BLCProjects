@@ -6,11 +6,11 @@ const teamIdSchema = joi.string().regex(/^[0-9a-fA-F]{24}$/);
 const nameSchema = joi.string().min(2).max(50);
 const memberSchema = joi.object({
   member_id: userIdSchema.required(),
-  permissions: joi.array().items(joi.string()).required(),
+  permissions: joi.string().required(),
   role: joi.string().min(3).max(30).required(),
 });
 
-const colorSchema = joi.string().hex();
+const colorSchema = joi.string().min(4).max(7);
 const membersSchema = joi.array().items(memberSchema);
 const areaConocimientoSchema = joi.string().min(3).max(50);
 const projectsSchema = joi.array().items(userIdSchema);

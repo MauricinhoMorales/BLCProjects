@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Heading,
   Flex,
@@ -12,12 +12,16 @@ import {
   HStack,
   IconButton,
   Icon,
+  Input,
+  InputGroup,
+  InputLeftElement,
 } from '@chakra-ui/react';
 import Axios from 'axios';
 import Head from 'next/head';
 import InContruction from '../../../../components/inConstruction';
 import { parseCookies } from '../../../../lib/parseCookies';
-import { Columns, List } from 'react-feather';
+import { ChevronDown, Columns, List } from 'react-feather';
+import ProjectSectionsList from '../../../../components/projectSectionsList';
 
 export default function ProjectPage({
   initialUser,
@@ -27,12 +31,39 @@ export default function ProjectPage({
   user,
   setShow,
 }) {
+  const [sections, setSections] = useState(() => {
+    return project.sections || [];
+  });
   useEffect(() => {
     if (initialUser) {
       setUser(initialUser);
     }
     setShow(true);
   });
+
+  const handleNewSection = async (e) => {
+    if (e.key === 'Enter' || e.keyCode === 13) {
+      try {
+        await Axios.post(
+          `/api/projects/${project._id}/sections`,
+          {
+            name: e.target.value,
+            tasks: [],
+          },
+          {
+            headers: {
+              Authorization: user.jwtToken,
+            },
+          }
+        );
+        setSections([...sections, { name: e.target.value, tasks: [] }]);
+      } catch (err) {
+        console.log(err.response);
+      }
+      e.target.value = '';
+    }
+  };
+
   return (
     <>
       <Head>
@@ -116,6 +147,33 @@ export default function ProjectPage({
                   isRound
                 />
               </HStack>
+              {sections.map((section, index) => {
+                return (
+                  <ProjectSectionsList
+                    index={index}
+                    sections={sections}
+                    setSections={setSections}
+                    user={user}
+                    section={section}
+                    projectId={project._id}
+                    color={project.color || 'blue'}
+                  />
+                );
+              })}
+              <InputGroup>
+                <InputLeftElement
+                  pointerEvents="none"
+                  children={<Icon as={ChevronDown} color="gray.500" />}
+                />
+                <Input
+                  border="0"
+                  placeholder="Nueva seccion..."
+                  fontSize="lg"
+                  fontWeight="bold"
+                  color="richBlack.500"
+                  onKeyUp={handleNewSection}
+                />
+              </InputGroup>
             </TabPanel>
             <TabPanel w="100%" h="100%">
               <InContruction />
@@ -139,6 +197,7 @@ export default function ProjectPage({
 export async function getServerSideProps(context) {
   const userCookie = parseCookies(context.req);
   const user = JSON.parse(userCookie.user);
+  let project;
   try {
     const response = await Axios.get(
       `http://localhost:3000/api/projects/${context.query.id}`,
@@ -148,20 +207,42 @@ export async function getServerSideProps(context) {
         },
       }
     );
+    project = response.data;
+    let sections = [];
+    if (project.sections) {
+      try {
+        for (let i = 0; i < project.sections.length; i++) {
+          const response = await Axios.get(
+            `http://localhost:3000/api/projects/${context.query.id}/tasks`,
+            {
+              params: {
+                sectionName: project.sections[i].name,
+              },
+              headers: {
+                Authorization: user.jwtToken,
+              },
+            }
+          );
+          sections.push(response.data);
+        }
+        project.sections = sections;
+      } catch (err) {
+        console.log('Task Error', err.response);
+      }
+    }
     return {
       props: {
         initialUser: user,
-        project: response.data,
+        project,
         isError: false,
       },
     };
   } catch (err) {
-    console.log(err.response);
     return {
       props: {
         isError: true,
         initialUser: user,
-        project: null,
+        project: { name: '', sections: [], creator: { creator_id: '' } },
       },
     };
   }

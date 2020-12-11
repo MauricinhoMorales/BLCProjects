@@ -29,19 +29,21 @@ export default authenticated(async function (req, res) {
     });
   } else if (method === 'POST') {
     validationHandler(createTeamSchema, 'body', req, res, function (req, res) {
-      scopeValidationHandler(['create:teams'], req, res, async function (
+      scopeValidationHandler(
+        ['create:teams'],
         req,
-        res
-      ) {
-        try {
-          const createdTeamId = await teamService.createTeam({
-            team: req.body,
-          });
-          res.status(201).json(createdTeamId);
-        } catch (err) {
-          errorHandler(boom.internal(err), req, res);
+        res,
+        async function (req, res) {
+          try {
+            const createdTeamId = await teamService.createTeam({
+              team: req.body,
+            });
+            res.status(201).json(createdTeamId);
+          } catch (err) {
+            errorHandler(boom.internal(err), req, res);
+          }
         }
-      });
+      );
     });
   } else {
     errorHandler(boom.methodNotAllowed(), req, res);

@@ -1,11 +1,9 @@
 const MongoLib = require('../lib/db');
-const ProjectService = require('./project');
 
 class TaskService {
   constructor() {
     this.MongoDB = new MongoLib();
     this.collection = 'tasks';
-    this.projectService = new ProjectService();
   }
 
   async getTasks({ name, assignedTo, dueDate, creator }) {
@@ -38,13 +36,7 @@ class TaskService {
   async deleteTask({ id }) {
     const exist = await this.getTask({ id });
     if (exist._id) {
-      const deletedTaskId = await this.MongoDB.delete(this.collection, id);
-      await this.projectService.deleteTaskFromSection({
-        id: exist.projects[0].project_id,
-        sectionName: exist.projects[0].section_name,
-        taskId: deletedTaskId,
-      });
-      return deletedTaskId;
+      return await this.MongoDB.delete(this.collection, id);
     } else {
       throw new Error('La tarea no existe');
     }
@@ -52,11 +44,6 @@ class TaskService {
 
   async createTask({ task }) {
     const createdTaskId = await this.MongoDB.create(this.collection, task);
-    await this.projectService.addTaskToSection({
-      id: task.projects[0].project_id,
-      sectionName: task.projects[0].section_name,
-      taskId: createdTaskId,
-    });
     return createdTaskId;
   }
 }
