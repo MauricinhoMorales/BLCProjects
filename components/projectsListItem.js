@@ -12,6 +12,7 @@ import {
   MenuDivider,
   MenuList,
   MenuItem,
+  Spinner,
   useToast,
 } from '@chakra-ui/react';
 import Axios from 'axios';
@@ -24,28 +25,28 @@ export default function projectsListItem({
   userName,
   userId,
   jwtToken,
-  url,
 }) {
+  const [isLoading, setIsLoading] = useState(false);
   const Router = useRouter();
   const toast = useToast();
   const handleClick = async (e) => {
-    if (
-      e.target.tagName !== 'button' &&
-      e.target.tagName !== 'svg' &&
-      e.target.tagName !== 'circle'
-    ) {
+    if (e.target.id !== 'menuButton' && !e.target.id.includes('menuitem')) {
       Router.replace(`/${userId}/my-projects/${project._id}`);
     }
   };
 
   const onSelect = async (selection) => {
+    console.log('Selection', selection);
     if (selection.target.innerText === 'Eliminar Proyecto') {
       try {
-        await Axios.delete(`${url}/api/projects/${project._id}`, {
-          headers: {
-            Authorization: jwtToken,
-          },
-        });
+        await Axios.delete(
+          `http://localhost:3000/api/projects/${project._id}`,
+          {
+            headers: {
+              Authorization: jwtToken,
+            },
+          }
+        );
         Router.replace(Router.asPath);
       } catch (err) {
         console.log(err);
@@ -75,7 +76,11 @@ export default function projectsListItem({
           h="11em"
           bg={project.color || 'green.500'}
           borderRadius="10px 10px 0px 0px"
-          padding="1em"></Box>
+          padding="1em">
+          {isLoading ? (
+            <Spinner speed="0.65" color="white" thickness="4px" size="sm" />
+          ) : null}
+        </Box>
         <HStack
           spacing="0.4em"
           align="center"
@@ -96,8 +101,13 @@ export default function projectsListItem({
               as={IconButton}
               isRound
               variant="ghost"
-              id="menuButton"
-              icon={<Icon as={MoreVertical} color="romanSilver.500" />}
+              icon={
+                <Icon
+                  as={MoreVertical}
+                  color="romanSilver.500"
+                  id="menuButton"
+                />
+              }
             />
             <MenuList overflowY="hidden">
               <MenuItem

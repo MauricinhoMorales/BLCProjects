@@ -22,7 +22,6 @@ import {
 import { ChevronDown, Plus } from 'react-feather';
 import ProjectSectionsTaskItem from './projectSectionsTaskItem';
 import Axios from 'axios';
-import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 
 export default function ProjectSectionsList({
   section,
@@ -31,12 +30,11 @@ export default function ProjectSectionsList({
   user,
   sections,
   setSections,
-  index,
 }) {
   const [tasks, setTasks] = useState(() => {
     return section.tasks || [];
   });
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
   const handleNewTask = async (e) => {
     if (e.key === 'Enter' || e.keyCode === 13) {
       try {
@@ -101,6 +99,7 @@ export default function ProjectSectionsList({
           let newSections = sections.filter(
             (newSection) => newSection.name !== section.name
           );
+          console.log(newSections);
           setSections(newSections);
         } catch (err) {
           console.log(err.response);
@@ -134,15 +133,6 @@ export default function ProjectSectionsList({
     } catch (err) {
       console.log(err.response);
     }
-  };
-
-  const handleOnDragEnd = (result) => {
-    if (!result.destination) return;
-    const items = Array.from(tasks);
-    const [reorderedItem] = items.splice(result.source.index, 1);
-    items.splice(result.destination.index, 0, reorderedItem);
-
-    setTasks(items);
   };
 
   return (
@@ -227,40 +217,19 @@ export default function ProjectSectionsList({
         </Center>
       </Flex>
       <Collapse in={isOpen} animateOpacity>
-        <DragDropContext onDragEnd={handleOnDragEnd}>
-          <Droppable droppableId={`${projectId}-${index}`}>
-            {(provided) => (
-              <ul
-                ref={provided.innerRef}
-                {...provided.droppableProps}
-                style={{ listStyle: 'none' }}>
-                {tasks.map((task, index) => {
-                  return (
-                    <Draggable
-                      key={task._id}
-                      draggableId={task._id}
-                      index={index}>
-                      {(provided) => (
-                        <ProjectSectionsTaskItem
-                          provided={provided}
-                          innerRef={provided.innerRef}
-                          projectId={projectId}
-                          sectionName={section.name}
-                          tasks={tasks}
-                          setTasks={setTasks}
-                          task={task}
-                          color={color}
-                          jwtToken={user.jwtToken}
-                        />
-                      )}
-                    </Draggable>
-                  );
-                })}
-                {provided.placeholder}
-              </ul>
-            )}
-          </Droppable>
-        </DragDropContext>
+        {tasks.map((task) => {
+          return (
+            <ProjectSectionsTaskItem
+              projectId={projectId}
+              sectionName={section.name}
+              tasks={tasks}
+              setTasks={setTasks}
+              task={task}
+              color={color}
+              jwtToken={user.jwtToken}
+            />
+          );
+        })}
         <Flex flex={13}>
           <HStack spacing="0" flex={13}>
             <Box w="2.4em"></Box>
