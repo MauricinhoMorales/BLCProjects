@@ -35,9 +35,9 @@ import departamentos from '../../../data/departamentos';
 import colorArray from '../../../theme/colors';
 import Autosuggest from 'react-autosuggest';
 import Axios from 'axios';
-import { config } from '../../../config/index';
 import theme from '../../../styles/suggestionTheme.module.css';
 import MembersList from '../../../components/memberList';
+import { config } from '../../../config/index';
 
 export default function NewTeamPage({
   initialUser,
@@ -350,6 +350,10 @@ export async function getServerSideProps({ req }) {
   if (user) {
     try {
       const users = await Axios.get(`${config.url}/api/users`, {
+        proxy: {
+          port: 3000,
+          host: 'localhost',
+        },
         headers: {
           Authorization: user.jwtToken,
         },
@@ -358,7 +362,9 @@ export async function getServerSideProps({ req }) {
         props: {
           initialUser: user,
           isError: false,
-          users: users.data,
+          users: users.data.filter(
+            (otherUser) => otherUser._id !== user.user.id
+          ),
         },
       };
     } catch (err) {

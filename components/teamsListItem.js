@@ -102,7 +102,6 @@ export default function TeamsListItem({
               <MenuItem
                 id="inviteMember"
                 iconSpacing="8px"
-                isDisabled
                 icon={<Icon as={UserPlus} />}>
                 Invitar miembro
               </MenuItem>

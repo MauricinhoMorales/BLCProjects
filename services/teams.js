@@ -74,6 +74,10 @@ class TeamService {
         };
         delete member['password'];
         delete member['isAdmin'];
+        delete member['activationCode'];
+        delete member['activationCodeExpires'];
+        delete member['accountActivated'];
+        delete member['_id'];
         membersDetails.push(member);
       }
       return membersDetails;
