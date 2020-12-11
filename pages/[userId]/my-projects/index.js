@@ -76,7 +76,7 @@ export async function getServerSideProps({ req }) {
   const userCookie = parseCookies(req);
   const user = JSON.parse(userCookie.user);
   try {
-    const projects = await Axios.get(`${config.url}/api/projects`, {
+    const projects = await Axios.get(`http://localhost:3000/api/projects`, {
       params: {
         creator: user.user.id,
       },
@@ -92,7 +92,7 @@ export async function getServerSideProps({ req }) {
       },
     };
   } catch (err) {
-    console.log(err.response);
+    console.log(err);
     return {
       props: {
         projects: [],

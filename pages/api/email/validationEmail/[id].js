@@ -20,7 +20,7 @@ export default async function handler(req, res) {
     try {
       const activationCode = crypto.randomBytes(20).toString('hex');
       const activationCodeExpires = Date.now() + 24 * 3600 * 1000;
-      const link = `http://${config.url}/activation/${activationCode}`;
+      const link = `${config.url}/activation/${activationCode}`;
       const user = await userService.getUser({ id });
       mailjetService.sendActivationEmail({
         userEmail: user.email,
