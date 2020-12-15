@@ -76,11 +76,7 @@ export async function getServerSideProps({ req }) {
   const userCookie = parseCookies(req);
   const user = JSON.parse(userCookie.user);
   try {
-<<<<<<< Updated upstream
     const projects = await Axios.get(`http://localhost:3000/api/projects`, {
-=======
-    const projects = await Axios.get(`${config.url}/api/projects`, {
->>>>>>> Stashed changes
       params: {
         creator: user.user.id,
       },
@@ -96,11 +92,7 @@ export async function getServerSideProps({ req }) {
       },
     };
   } catch (err) {
-<<<<<<< Updated upstream
     console.log(err);
-=======
-    console.log(err.response);
->>>>>>> Stashed changes
     return {
       props: {
         projects: [],

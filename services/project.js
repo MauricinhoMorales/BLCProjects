@@ -2,7 +2,6 @@ const MongoLib = require('../lib/db');
 const TeamService = require('./teams');
 const UserService = require('./user');
 const TaskService = require('./task');
-const project = require('../utils/models/project');
 
 class ProjectService {
   constructor() {

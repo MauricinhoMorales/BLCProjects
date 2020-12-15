@@ -21,13 +21,7 @@ import Head from 'next/head';
 import InContruction from '../../../../components/inConstruction';
 import { parseCookies } from '../../../../lib/parseCookies';
 import { ChevronDown, Columns, List } from 'react-feather';
-<<<<<<< Updated upstream
 import ProjectSectionsList from '../../../../components/projectSectionsList';
-=======
-import { config } from '../../../../config';
-import ProjectSectionsList from '../../../../components/projectSectionsList';
-import { DragDropContext, Droppable } from 'react-beautiful-dnd';
->>>>>>> Stashed changes
 
 export default function ProjectPage({
   initialUser,
@@ -206,7 +200,7 @@ export async function getServerSideProps(context) {
   let project;
   try {
     const response = await Axios.get(
-      `${config.url}/api/projects/${context.query.id}`,
+      `http://localhost:3000/api/projects/${context.query.id}`,
       {
         headers: {
           Authorization: user.jwtToken,
@@ -219,11 +213,7 @@ export async function getServerSideProps(context) {
       try {
         for (let i = 0; i < project.sections.length; i++) {
           const response = await Axios.get(
-<<<<<<< Updated upstream
             `http://localhost:3000/api/projects/${context.query.id}/tasks`,
-=======
-            `${config.url}/api/projects/${context.query.id}/tasks`,
->>>>>>> Stashed changes
             {
               params: {
                 sectionName: project.sections[i].name,
@@ -248,10 +238,6 @@ export async function getServerSideProps(context) {
       },
     };
   } catch (err) {
-<<<<<<< Updated upstream
-=======
-    console.log('Nada ok', err);
->>>>>>> Stashed changes
     return {
       props: {
         isError: true,
