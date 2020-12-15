@@ -28,13 +28,12 @@ class MailjetService {
         },
       ],
     });
-    request
-      .then((result) => {
-        console.log(result);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    try{
+      const respose = await request;
+      console.log("Mailjet response", respose);
+    }catch(err){
+      console.log("Mailjet error",err);
+    }
   }
 
   sendRecoveryEmail({ userEmail, userName, link }) {
