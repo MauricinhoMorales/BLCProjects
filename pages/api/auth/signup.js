@@ -22,6 +22,7 @@ export default async function handler(req, res) {
           });
           return res.status(200).json(createdUserId);
         } catch (err) {
+          console.log(err);
           return errorHandler(boom.internal(err), req, res);
         }
       }
