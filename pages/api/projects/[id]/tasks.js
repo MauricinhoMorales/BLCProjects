@@ -6,7 +6,6 @@ import ProjectService from '../../../../services/project';
 import {
   changeTaskSectionSchema,
   projectIdSchema,
-  updateProjectSchema,
 } from '../../../../utils/models/project';
 import { validationHandler } from '../../../../utils/middlewares/validationHandlers';
 
@@ -30,11 +29,19 @@ export default authenticated(async function (req, res) {
                 query: { id, sectionName },
               } = req;
               try {
+<<<<<<< HEAD
                 const sections = await projectService.getSectionTask({
                   id,
                   sectionName,
                 });
                 res.status(200).json(sections);
+=======
+                const tasks = await projectService.getSectionTask({
+                  id,
+                  sectionName,
+                });
+                res.status(200).json(tasks);
+>>>>>>> tania-workspace
               } catch (err) {
                 errorHandler(boom.internal(err), req, res);
               }
@@ -124,7 +131,11 @@ export default authenticated(async function (req, res) {
         res,
         function (req, res) {
           scopeValidationHandler(
+<<<<<<< HEAD
             ['delete:projects'],
+=======
+            ['update:projects'],
+>>>>>>> tania-workspace
             req,
             res,
             async function (req, res) {
@@ -133,11 +144,15 @@ export default authenticated(async function (req, res) {
               } = req;
               try {
                 const updatedProjectId = await projectService.deleteTaskFromSection(
+<<<<<<< HEAD
                   {
                     id,
                     sectionName,
                     taskId,
                   }
+=======
+                  { id, sectionName, taskId }
+>>>>>>> tania-workspace
                 );
                 res.status(200).json(updatedProjectId);
               } catch (err) {

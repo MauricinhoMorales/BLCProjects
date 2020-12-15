@@ -8,6 +8,7 @@ import { parseCookies } from '../../../lib/parseCookies';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import { config } from '../../../config/index';
+import Departamentos from '../../../data/departamentos';
 
 export default function MyProjectsPage({
   user,
@@ -15,6 +16,7 @@ export default function MyProjectsPage({
   initialUser,
   setShow,
   projects,
+  url,
 }) {
   const Router = useRouter();
 
@@ -26,7 +28,6 @@ export default function MyProjectsPage({
   }, []);
 
   const handleAddProjectClick = () => {
-    console;
     Router.replace(`/${user.user.id}/my-projects/new-project`);
   };
 
@@ -43,8 +44,8 @@ export default function MyProjectsPage({
           {projects.map((project) => {
             return (
               <ProjectsListItem
-                Flex={1}
                 key={project._id}
+                url={url}
                 jwtToken={user.jwtToken}
                 project={project}
                 creatorName={`${user.user.firstName} ${user.user.lastName}`}
@@ -75,7 +76,7 @@ export async function getServerSideProps({ req }) {
   const userCookie = parseCookies(req);
   const user = JSON.parse(userCookie.user);
   try {
-    const projects = await Axios.get(`http://${config.url}/api/projects`, {
+    const projects = await Axios.get(`http://localhost:3000/api/projects`, {
       params: {
         creator: user.user.id,
       },
@@ -83,19 +84,20 @@ export async function getServerSideProps({ req }) {
         Authorization: user.jwtToken,
       },
     });
-    console.log(projects.data);
     return {
       props: {
         projects: projects.data,
         initialUser: user,
+        url: config.url,
       },
     };
   } catch (err) {
-    console.log(error.response);
+    console.log(err);
     return {
       props: {
         projects: [],
         initialUser: user,
+        url: config.url,
       },
     };
   }
