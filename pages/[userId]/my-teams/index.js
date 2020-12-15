@@ -7,7 +7,6 @@ import { config } from '../../../config/index';
 import { parseCookies } from '../../../lib/parseCookies';
 import { useRouter } from 'next/router';
 import Axios from 'axios';
-import { config } from '../../../config/index';
 
 export default function MyTeamsPage({
   user,
