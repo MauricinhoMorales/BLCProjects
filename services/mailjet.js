@@ -5,7 +5,7 @@ const mailjet = require('node-mailjet').connect(
 );
 
 class MailjetService {
-  sendActivationEmail({ userEmail, userName, link }) {
+  async sendActivationEmail({ userEmail, userName, link }) {
     const request = mailjet.post('send', { version: 'v3.1' }).request({
       Messages: [
         {
@@ -28,11 +28,11 @@ class MailjetService {
         },
       ],
     });
-    try{
+    try {
       const respose = await request;
-      console.log("Mailjet response", respose);
-    }catch(err){
-      console.log("Mailjet error",err);
+      console.log('Mailjet response', respose);
+    } catch (err) {
+      console.log('Mailjet error', err);
     }
   }
 
