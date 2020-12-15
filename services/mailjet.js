@@ -30,10 +30,10 @@ class MailjetService {
     });
     request
       .then((result) => {
-        console.log(result.body);
+        console.log(result);
       })
       .catch((err) => {
-        console.log(err.statusCode);
+        console.log(err);
       });
   }
 
@@ -63,10 +63,10 @@ class MailjetService {
     });
     request
       .then((result) => {
-        console.log(result.body);
+        console.log(result);
       })
       .catch((err) => {
-        console.log(err.statusCode);
+        console.log(err);
       });
   }
 }
