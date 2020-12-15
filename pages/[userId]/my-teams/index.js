@@ -7,6 +7,7 @@ import { config } from '../../../config/index';
 import { parseCookies } from '../../../lib/parseCookies';
 import { useRouter } from 'next/router';
 import Axios from 'axios';
+import { config } from '../../../config/index';
 
 export default function MyTeamsPage({
   user,
@@ -75,7 +76,7 @@ export async function getServerSideProps({ req }) {
   const userCookie = parseCookies(req);
   const user = JSON.parse(userCookie.user);
   try {
-    const teams = await Axios.get(`http://localhost:3000/api/teams`, {
+    const teams = await Axios.get(`${config.url}/api/teams`, {
       params: {
         creator: user.user.id,
         memberId: user.user.id,
@@ -84,7 +85,7 @@ export async function getServerSideProps({ req }) {
         Authorization: user.jwtToken,
       },
     });
-    const users = await Axios.get(`http://localhost:3000/api/users`, {
+    const users = await Axios.get(`${config.url}/api/users`, {
       headers: {
         Authorization: user.jwtToken,
       },
