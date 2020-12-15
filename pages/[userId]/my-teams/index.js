@@ -14,6 +14,7 @@ export default function MyTeamsPage({
   initialUser,
   setShow,
   teams,
+  users,
   url,
 }) {
   const Router = useRouter();
@@ -42,6 +43,7 @@ export default function MyTeamsPage({
           {teams.map((team) => {
             return (
               <TeamsListItem
+                users={users}
                 key={team._id}
                 url={url}
                 jwtToken={user.jwtToken}
@@ -76,13 +78,20 @@ export async function getServerSideProps({ req }) {
     const teams = await Axios.get(`http://localhost:3000/api/teams`, {
       params: {
         creator: user.user.id,
+        memberId: user.user.id,
       },
+      headers: {
+        Authorization: user.jwtToken,
+      },
+    });
+    const users = await Axios.get(`http://localhost:3000/api/users`, {
       headers: {
         Authorization: user.jwtToken,
       },
     });
     return {
       props: {
+        users: users.data,
         teams: teams.data,
         isError: false,
         initialUser: user,
@@ -92,6 +101,7 @@ export async function getServerSideProps({ req }) {
   } catch (err) {
     return {
       props: {
+        users: [],
         teams: [],
         isError: true,
         initialUser: user,

@@ -10,19 +10,7 @@ export default authenticated(async function (req, res) {
   const { method } = req;
   const teamService = new TeamService();
 
-  if (method === 'GET') {
-    const {
-      query: { id },
-    } = req;
-    scopeValidationHandler(['read:teams'], req, res, async function (req, res) {
-      try {
-        const members = await teamService.getTeamMembersDetails({ id });
-        res.status(200).json(members);
-      } catch (err) {
-        errorHandler(boom.internal(err), req, res);
-      }
-    });
-  } else if (method === 'POST') {
+  if (method === 'POST') {
     validationHandler(teamIdSchema, 'query', req, res, function (req, res) {
       validationHandler(memberSchema, 'body', req, res, function (req, res) {
         scopeValidationHandler(
@@ -34,34 +22,9 @@ export default authenticated(async function (req, res) {
               query: { id },
             } = req;
             try {
-              const updatedTeamId = await teamService.addNewMember({
+              const updatedTeamId = await teamService.addProject({
                 id,
-                member: req.body,
-              });
-              res.status(200).json(updatedTeamId);
-            } catch (err) {
-              errorHandler(boom.internal(err), req, res);
-            }
-          }
-        );
-      });
-    });
-  } else if (method === 'PUT') {
-    validationHandler(teamIdSchema, 'query', req, res, function (req, res) {
-      validationHandler(memberSchema, 'body', req, res, function (req, res) {
-        scopeValidationHandler(
-          ['update:teams'],
-          req,
-          res,
-          async function (req, res) {
-            const {
-              query: { id },
-            } = req;
-            const { body: member } = req;
-            try {
-              const updatedTeamId = await teamService.updateMember({
-                id,
-                member,
+                project: req.body,
               });
               res.status(200).json(updatedTeamId);
             } catch (err) {
@@ -79,12 +42,12 @@ export default authenticated(async function (req, res) {
         res,
         async function (req, res) {
           const {
-            query: { id, memberId },
+            query: { id, projectId },
           } = req;
           try {
-            const updatedTeamId = await teamService.deleteMember({
+            const updatedTeamId = await teamService.deleteProject({
               id,
-              memberId,
+              projectId,
             });
             res.status(200).json(updatedTeamId);
           } catch (err) {

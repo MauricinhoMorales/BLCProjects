@@ -8,7 +8,7 @@ class TeamService {
     this.userService = new UserService();
   }
 
-  async getTeams({ name, creator, areaConocimiento }) {
+  async getTeams({ name, creator, areaConocimiento, memberId }) {
     const query = { name, creator, areaConocimiento };
 
     Object.keys(query).forEach((key) => {
@@ -16,9 +16,20 @@ class TeamService {
         delete query[key];
       }
     });
-
+    let memberTeams = [];
     const teams = await this.MongoDB.getAll(this.collection, query);
-    return teams || [];
+    if (memberId !== undefined) {
+      memberTeams = await this.MongoDB.getAll(this.collection, null);
+      memberTeams = memberTeams.filter((team) => team.creator !== memberId);
+      memberTeams = memberTeams.filter((team) => {
+        for (let i = 0; i < team.members.length; i++) {
+          if (team.members[i].member_id === memberId) {
+            return team;
+          }
+        }
+      });
+    }
+    return [...teams, ...memberTeams] || [];
   }
 
   async getTeam({ id }) {
@@ -94,6 +105,39 @@ class TeamService {
     }
   }
 
+  async updateMember({ id, member }) {
+    let team = await this.getTeam({ id });
+    let existMember = false;
+    if (team) {
+      for (let i = 0; i < team.members.length; i++) {
+        if (team.members[i].member_id === member.member_id) {
+          team.members[i] = member;
+          existMember = true;
+        }
+      }
+      if (!existMember) {
+        throw new Error('Miembro no se encuentra agregado al equipo');
+      }
+      team.members = team.members.sort((a, b) => a.member_id > b.member_id);
+      return await this.updateTeam({ id, team });
+    } else {
+      throw new Error('El equipo no existe');
+    }
+  }
+
+  async deleteMember({ id, memberId }) {
+    let team = await this.getTeam({ id });
+    if (team) {
+      team.members = team.members.filter(
+        (member) => member.member_id !== memberId
+      );
+      team.members = team.members.sort((a, b) => a.member_id > b.member_id);
+      return await this.updateTeam({ id, team });
+    } else {
+      throw new Error('El equipo no existe');
+    }
+  }
+
   async addProject({ id, project }) {
     let team = await this.getTeam({ id });
     if (team.length) {
@@ -102,6 +146,19 @@ class TeamService {
       team = {
         ...team,
         projects: team.projects.push(project) || [project],
+      };
+      return await this.updateTeam({ id, team });
+    }
+  }
+
+  async deleteProject({ id, projectId }) {
+    let team = await this.getTeam({ id });
+    if (team.length) {
+    } else {
+      team = {
+        ...team,
+        projects:
+          team.projects.filter((project) => project !== projectId) || [],
       };
       return await this.updateTeam({ id, team });
     }
