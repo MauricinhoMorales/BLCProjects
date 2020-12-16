@@ -143,9 +143,11 @@ class TeamService {
     if (team.length) {
       throw new Error('El equipo no existe');
     } else {
+      let projects = team.projects;
+      projects.push(project.project);
       team = {
         ...team,
-        projects: team.projects.push(project) || [project],
+        projects,
       };
       return await this.updateTeam({ id, team });
     }

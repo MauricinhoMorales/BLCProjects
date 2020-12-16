@@ -24,6 +24,4 @@ const config = {
   mesiboApiUrl: process.env.MESIBO_API_URL,
 };
 
-console.log(config);
-
 module.exports = { config };
