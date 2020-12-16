@@ -2,20 +2,33 @@ import { useEffect, useState } from 'react';
 import {
   Box,
   HStack,
-  WrapItem,
   Text,
   Icon,
   Stack,
+  Flex,
+  Spacer,
   MenuButton,
   IconButton,
   Menu,
   MenuDivider,
   MenuList,
   MenuItem,
+  Modal,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  ModalHeader,
+  ModalContent,
+  ModalOverlay,
+  Button,
+  VStack,
+  Input,
+  Textarea,
   useToast,
+  useDisclosure,
 } from '@chakra-ui/react';
 import Axios from 'axios';
-import { MoreVertical, Trash, UserPlus } from 'react-feather';
+import { Edit, MoreVertical, Trash } from 'react-feather';
 import { useRouter } from 'next/router';
 
 export default function projectsListItem({
@@ -25,41 +38,114 @@ export default function projectsListItem({
   userId,
   jwtToken,
   url,
+  projects,
+  setProjects,
 }) {
+  const [teamCreatorName, setTeamCreatorName] = useState('Personal');
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [isOpenDelete, setOpenDelete] = useState(false);
+  const [inputValue, setInputValue] = useState(project.name);
+  const [descriptionValue, setDescriptionValue] = useState(project.description);
+  const [loading, setLoading] = useState(false);
   const Router = useRouter();
   const toast = useToast();
+
+  useEffect(async () => {
+    if (userName !== creatorName) {
+      try {
+        const team = await Axios.get(`/api/teams/${creatorName}`, {
+          headers: {
+            Authorization: jwtToken,
+          },
+        });
+        setTeamCreatorName(team.data.name);
+      } catch (err) {
+        console.log(err.response);
+      }
+    }
+  }, []);
+
   const handleClick = async (e) => {
     if (
-      e.target.tagName !== 'button' &&
+      e.target.localName !== 'button' &&
       e.target.tagName !== 'svg' &&
-      e.target.tagName !== 'circle'
+      e.target.tagName !== 'circle' &&
+      !e.target.id.includes('menuitem')
     ) {
       Router.replace(`/${userId}/my-projects/${project._id}`);
     }
   };
 
-  const onSelect = async (selection) => {
-    if (selection.target.innerText === 'Eliminar Proyecto') {
-      try {
-        await Axios.delete(`${url}/api/projects/${project._id}`, {
+  const onChangeInput = (e) => {
+    setInputValue(e.target.value);
+  };
+
+  const onChangeTextArea = (e) => {
+    setDescriptionValue(e.target.value);
+  };
+
+  const onClickChange = async () => {
+    setLoading(true);
+    try {
+      await Axios.put(
+        `/api/projects/${project._id}`,
+        {
+          name: inputValue,
+          description: descriptionValue,
+        },
+        {
           headers: {
             Authorization: jwtToken,
           },
-        });
-        Router.replace(Router.asPath);
-      } catch (err) {
-        console.log(err);
-        toast({
-          title: 'Error.',
-          description: 'Ha ocurrido un error al intentar eliminar el proyecto.',
-          duration: 9000,
-          status: 'error',
-          isClosable: true,
-          position: 'top',
-        });
-      }
+        }
+      );
+      let myProjects = projects;
+      myProjects.map((projectItem, index) => {
+        if (projectItem._id === project._id) {
+          myProjects[index].name = inputValue;
+          myProjects[index].description = descriptionValue;
+        }
+      });
+      setProjects(myProjects);
+      onClose();
+    } catch (err) {
+      console.log(err);
+    }
+    setLoading(false);
+  };
+
+  const onDeleteProject = async () => {
+    try {
+      await Axios.delete(`/api/projects/${project._id}`, {
+        headers: {
+          Authorization: jwtToken,
+        },
+      });
+      const myProjects = projects.filter(
+        (otherProject) => otherProject._id !== project._id
+      );
+      setProjects(myProjects);
+    } catch (err) {
+      console.log(err);
+      toast({
+        title: 'Error.',
+        description: 'Ha ocurrido un error al intentar eliminar el proyecto.',
+        duration: 9000,
+        status: 'error',
+        isClosable: true,
+        position: 'top',
+      });
     }
   };
+
+  const onOpenDelete = () => {
+    setOpenDelete(true);
+  };
+
+  const onCloseDelete = () => {
+    setOpenDelete(false);
+  };
+
   return (
     <>
       <Box
@@ -88,7 +174,7 @@ export default function projectsListItem({
               {project.name}
             </Text>
             <Text color="richBlack.200" fontSize="md">
-              {creatorName === userName ? 'Personal' : creatorName}
+              {teamCreatorName}
             </Text>
           </Stack>
           <Menu isLazy>
@@ -103,14 +189,14 @@ export default function projectsListItem({
               <MenuItem
                 id="inviteMember"
                 iconSpacing="8px"
-                isDisabled
-                icon={<Icon as={UserPlus} />}>
-                Invitar miembro
+                onClick={onOpen}
+                icon={<Icon as={Edit} />}>
+                Editar Proyecto
               </MenuItem>
               <MenuDivider />
               <MenuItem
-                onClick={(e) => onSelect(e)}
                 iconSpacing="8px"
+                onClick={onOpenDelete}
                 color="red.500"
                 icon={<Icon as={Trash} color="red.500" />}
                 _hover={{ bg: 'red.100' }}>
@@ -120,6 +206,85 @@ export default function projectsListItem({
           </Menu>
         </HStack>
       </Box>
+      <Modal isOpen={isOpen} onClose={onClose} isCentered>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Editar Proyecto</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <VStack spacing="0.5em" w="100%" h="100%" align="start">
+              <Text fontWeight="bold" color="richBlack.500">
+                Nombre del Proyecto
+              </Text>
+              <Input
+                className="input"
+                value={inputValue}
+                onChange={onChangeInput}
+              />
+              <Box h="0.5em" />
+              <Text fontWeight="bold" color="richBlack.500">
+                Descripción
+              </Text>
+              <Textarea
+                className="input"
+                value={descriptionValue}
+                onChange={onChangeTextArea}
+              />
+            </VStack>
+          </ModalBody>
+          <ModalFooter alignContent="flex-end">
+            <Button
+              isLoading={loading}
+              variant="primary"
+              bg="rufous.500"
+              color="white"
+              borderRadius="100px"
+              className="button"
+              onClick={onClickChange}>
+              Guardar Cambios
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+      <Modal
+        motionPreset="scale"
+        isOpen={isOpenDelete}
+        onClose={onCloseDelete}
+        closeOnOverlayClick={false}
+        isCentered>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Confirmación de eliminación</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Text color="richBlack.500">
+              ¿Está seguro que desea eliminar este Proyecto?
+            </Text>
+            <br />
+            <Text color="richBlack.500">
+              También se procederá a eliminar las tareas que fueron creadas en
+              este projecto.
+            </Text>
+          </ModalBody>
+          <ModalFooter>
+            <Flex w="100%">
+              <Button
+                colorScheme="gray"
+                onClick={onCloseDelete}
+                borderRadius="100px">
+                Cancel
+              </Button>
+              <Spacer />
+              <Button
+                colorScheme="red"
+                borderRadius="100px"
+                onClick={onDeleteProject}>
+                Eliminar
+              </Button>
+            </Flex>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </>
   );
 }

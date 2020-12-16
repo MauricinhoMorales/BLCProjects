@@ -22,6 +22,9 @@ import InContruction from '../../../../components/inConstruction';
 import { parseCookies } from '../../../../lib/parseCookies';
 import { ChevronDown, Columns, List } from 'react-feather';
 import ProjectSectionsList from '../../../../components/projectSectionsList';
+import { DragDropContext, Droppable } from 'react-beautiful-dnd';
+import { config } from '..7../../../config/index';
+import { useRouter } from 'next/router';
 
 export default function ProjectPage({
   initialUser,
@@ -34,12 +37,39 @@ export default function ProjectPage({
   const [sections, setSections] = useState(() => {
     return project.sections || [];
   });
+  const [teamCreatorName, setTeamCreatorName] = useState('Personal');
+  const [memberPermission, setMemberPermission] = useState('edit');
+  const Router = useRouter();
+
   useEffect(() => {
     if (initialUser) {
       setUser(initialUser);
     }
     setShow(true);
   });
+
+  useEffect(async () => {
+    if (project.creator.creator_id !== user.user.id) {
+      try {
+        const teamName = await Axios.get(
+          `/api/teams/${project.creator.creator_id}`,
+          {
+            headers: {
+              Authorization: user.jwtToken,
+            },
+          }
+        );
+        setTeamCreatorName(teamName.data.name);
+        for (let i = 0; i < teamName.data.members.length; i++) {
+          if (teamName.data.members[i].member_id === user.user.id) {
+            setMemberPermission(teamName.data.members[i].permissions);
+          }
+        }
+      } catch (err) {
+        console.log(err.response);
+      }
+    }
+  }, []);
 
   const handleNewSection = async (e) => {
     if (e.key === 'Enter' || e.keyCode === 13) {
@@ -64,6 +94,52 @@ export default function ProjectPage({
     }
   };
 
+  const handleDragEnd = ({ source, destination }) => {
+    if (!destination) return;
+    if (
+      source.droppableId === destination.droppableId &&
+      destination.index === source.index
+    )
+      return;
+
+    const start = sections[Number(source.droppableId)];
+    const end = sections[Number(destination.droppableId)];
+
+    console.log('start', start);
+    console.log('end', end);
+
+    if (start.name === end.name) {
+      const newList = start.tasks;
+      const [reorderedItem] = newList.splice(source.index, 1);
+      newList.splice(destination.index, 0, reorderedItem);
+
+      let newSections = sections;
+      newSections.map((section, index) => {
+        if (section.name === start.name) {
+          newSections[index].tasks = newList;
+        }
+      });
+      setSections(newSections);
+    } else {
+      const newStartList = start.tasks.filter(
+        (_, index) => index !== source.index
+      );
+      const newEndList = end.tasks;
+      newEndList.splice(destination.index, 0, start.tasks[source.index]);
+
+      let newSections = sections;
+      newSections.map((section, index) => {
+        if (section.name === start.name) {
+          newSections[index].tasks = newStartList;
+        }
+        if (section.name === end.name) {
+          newSections[index].tasks = newEndList;
+        }
+      });
+      setSections(newSections);
+    }
+  };
+
   return (
     <>
       <Head>
@@ -79,11 +155,7 @@ export default function ProjectPage({
           <Heading as="h3" fontSize="3xl" color="richBlack.500">
             {project.name}
           </Heading>
-          <Text color={project.color || 'green.500'}>
-            {project.creator.creator_id === user.user.id
-              ? 'Personal'
-              : project.creator.creator_id}
-          </Text>
+          <Text color={project.color || 'green.500'}>{teamCreatorName}</Text>
         </VStack>
         <Tabs>
           <TabList>
@@ -133,8 +205,7 @@ export default function ProjectPage({
               <HStack
                 spacing="2px"
                 padding="0.5em 0"
-                align="center"
-                justify="right"
+                justify="flex-end"
                 w="100%">
                 <IconButton
                   variant="ghost"
@@ -147,33 +218,48 @@ export default function ProjectPage({
                   isRound
                 />
               </HStack>
-              {sections.map((section, index) => {
-                return (
-                  <ProjectSectionsList
-                    index={index}
-                    sections={sections}
-                    setSections={setSections}
-                    user={user}
-                    section={section}
-                    projectId={project._id}
-                    color={project.color || 'blue'}
+              <DragDropContext onDragEnd={handleDragEnd}>
+                {sections.map((section, index) => {
+                  return (
+                    <Droppable droppableId={`${index}`}>
+                      {(provided) => (
+                        <>
+                          <ProjectSectionsList
+                            provided={provided}
+                            innerRef={provided.innerRef}
+                            index={index}
+                            memberPermission={memberPermission}
+                            sections={sections}
+                            setSections={setSections}
+                            user={user}
+                            section={section}
+                            projectId={project._id}
+                            color={project.color || 'blue'}
+                          />
+
+                          {provided.placeholder}
+                        </>
+                      )}
+                    </Droppable>
+                  );
+                })}
+              </DragDropContext>
+              {memberPermission === 'edit' ? (
+                <InputGroup>
+                  <InputLeftElement
+                    pointerEvents="none"
+                    children={<Icon as={ChevronDown} color="gray.500" />}
                   />
-                );
-              })}
-              <InputGroup>
-                <InputLeftElement
-                  pointerEvents="none"
-                  children={<Icon as={ChevronDown} color="gray.500" />}
-                />
-                <Input
-                  border="0"
-                  placeholder="Nueva seccion..."
-                  fontSize="lg"
-                  fontWeight="bold"
-                  color="richBlack.500"
-                  onKeyUp={handleNewSection}
-                />
-              </InputGroup>
+                  <Input
+                    border="0"
+                    placeholder="Nueva seccion..."
+                    fontSize="lg"
+                    fontWeight="bold"
+                    color="richBlack.500"
+                    onKeyUp={handleNewSection}
+                  />
+                </InputGroup>
+              ) : null}
             </TabPanel>
             <TabPanel w="100%" h="100%">
               <InContruction />
@@ -200,7 +286,7 @@ export async function getServerSideProps(context) {
   let project;
   try {
     const response = await Axios.get(
-      `http://localhost:3000/api/projects/${context.query.id}`,
+      `${config.url}/api/projects/${context.query.id}`,
       {
         headers: {
           Authorization: user.jwtToken,
@@ -213,7 +299,7 @@ export async function getServerSideProps(context) {
       try {
         for (let i = 0; i < project.sections.length; i++) {
           const response = await Axios.get(
-            `http://localhost:3000/api/projects/${context.query.id}/tasks`,
+            `${config.url}/api/projects/${context.query.id}/tasks`,
             {
               params: {
                 sectionName: project.sections[i].name,
@@ -227,7 +313,7 @@ export async function getServerSideProps(context) {
         }
         project.sections = sections;
       } catch (err) {
-        console.log('Task Error', err.response);
+        console.log('Task Error', err);
       }
     }
     return {
@@ -238,6 +324,7 @@ export async function getServerSideProps(context) {
       },
     };
   } catch (err) {
+    console.log(err);
     return {
       props: {
         isError: true,

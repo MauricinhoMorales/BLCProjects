@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Heading, Icon, IconButton, VStack, Flex } from '@chakra-ui/react';
 import Axios from 'axios';
 import { useEffect } from 'react';
@@ -8,7 +8,6 @@ import { parseCookies } from '../../../lib/parseCookies';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import { config } from '../../../config/index';
-import Departamentos from '../../../data/departamentos';
 
 export default function MyProjectsPage({
   user,
@@ -18,6 +17,7 @@ export default function MyProjectsPage({
   projects,
   url,
 }) {
+  const [userProjects, setProjects] = useState(projects);
   const Router = useRouter();
 
   useEffect(async () => {
@@ -41,14 +41,22 @@ export default function MyProjectsPage({
           Mis Projectos
         </Heading>
         <Flex w="100%" h="100vh" justify="space-between" flexWrap="wrap">
-          {projects.map((project) => {
+          {userProjects.map((project) => {
             return (
               <ProjectsListItem
                 key={project._id}
                 url={url}
                 jwtToken={user.jwtToken}
                 project={project}
-                creatorName={`${user.user.firstName} ${user.user.lastName}`}
+                projects={userProjects}
+                setProjects={setProjects}
+                creatorName={
+                  project.creator &&
+                  project.creator.creator_id &&
+                  project.creator.creator_id === user.user.id
+                    ? `${user.user.firstName} ${user.user.lastName}`
+                    : project.creator.creator_id
+                }
                 userName={`${user.user.firstName} ${user.user.lastName}`}
                 userId={user.user.id}
               />
@@ -76,7 +84,7 @@ export async function getServerSideProps({ req }) {
   const userCookie = parseCookies(req);
   const user = JSON.parse(userCookie.user);
   try {
-    const projects = await Axios.get(`http://localhost:3000/api/projects`, {
+    const projects = await Axios.get(`${config.url}/api/projects`, {
       params: {
         creator: user.user.id,
       },
@@ -84,9 +92,35 @@ export async function getServerSideProps({ req }) {
         Authorization: user.jwtToken,
       },
     });
+    const teams = await Axios.get(`${config.url}/api/teams`, {
+      params: {
+        memberId: user.user.id,
+      },
+      headers: {
+        Authorization: user.jwtToken,
+      },
+    });
+    let teamProjects = [];
+    for (let i = 0; i < teams.data.length; i++) {
+      console.log('Team', teams.data[i].projects);
+      for (let j = 0; j < teams.data[i].projects.length; j++) {
+        console.log('Project', teams.data[i].projects[j]);
+        const project = await Axios.get(
+          `${config.url}/api/projects/${teams.data[i].projects[j]}`,
+          {
+            headers: {
+              Authorization: user.jwtToken,
+            },
+          }
+        );
+        if (project.data.length || project.data._id) {
+          teamProjects.push(project.data);
+        }
+      }
+    }
     return {
       props: {
-        projects: projects.data,
+        projects: [...projects.data, ...teamProjects],
         initialUser: user,
         url: config.url,
       },

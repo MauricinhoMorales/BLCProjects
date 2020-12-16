@@ -17,12 +17,12 @@ import {
   MenuItem,
   MenuDivider,
   Menu,
+  Input,
 } from '@chakra-ui/react';
 import { ChevronDown } from 'react-feather';
 
 import 'react-calendar/dist/Calendar.css';
 import Axios from 'axios';
-import project from '../utils/models/project';
 
 export default function ProjectSectionsTaskItem({
   task,
@@ -32,12 +32,19 @@ export default function ProjectSectionsTaskItem({
   setTasks,
   sectionName,
   projectId,
+  memberPermission,
+  provided,
+  innerRef,
 }) {
   const [value, onChange] = useState(() => {
     console.log(task.dueDate);
-    return task.dueDate.start ? new Date(task.dueDate.start) : '';
+    return task.dueDate && task.dueDate.start
+      ? new Date(task.dueDate.start)
+      : '';
   });
   const [isVisible, setIsVisible] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [inputValue, setValue] = useState(task.name);
 
   const onChangeDate = async (date) => {
     onChange(date);
@@ -61,15 +68,22 @@ export default function ProjectSectionsTaskItem({
   };
 
   const changeVisibleOnEnter = () => {
-    setIsVisible(true);
+    if (memberPermission === 'edit') {
+      setIsVisible(true);
+    }
   };
 
   const changeVisibleOnLeave = () => {
-    setIsVisible(false);
+    if (memberPermission === 'edit') {
+      setIsVisible(false);
+    }
   };
 
   const handleOnSelect = async (selection) => {
     switch (selection) {
+      case 'rename':
+        setIsEditing(true);
+        break;
       case 'delete':
         try {
           await Axios.delete(`/api/projects/${projectId}/tasks`, {
@@ -90,8 +104,45 @@ export default function ProjectSectionsTaskItem({
     }
   };
 
+  const onChangeValue = (e) => {
+    setValue(e.target.value);
+  };
+
+  const onChangeTaskName = async (e) => {
+    if (e.key === 'Enter' || e.keyCode === 13) {
+      try {
+        await Axios.put(
+          `/api/tasks/${task._id}`,
+          {
+            name: inputValue,
+          },
+          {
+            headers: {
+              Authorization: jwtToken,
+            },
+          }
+        );
+        let oldTasks = tasks;
+        oldTasks.map((oldTask, index) => {
+          if (oldTask.name === task.name) {
+            oldTasks[index].name = inputValue;
+          }
+        });
+        setTasks(oldTasks);
+        setIsEditing(false);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  };
+
   return (
-    <>
+    <li
+      key={task._id}
+      style={{ listStyle: 'none', listStyleType: 'none' }}
+      ref={innerRef}
+      {...provided.draggableProps}
+      {...provided.dragHandleProps}>
       <Flex
         w="100%"
         h="100%"
@@ -99,71 +150,99 @@ export default function ProjectSectionsTaskItem({
         onMouseOver={changeVisibleOnEnter}
         onMouseOut={changeVisibleOnLeave}>
         <HStack spacing="0.7em" flex={6}>
-          <Menu>
-            <MenuButton>
-              <IconButton
-                marginLeft="0.6em"
-                visibility={isVisible ? 'visible' : 'hidden'}
-                isRound
-                size={4}
-                variant="ghost"
-                style={{ backgroundColor: color }}
-                icon={
-                  <Icon
-                    as={ChevronDown}
-                    color="white"
-                    w={4}
-                    h={4}
-                    fontWeight="bold"
-                  />
-                }
-              />
-            </MenuButton>
-            <MenuList>
-              <MenuItem>Renombrar Tarea</MenuItem>
-              <MenuDivider />
-              <MenuItem>Archivar</MenuItem>
-              <MenuItem onClick={() => handleOnSelect('delete')}>
-                Eliminar
-              </MenuItem>
-            </MenuList>
-          </Menu>
+          {memberPermission === 'edit' ? (
+            <Menu isLazy>
+              <MenuButton>
+                <IconButton
+                  marginLeft="0.6em"
+                  visibility={isVisible ? 'visible' : 'hidden'}
+                  isRound
+                  size={4}
+                  variant="ghost"
+                  style={{ backgroundColor: color }}
+                  icon={
+                    <Icon
+                      as={ChevronDown}
+                      color="white"
+                      w={4}
+                      h={4}
+                      fontWeight="bold"
+                    />
+                  }
+                />
+              </MenuButton>
+              <MenuList>
+                <MenuItem onClick={() => handleOnSelect('rename')}>
+                  Renombrar Tarea
+                </MenuItem>
+                <MenuDivider />
+                <MenuItem>Archivar</MenuItem>
+                <MenuItem onClick={() => handleOnSelect('delete')}>
+                  Eliminar
+                </MenuItem>
+              </MenuList>
+            </Menu>
+          ) : (
+            <Box w="1.8em"></Box>
+          )}
           <Box
             flex={6}
             borderLeft={`10px solid ${color}`}
             bg="gray.200"
             padding="0.8em"
             margin="0 2px 2px 0">
-            <Text fontSize="md" color="richBlack.500">
-              {task.name}
-            </Text>
+            {memberPermission === 'edit' && isEditing ? (
+              <Input
+                w="80%"
+                value={inputValue}
+                onChange={onChangeValue}
+                onKeyUp={onChangeTaskName}
+              />
+            ) : (
+              <Text fontSize="md" color="richBlack.500">
+                {task.name}
+              </Text>
+            )}
           </Box>
         </HStack>
         <Box flex={2} bg="gray.200" margin="0 2px 2px 0" padding="0.5em">
-          <Popover placement="bottom" isLazy>
-            <PopoverTrigger>
-              <Center
-                _hover={{ cursor: 'pointer' }}
-                borderRadius="100px"
-                style={{ backgroundColor: value !== '' ? color : 'gray.200' }}
-                padding="0.3em"
-                w="100%"
-                h="100%">
-                <Text fontSize="sm" color="white" textAlign="center">
-                  {value !== '' ? value.toDateString() : ''}
-                </Text>
-              </Center>
-            </PopoverTrigger>
-            <PopoverContent>
-              <PopoverBody padding={0}>
-                <Calendar
-                  onChange={onChangeDate}
-                  value={value}
-                  locale="es-ve"
-                />
-              </PopoverBody>
-            </PopoverContent>
-          </Popover>
+          {memberPermission === 'edit' ? (
+            <Popover placement="bottom" isLazy>
+              <PopoverTrigger>
+                <Center
+                  _hover={{ cursor: 'pointer' }}
+                  borderRadius="100px"
+                  style={{ backgroundColor: value !== '' ? color : 'gray.200' }}
+                  padding="0.3em"
+                  w="100%"
+                  h="100%">
+                  <Text fontSize="sm" color="white" textAlign="center">
+                    {value !== '' ? value.toDateString() : ''}
+                  </Text>
+                </Center>
+              </PopoverTrigger>
+              <PopoverContent>
+                <PopoverBody padding={0}>
+                  <Calendar
+                    onChange={onChangeDate}
+                    value={value}
+                    locale="es-ve"
+                  />
+                </PopoverBody>
+              </PopoverContent>
+            </Popover>
+          ) : (
+            <Center
+              borderRadius="100px"
+              style={{ backgroundColor: value !== '' ? color : 'gray.200' }}
+              padding="0.3em"
+              w="100%"
+              h="100%">
+              <Text fontSize="sm" color="white" textAlign="center">
+                {value !== '' ? value.toDateString() : ''}
+              </Text>
+            </Center>
+          )}
         </Box>
         {/* <Popover placement="bottom-start">
           <PopoverTrigger> */}
@@ -223,6 +302,6 @@ export default function ProjectSectionsTaskItem({
         </Center>
         <Box flex={1} bg="gray.200" margin="0 0 2px 0"></Box>
       </Flex>
-    </>
+    </li>
   );
 }
