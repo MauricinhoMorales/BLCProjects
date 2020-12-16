@@ -38,7 +38,7 @@ export default function MyProjectsPage({
       </Head>
       <VStack spacing="2em" padding="3em" h="100vh" w="100%" align="start">
         <Heading as="h3" color="richBlack.500">
-          Mis Projectos
+          Mis Proyectos
         </Heading>
         <Flex w="100%" h="100vh" justify="space-between" flexWrap="wrap">
           {projects.map((project) => {
