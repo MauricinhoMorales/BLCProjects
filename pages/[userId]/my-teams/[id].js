@@ -34,6 +34,7 @@ export default function TeamDetailPage({
   const [thisMemberPermission, setThisMemberPermission] = useState('edit');
   const [fetchingError, setFechingError] = useState(false);
   const Router = useRouter();
+
   useEffect(() => {
     if (initialUser) {
       setUser(initialUser);
@@ -78,6 +79,10 @@ export default function TeamDetailPage({
       setFechingError(true);
     }
   }, []);
+
+  const onClickNewProject = () => {
+    Router.replace(`/${user.user.id}/my-projects/new-project`);
+  };
 
   if (fetchingError) {
     return <p>Something was wrong....</p>;
@@ -166,7 +171,13 @@ export default function TeamDetailPage({
           <TabPanel marginTop="2em" padding="">
             <SimpleGrid columns={2} spacing="2em">
               {teamProjects.map((project) => (
-                <TeamProjectListItem project={project} userId={user.user.id} />
+                <TeamProjectListItem
+                  project={project}
+                  teamProjects={teamProjects}
+                  jwtToken={user.jwtToken}
+                  userId={user.user.id}
+                  setTeamProjects={setTeamProjects}
+                />
               ))}
 
               {thisMemberPermission === 'edit' ? (
@@ -176,7 +187,8 @@ export default function TeamDetailPage({
                   padding="4em"
                   border="1px"
                   borderRadius="10px"
-                  borderColor="romanSilver.400">
+                  borderColor="romanSilver.400"
+                  onClick={onClickNewProject}>
                   <VStack spacing="0.5em" w="100%" h="100%" justify="center">
                     <Text color="romanSilver.400">Crear Proyecto</Text>
                     <Icon

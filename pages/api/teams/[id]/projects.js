@@ -12,27 +12,25 @@ export default authenticated(async function (req, res) {
 
   if (method === 'POST') {
     validationHandler(teamIdSchema, 'query', req, res, function (req, res) {
-      validationHandler(memberSchema, 'body', req, res, function (req, res) {
-        scopeValidationHandler(
-          ['update:teams'],
-          req,
-          res,
-          async function (req, res) {
-            const {
-              query: { id },
-            } = req;
-            try {
-              const updatedTeamId = await teamService.addProject({
-                id,
-                project: req.body,
-              });
-              res.status(200).json(updatedTeamId);
-            } catch (err) {
-              errorHandler(boom.internal(err), req, res);
-            }
+      scopeValidationHandler(
+        ['update:teams'],
+        req,
+        res,
+        async function (req, res) {
+          const {
+            query: { id },
+          } = req;
+          try {
+            const updatedTeamId = await teamService.addProject({
+              id,
+              project: req.body,
+            });
+            res.status(200).json(updatedTeamId);
+          } catch (err) {
+            errorHandler(boom.internal(err), req, res);
           }
-        );
-      });
+        }
+      );
     });
   } else if (method === 'DELETE') {
     validationHandler(teamIdSchema, 'query', req, res, function (req, res) {

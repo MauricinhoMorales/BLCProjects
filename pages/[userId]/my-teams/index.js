@@ -98,8 +98,6 @@ export async function getServerSideProps({ req }) {
         url: config.url,
       },
     };
-    console.log('teams', teams);
-    console.log('users', users);
   } catch (err) {
     console.log(err);
     console.log(err.response);
