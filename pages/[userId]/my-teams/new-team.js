@@ -37,6 +37,7 @@ import Autosuggest from 'react-autosuggest';
 import Axios from 'axios';
 import theme from '../../../styles/suggestionTheme.module.css';
 import MembersList from '../../../components/memberList';
+import { config } from '../../../config/index';
 
 export default function NewTeamPage({
   initialUser,
@@ -348,7 +349,7 @@ export async function getServerSideProps({ req }) {
   const user = JSON.parse(userCookie.user);
   if (user) {
     try {
-      const users = await Axios.get(`http://localhost:3000/api/users`, {
+      const users = await Axios.get(`${config.url}/api/users`, {
         headers: {
           Authorization: user.jwtToken,
         },

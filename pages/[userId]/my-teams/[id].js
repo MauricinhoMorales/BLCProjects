@@ -64,7 +64,7 @@ export default function TeamDetailPage({
       let projects = [];
       for (let i = 0; i < team.data.projects.length; i++) {
         const project = await Axios.get(
-          `http://localhost:3000/api/projects/${team.data.projects[i]}`,
+          `/api/projects/${team.data.projects[i]}`,
           {
             headers: {
               Authorization: user.jwtToken,
