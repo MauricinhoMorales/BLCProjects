@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Flex,
   Text,
@@ -15,13 +15,11 @@ import {
   MenuItem,
   MenuDivider,
   Collapse,
-  Editable,
-  EditablePreview,
-  EditableInput,
 } from '@chakra-ui/react';
 import { ChevronDown, Plus } from 'react-feather';
 import ProjectSectionsTaskItem from './projectSectionsTaskItem';
 import Axios from 'axios';
+import { Draggable } from 'react-beautiful-dnd';
 
 export default function ProjectSectionsList({
   section,
@@ -30,11 +28,21 @@ export default function ProjectSectionsList({
   user,
   sections,
   setSections,
+  memberPermission,
+  provided,
+  innerRef,
 }) {
   const [tasks, setTasks] = useState(() => {
     return section.tasks || [];
   });
   const [isOpen, setIsOpen] = useState(true);
+  const [isEditing, setIsEditing] = useState(false);
+  const [value, setValue] = useState(section.name);
+
+  useEffect(() => {
+    setTasks(section.tasks);
+  }, [sections]);
+
   const handleNewTask = async (e) => {
     if (e.key === 'Enter' || e.keyCode === 13) {
       try {
@@ -74,6 +82,7 @@ export default function ProjectSectionsList({
           },
         });
         setTasks([...tasks, task.data]);
+        console.log('Tasks', tasks);
       } catch (err) {
         console.log(err.response);
       }
@@ -85,6 +94,9 @@ export default function ProjectSectionsList({
     switch (nameSection) {
       case 'collapse':
         setIsOpen(!isOpen);
+        break;
+      case 'rename':
+        setIsEditing(true);
         break;
       case 'delete':
         try {
@@ -110,33 +122,40 @@ export default function ProjectSectionsList({
 
   const handleChangeNameSection = async (e) => {
     console.log(e);
-    try {
-      await Axios.put(
-        `/api/projects/${projectId}/sections`,
-        {
-          oldSectionName: section.name,
-          newSectionName: e,
-        },
-        {
-          headers: {
-            Authorization: user.jwtToken,
+    if (e.key === 'Enter' || e.keyCode === 13) {
+      try {
+        await Axios.put(
+          `/api/projects/${projectId}/sections`,
+          {
+            oldSectionName: section.name,
+            newSectionName: value,
           },
-        }
-      );
-      let oldSections = sections;
-      oldSections.map((oldSection, index) => {
-        if (oldSection.name === section.name) {
-          oldSections[index].name = e;
-        }
-      });
-      setSections(oldSections);
-    } catch (err) {
-      console.log(err.response);
+          {
+            headers: {
+              Authorization: user.jwtToken,
+            },
+          }
+        );
+        let oldSections = sections;
+        oldSections.map((oldSection, index) => {
+          if (oldSection.name === section.name) {
+            oldSections[index].name = value;
+          }
+        });
+        setSections(oldSections);
+      } catch (err) {
+        console.log(err.response);
+      }
+      setIsEditing(false);
     }
   };
 
+  const onChange = (e) => {
+    setValue(e.target.value);
+  };
+
   return (
-    <>
+    <ul ref={innerRef} {...provided.droppableProps}>
       <Flex h="100%" flex={13} align="center" padding="0.5em 0">
         <HStack spacing="0.3em" flex={5.5}>
           <Menu>
@@ -154,33 +173,40 @@ export default function ProjectSectionsList({
               <MenuItem onClick={() => handleOnSelect('collapse')}>
                 {isOpen ? 'Colapsar Seccion' : 'Mostrar Seccion'}
               </MenuItem>
-              <MenuDivider />
-              <MenuItem>Renombrar seccion</MenuItem>
-              <MenuDivider />
-              <MenuItem onClick={() => handleOnSelect('delete')}>
-                Eliminar Seccion
-              </MenuItem>
+              {memberPermission === 'edit' ? (
+                <>
+                  <MenuDivider />
+                  <MenuItem onClick={() => handleOnSelect('rename')}>
+                    Renombrar seccion
+                  </MenuItem>
+                  <MenuDivider />
+                  <MenuItem onClick={() => handleOnSelect('delete')}>
+                    Eliminar Seccion
+                  </MenuItem>
+                </>
+              ) : null}
             </MenuList>
           </Menu>
-          <Editable
-            w="100%"
-            _hover={{ border: `1px dotted ${color}`, borderRadius: '5px' }}
-            _focus={{ border: `3px solid ${color}` }}
-            _focusVisible={{ border: `3px solid ${color}` }}
-            as="h3"
-            submitOnBlur={false}
-            color="richBlack.500"
-            border="1px solid white"
-            fontSize="xl"
-            fontWeight="bold"
-            onSubmit={handleChangeNameSection}
-            defaultValue={section.name}>
-            <EditablePreview />
-            <EditableInput />
-          </Editable>
-          {/* <Heading as="h4" color="richBlack.500" fontSize="xl">
-            {section.name}
-          </Heading> */}
+          {memberPermission === 'edit' && isEditing ? (
+            <Input
+              w="100%"
+              fontSize="xl"
+              fontWeight="bold"
+              color="richBlack.500"
+              value={value}
+              onChange={onChange}
+              onKeyUp={handleChangeNameSection}
+            />
+          ) : (
+            <Heading
+              padding="0.5em 0.5em 0.5em 0"
+              as="h3"
+              color="richBlack.500"
+              fontSize="xl"
+              fontWeight="bold">
+              {section.name}
+            </Heading>
+          )}
         </HStack>
         <Text
           fontSize="md"
@@ -217,37 +243,49 @@ export default function ProjectSectionsList({
         </Center>
       </Flex>
       <Collapse in={isOpen} animateOpacity>
-        {tasks.map((task) => {
-          return (
-            <ProjectSectionsTaskItem
-              projectId={projectId}
-              sectionName={section.name}
-              tasks={tasks}
-              setTasks={setTasks}
-              task={task}
-              color={color}
-              jwtToken={user.jwtToken}
-            />
-          );
-        })}
-        <Flex flex={13}>
-          <HStack spacing="0" flex={13}>
-            <Box w="2.4em"></Box>
-            <Input
-              border="1px solid"
-              borderColor="romanSilver.200"
-              borderLeft="10px solid"
-              borderLeftColor="rufous.100"
-              borderRadius="0"
-              placeholder="+ Nueva tarea..."
-              focusBorderColor="rufous.200"
-              onKeyUp={handleNewTask}
-            />
-          </HStack>
-        </Flex>
+        <Box padding="0" w="100%">
+          {tasks.map((task, index) => {
+            return (
+              <Draggable index={index} draggableId={task._id} key={task._id}>
+                {(provided) => (
+                  <ProjectSectionsTaskItem
+                    provided={provided}
+                    innerRef={provided.innerRef}
+                    memberPermission={memberPermission}
+                    projectId={projectId}
+                    sectionName={section.name}
+                    tasks={tasks}
+                    setTasks={setTasks}
+                    task={task}
+                    color={color}
+                    jwtToken={user.jwtToken}
+                  />
+                )}
+              </Draggable>
+            );
+          })}
+          <Flex flex={13}>
+            <HStack spacing="0" flex={13}>
+              {memberPermission === 'edit' ? (
+                <>
+                  <Box w="2.4em"></Box>
+                  <Input
+                    border="1px solid"
+                    borderColor="romanSilver.200"
+                    borderLeft="10px solid"
+                    borderLeftColor="rufous.100"
+                    borderRadius="0"
+                    placeholder="+ Nueva tarea..."
+                    focusBorderColor="rufous.200"
+                    onKeyUp={handleNewTask}
+                  />
+                </>
+              ) : null}
+            </HStack>
+          </Flex>
+        </Box>
       </Collapse>
-
       <Box h="10"></Box>
-    </>
+    </ul>
   );
 }

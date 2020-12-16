@@ -13,7 +13,6 @@ import {
 export default authenticated(async function (req, res) {
   const { method } = req;
   const projectService = new ProjectService();
-
   switch (method) {
     case 'GET':
       validationHandler(

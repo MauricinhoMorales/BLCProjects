@@ -12,7 +12,7 @@ export default authenticated(async function (req, res) {
 
   if (method === 'GET') {
     const {
-      query: { name, creator, areaConocimiento },
+      query: { name, creator, areaConocimiento, memberId },
     } = req;
 
     scopeValidationHandler(['read:teams'], req, res, async function (req, res) {
@@ -21,6 +21,7 @@ export default authenticated(async function (req, res) {
           name,
           creator,
           areaConocimiento,
+          memberId,
         });
         res.status(200).json(teams);
       } catch (err) {

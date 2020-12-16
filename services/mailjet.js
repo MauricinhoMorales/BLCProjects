@@ -5,7 +5,7 @@ const mailjet = require('node-mailjet').connect(
 );
 
 class MailjetService {
-  sendActivationEmail({ userEmail, userName, link }) {
+  async sendActivationEmail({ userEmail, userName, link }) {
     const request = mailjet.post('send', { version: 'v3.1' }).request({
       Messages: [
         {
@@ -28,13 +28,12 @@ class MailjetService {
         },
       ],
     });
-    request
-      .then((result) => {
-        console.log(result.body);
-      })
-      .catch((err) => {
-        console.log(err.statusCode);
-      });
+    try {
+      const respose = await request;
+      console.log('Mailjet response', respose);
+    } catch (err) {
+      console.log('Mailjet error', err);
+    }
   }
 
   sendRecoveryEmail({ userEmail, userName, link }) {
@@ -63,10 +62,10 @@ class MailjetService {
     });
     request
       .then((result) => {
-        console.log(result.body);
+        console.log(result);
       })
       .catch((err) => {
-        console.log(err.statusCode);
+        console.log(err);
       });
   }
 }
