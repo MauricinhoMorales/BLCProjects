@@ -10,7 +10,6 @@ class TeamService {
 
   async getTeams({ name, creator, areaConocimiento, memberId }) {
     const query = { name, creator, areaConocimiento };
-
     Object.keys(query).forEach((key) => {
       if (query[key] === undefined) {
         delete query[key];

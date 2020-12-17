@@ -2,15 +2,13 @@ const MongoLib = require('../lib/db');
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
 const { config } = require('../config/index');
-const EmailValidatorService = require('./deBounceEmailValidator');
-const MailjetService = require('./mailjet');
+const SendinBlueService = require('./sendinblue');
 
 class UserService {
   constructor() {
     this.MongoDB = new MongoLib();
     this.collection = 'users';
-    this.emailValidatorService = new EmailValidatorService();
-    this.mailjet = new MailjetService();
+    this.sendingblueService = new SendinBlueService();
   }
 
   async getUsers({
@@ -48,19 +46,11 @@ class UserService {
     if (exist.length) {
       throw new Error('El usuario ya existe');
     } else {
-      const response = await this.emailValidatorService.validateEmail({
-        email: user.email,
-      });
-      if (!response) {
-        throw new Error('El email no es valido');
-      }
       const hashedPassword = await bcrypt.hash(user.password, 10);
       const activationCode = crypto.randomBytes(20);
       const activationCodeExpires = Date.now() + 24 * 3600 * 1000;
-      const link = `http://${config.url}/activation/${activationCode.toString(
-        'hex'
-      )}`;
-      this.mailjet.sendActivationEmail({
+      const link = `${config.url}/activation/${activationCode.toString('hex')}`;
+      this.sendingblueService.sendActivationEmail({
         userEmail: user.email,
         userName: `${user.firstName} ${user.lastName}`,
         link,
