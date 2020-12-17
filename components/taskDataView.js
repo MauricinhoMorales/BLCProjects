@@ -29,10 +29,9 @@ import {
   TagCloseButton
 } from "@chakra-ui/react";
 
-export default function TaskDataView({ nombreTarea, nombreResponsable, fechaEntrega, nombreProyecto, estadoProyecto, descripcionTarea }){
+export default function TaskDataView(props){
 
-  const { isOpen, onOpen, onClose } = useDisclosure();
-
+  const [isOpen, changeIsOpen] = useState(true);
   const [variant, setVariant] = useState("outline");
   const [mensajeMarcado, setMensajeMarcado] = useState("Marcar como terminada");
 
@@ -59,10 +58,13 @@ export default function TaskDataView({ nombreTarea, nombreResponsable, fechaEntr
     }
   };
 
+  const onClose = () => {
+    changeIsOpen(false);
+  };
+
   return (
     <>
-    <Button onClick={onOpen}>Abrir Tarea</Button>
-    <Modal isOpen={isOpen} onClose={onClose} size='xl'>
+    <Modal isOpen={isOpen} size='xl' >
       <ModalOverlay />
 
       <ModalContent maxW="60rem">
@@ -113,7 +115,7 @@ export default function TaskDataView({ nombreTarea, nombreResponsable, fechaEntr
               variant="link"
               colorScheme="gray"
               fontSize="22px"
-              onClick={onClose}
+              onClick={props.hideTask}
               icon={<Icon as={IoClose} />}
             />
           </Flex>
@@ -125,7 +127,7 @@ export default function TaskDataView({ nombreTarea, nombreResponsable, fechaEntr
           <Stack direction="column" spacing={4}>
             <Stack direction="row" spacing={8}>
               <Box color="black">
-                <Text fontSize="3xl" color="black">{nombreTarea}</Text>
+                <Text fontSize="3xl" color="black">{props.nombreTarea}</Text>
               </Box>
             </Stack>
             <Box width="1" />
@@ -148,9 +150,9 @@ export default function TaskDataView({ nombreTarea, nombreResponsable, fechaEntr
                 <Box fontSize="md" height="6" textAlign="left">
                   <Stack direction="row" spacing={4}>
                     <Center h="6" w="8">
-                      <Avatar size="sm" name={nombreResponsable} color="red" textColor="white" />
+                      <Avatar size="sm" name={props.nombreResponsable} color="red" textColor="white" />
                     </Center>
-                    <Text>{nombreResponsable}</Text>
+                    <Text>{props.nombreResponsable}</Text>
                   </Stack>
                 </Box>
                 <Box fontSize="md" height="6" textAlign="left" margin="0">
@@ -164,7 +166,7 @@ export default function TaskDataView({ nombreTarea, nombreResponsable, fechaEntr
                         icon={<Icon as={IoIosCalendar} />}
                       />
                     </Center>
-                  <Text>{fechaEntrega}</Text>
+                  <Text>{props.fechaEntrega}</Text>
                   </Stack>
                 </Box>
                 <Box fontSize="md" height="6" textAlign="left">
@@ -176,14 +178,14 @@ export default function TaskDataView({ nombreTarea, nombreResponsable, fechaEntr
                       variant="solid"
                       colorScheme="red"
                     >
-                      <TagLabel>{nombreProyecto}</TagLabel>
+                      <TagLabel>{props.nombreProyecto}</TagLabel>
                       <Box width="3" />
-                      <TagLabel><Text textColor="gray.300">{estadoProyecto}</Text></TagLabel>
+                      <TagLabel><Text textColor="gray.300">{props.estadoProyecto}</Text></TagLabel>
                       <TagCloseButton />
                     </Tag>
                   </Stack>
                 </Box>
-                <DescriptionControl descripcionTarea={descripcionTarea}/>
+                <DescriptionControl descripcionTarea={props.descripcionTarea}/>
               </Stack>
               <Box width="1" />
             </Stack>
@@ -195,7 +197,7 @@ export default function TaskDataView({ nombreTarea, nombreResponsable, fechaEntr
         <ModalFooter>
           <Button variant="ghost"
             leftIcon={<BellIcon />}
-            onClick={onClose}
+            onClick={props.hideTask}
             size="sl"
             colorScheme="red">
             Abandonar Tarea

@@ -1,18 +1,29 @@
-import React from 'react';
-import TaskDataView from '../components/taskDataView';
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
+import { parseCookies } from '../lib/parseCookies';
 
-export default function HomePage() {
+export default function HomePage({ user, setUser, initialUser }) {
+  const Router = useRouter();
+  useEffect(() => {
+    if (initialUser) {
+      setUser(initialUser);
+      Router.replace(`${user.user.id}/my-tasks`);
+    } else {
+      Router.replace('/login');
+    }
+  }, [user]);
 
-return (
-  <>
-    <TaskDataView 
-      nombreTarea="Descomposicion en Tablas" 
-      nombreResponsable="Mauricio Morales"
-      fechaEntrega="24 de Abril de 2020"
-      nombreProyecto="Apollo 11"
-      estadoProyecto="In Progress"
-      descripcionTarea=" Esta es una mision para ir al espacio descomponiendo tablas, Gran idea no?"
-      />
-  </>
-);
+  return null;
+}
+export async function getServerSideProps({ req }) {
+  const user = parseCookies(req);
+  try {
+    return {
+      props: {
+        initialUser: JSON.parse(user.user),
+      },
+    };
+  } catch (err) {
+    return { props: {} };
+  }
 }
