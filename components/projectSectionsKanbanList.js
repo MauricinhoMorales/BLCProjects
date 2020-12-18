@@ -55,7 +55,6 @@ export default function ProjectSectionsKanbanList({
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    console.log('Message from ProjectSectionKanbanList');
     setTasks(section.tasks);
   }, [sections]);
 
@@ -141,7 +140,6 @@ export default function ProjectSectionsKanbanList({
   };
 
   const handleChangeNameSection = async (e) => {
-    console.log(e);
     if (e.key === 'Enter' || e.keyCode === 13) {
       try {
         await Axios.put(

@@ -43,7 +43,7 @@ export default function NewProjectPage({
   teams,
 }) {
   const { register, handleSubmit, errors } = useForm();
-  const [color, setColor] = useState('green.500');
+  const [color, setColor] = useState('#ffffff');
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const Router = useRouter();
@@ -98,18 +98,18 @@ export default function NewProjectPage({
       setLoading(false);
       toast({
         title: 'Exito',
+        status: 'success',
         description: 'Projecto creado correctamente.',
         duration: 9000,
         isClosable: true,
         position: 'top',
       });
-      console.log(response);
       Router.replace(`/${user.user.id}/my-projects`);
     } catch (err) {
-      console.log(response);
-      console.log(err);
+      console.log(err.response);
       toast({
         title: 'Error',
+        status: 'error',
         description: 'Intente de nuevo',
         duration: 9000,
         isClosable: true,
@@ -164,6 +164,14 @@ export default function NewProjectPage({
                       className="input"
                     />
                   </Flex>
+                  {errors.name?.type === 'required' && (
+                    <Flex w="100%">
+                      <Spacer />
+                      <Text w="70%" color="red.500">
+                        El campo es requerido
+                      </Text>
+                    </Flex>
+                  )}
                 </FormControl>
                 <FormControl>
                   <Flex w="100%" alignItems="center">
@@ -184,6 +192,14 @@ export default function NewProjectPage({
                       ))}
                     </Select>
                   </Flex>
+                  {errors.creator?.type === 'required' && (
+                    <Flex w="100%">
+                      <Spacer />
+                      <Text w="70%" color="red.500">
+                        El campo es requerido
+                      </Text>
+                    </Flex>
+                  )}
                 </FormControl>
                 <FormControl>
                   <Flex w="100%">

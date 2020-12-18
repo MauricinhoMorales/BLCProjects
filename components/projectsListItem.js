@@ -109,7 +109,7 @@ export default function projectsListItem({
       setProjects(myProjects);
       onClose();
     } catch (err) {
-      console.log(err);
+      console.log(err.response);
     }
     setLoading(false);
   };
@@ -126,12 +126,12 @@ export default function projectsListItem({
       );
       setProjects(myProjects);
     } catch (err) {
-      console.log(err);
+      console.log(err.response);
       toast({
         title: 'Error.',
         description: 'Ha ocurrido un error al intentar eliminar el proyecto.',
-        duration: 9000,
         status: 'error',
+        duration: 9000,
         isClosable: true,
         position: 'top',
       });

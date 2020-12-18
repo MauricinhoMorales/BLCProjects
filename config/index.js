@@ -12,7 +12,6 @@ const config = {
   sendinblueApiKey: process.env.SENDINBLUE_API_KEY,
   authJwtSecret: process.env.AUTH_JWT_SECRET,
   publicApiKeyToken: process.env.PUBLIC_API_KEY_TOKEN,
-  adminApiKeyToken: process.env.ADMIN_API_KEY_TOKEN,
   mesiboAccessToken: process.env.MESIBO_ACCESS_TOKEN,
   mesiboAppId: process.env.MESIBO_APP_ID,
   mesiboApiUrl: process.env.MESIBO_API_URL,

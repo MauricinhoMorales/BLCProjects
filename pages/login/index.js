@@ -1,7 +1,7 @@
-import { Center, Flex, Heading, Box, Image, Stack } from '@chakra-ui/react';
-import { useRouter, userRouter } from 'next/router';
+import { Center, Flex, Image, Stack } from '@chakra-ui/react';
+import { useRouter } from 'next/router';
 import Head from 'next/head';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { config } from '../../config/index';
 
 import LoginRegisterSlider from '../../components/loginRegisterSlide';

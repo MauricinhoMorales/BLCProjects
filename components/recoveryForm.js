@@ -26,13 +26,9 @@ export default function LoginForm({ userId }) {
   const onSubmit = async (data) => {
     setIsLoading(true);
     try {
-      const recoveryResponse = await Axios.post(
-        `/api/auth/recovery/${userId}`,
-        {
-          password: data.password,
-        }
-      );
-      console.log(recoveryResponse.data);
+      await Axios.post(`/api/auth/recovery/${userId}`, {
+        password: data.password,
+      });
       setIsLoading(false);
       toast({
         title: 'Exito.',
@@ -44,7 +40,7 @@ export default function LoginForm({ userId }) {
       Router.replace(`/login`);
     } catch (err) {
       setIsLoading(false);
-      console.log(err);
+      console.log(err.response.data);
       toast({
         title: 'Ha ocurrido un error.',
         description: 'Intente más tarde.',

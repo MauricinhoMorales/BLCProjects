@@ -118,7 +118,6 @@ export default function ProjectSectionsList({
           let newSections = sections.filter(
             (newSection) => newSection.name !== section.name
           );
-          console.log(newSections);
           setSections(newSections);
         } catch (err) {
           console.log(err.response);
@@ -128,7 +127,6 @@ export default function ProjectSectionsList({
   };
 
   const handleChangeNameSection = async (e) => {
-    console.log(e);
     if (e.key === 'Enter' || e.keyCode === 13) {
       try {
         await Axios.put(

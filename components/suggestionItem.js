@@ -3,6 +3,7 @@ import { Avatar, HStack, VStack, Text } from '@chakra-ui/react';
 export default function SuggetionItem({ user }) {
   return (
     <HStack
+      gridArea="1/1"
       spacing="10px"
       align="center"
       padding="0.5em"

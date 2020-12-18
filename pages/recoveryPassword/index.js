@@ -32,26 +32,27 @@ export default function RecoveryPasswordPage() {
       );
       if (recoveryResponse.status === 200) {
         setIsLoading(false);
-        console.log(recoveryResponse.data);
         Router.replace('/sentEmail/recovery/' + data.email);
       } else {
         toast({
           title: 'Ha ocurrido un error.',
           description: 'Intente más tarde.',
           status: 'error',
+          position: 'top',
           duration: 9000,
           isClosable: true,
         });
         setIsLoading(false);
       }
     } catch (err) {
-      console.log(err);
+      console.log(err.response);
       toast({
         title: 'Ha ocurrido un error.',
         description: 'Intente más tarde.',
         status: 'error',
         duration: 9000,
         isClosable: true,
+        position: 'top',
       });
       setIsLoading(false);
     }

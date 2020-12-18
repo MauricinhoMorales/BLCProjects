@@ -99,7 +99,6 @@ export async function getServerSideProps({ req }) {
       },
     };
   } catch (err) {
-    console.log(err);
     console.log(err.response);
     return {
       props: {

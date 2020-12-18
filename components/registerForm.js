@@ -37,27 +37,15 @@ export default function RegisterForm() {
         lastName: data.lastName,
         isAdmin: false,
       });
-      if (RegisterResponse.status === 200) {
-        setIsLoading(false);
-        console.log(RegisterResponse.data);
-        Router.replace(`/sentEmail/activation/${RegisterResponse.data}`);
-      } else {
-        toast({
-          title: 'Ha ocurrido un error.',
-          description: 'Intente más tarde.',
-          status: 'error',
-          duration: 9000,
-          isClosable: true,
-          position: 'top',
-        });
-        setIsLoading(false);
-      }
+      setIsLoading(false);
+      Router.replace(`/sentEmail/activation/${RegisterResponse.data}`);
     } catch (err) {
-      console.log(err);
+      console.log(err.response);
       toast({
         title: 'Ha ocurrido un error.',
         description: 'Intente más tarde.',
         status: 'error',
+        position: 'top',
         duration: 9000,
         isClosable: true,
       });

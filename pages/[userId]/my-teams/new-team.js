@@ -77,7 +77,6 @@ export default function NewTeamPage({
       permissions: 'edit',
       role: 'Creador',
     });
-    console.log(filterMembers);
     try {
       await Axios.post(
         `/api/teams`,
@@ -131,7 +130,6 @@ export default function NewTeamPage({
   const close = () => setIsOpen(false);
 
   const addMember = (memberUser) => {
-    console.log(members);
     const withoutDuplicates = members.filter(
       (member) => member._id !== memberUser._id
     );
@@ -247,6 +245,14 @@ export default function NewTeamPage({
                   })}
                 </Select>
               </Flex>
+              {errors.department?.type === 'required' && (
+                <Flex w="100%">
+                  <Spacer />
+                  <Text w="70%" color="red.500">
+                    El campo es requerido
+                  </Text>
+                </Flex>
+              )}
             </FormControl>
             <Flex w="100%" alignItems="center">
               <Text w="42%" color="romanSilver.800">
@@ -364,7 +370,7 @@ export async function getServerSideProps({ req }) {
         },
       };
     } catch (err) {
-      console.log(err);
+      console.log(err.response);
       return {
         props: {
           initialUser: user,

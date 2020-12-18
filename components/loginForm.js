@@ -29,7 +29,6 @@ export default function LoginForm({ apiToken, setUser, setShowNav }) {
   const toast = useToast();
 
   const onSubmit = async (data) => {
-    console.log('LoginForm', apiToken);
     setIsLoading(true);
     try {
       const loginResponse = await Axios.post('api/auth/login', {
@@ -47,7 +46,7 @@ export default function LoginForm({ apiToken, setUser, setShowNav }) {
       setShowNav(true);
       Router.replace(`${loginResponse.data.user.id}/my-tasks`);
     } catch (err) {
-      console.log(err);
+      console.log(err.response);
       setIsLoading(false);
       toast({
         title: 'Ha ocurrido un error.',

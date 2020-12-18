@@ -68,7 +68,7 @@ export default function TeamDetailMemberItem({
       });
       setOtherTeams(otherTeamsList);
     } catch (err) {
-      console.log(err);
+      console.log(err.response);
     }
   }, []);
 
@@ -84,7 +84,7 @@ export default function TeamDetailMemberItem({
   };
 
   const onMenuSelect = (selection) => {
-    console.log(selection);
+    console.log(err.response);
     if (selection.target.innerText === 'Eliminar Miembro') {
       onOpen();
     }
@@ -105,7 +105,7 @@ export default function TeamDetailMemberItem({
       );
       setTeamMembers(remainingMembers);
     } catch (err) {
-      console.log(err);
+      console.log(err.response);
       toast({
         title: 'Ha ocurrido un error.',
         description: 'No se ha podido eliminar al miembro. Intente nuevamente',
@@ -157,7 +157,7 @@ export default function TeamDetailMemberItem({
       });
       setTeamMembers(members);
     } catch (err) {
-      console.log(err);
+      console.log(err.response);
     }
     onEditDisable();
   };

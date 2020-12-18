@@ -20,11 +20,11 @@ export default function SentEmailPage({ userId }) {
   const handleSentEmail = async () => {
     try {
       const response = await Axios.post(`/api/email/validationEmail/${userId}`);
-      console.log(response.data);
       toast({
         title: 'Exito.',
-        message: 'Correo de activacion enviado.',
+        message: 'Correo de activación enviado.',
         status: 'success',
+        position: 'top',
         duration: 9000,
         isClosable: true,
       });
@@ -32,9 +32,11 @@ export default function SentEmailPage({ userId }) {
       console.log(err);
       toast({
         title: 'Ha ocurrido un error.',
+        description: 'Intente más tarde.',
         status: 'error',
         duration: 9000,
         isClosable: true,
+        position: 'top',
       });
     }
   };

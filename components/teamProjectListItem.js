@@ -48,7 +48,6 @@ export default function TeamProjectListItem({
   });
 
   const seeProjectDetail = (e) => {
-    console.log(e);
     if (
       e.target.localName !== 'button' &&
       e.target.tagName !== 'svg' &&
@@ -92,7 +91,7 @@ export default function TeamProjectListItem({
       setTeamProjects(projects);
       onClose();
     } catch (err) {
-      console.log(err);
+      console.log(err.response);
     }
     setLoading(false);
   };

@@ -27,6 +27,11 @@ import {
   VStack,
   Input,
   Wrap,
+  Textarea,
+  Badge,
+  WrapItem,
+  Avatar,
+  CloseButton,
 } from '@chakra-ui/react';
 import Axios from 'axios';
 import { MoreVertical, Trash, UserPlus } from 'react-feather';
@@ -45,7 +50,11 @@ export default function TeamsListItem({
   const Router = useRouter();
   const toast = useToast();
   const [inviteModalOpen, setInviteModalOpen] = useState(false);
-  const [suggestions, setSuggestions] = useState(() => {
+  const [suggestions, setSuggestions] = useState([]);
+  const [suggestionValue, setSuggestionValue] = useState('');
+  const [newMembers, setNewMembers] = useState([]);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [invitedUsers] = useState(() => {
     return users.filter((user) => {
       let isMember = false;
       for (let i = 0; i < team.members.length; i++) {
@@ -59,11 +68,8 @@ export default function TeamsListItem({
       }
     });
   });
-  const [suggestionValue, setSuggestionValue] = useState('');
-  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const handleClick = async (e) => {
-    console.log(e);
     if (
       e.target.tagName !== 'button' &&
       e.target.tagName !== 'svg' &&
@@ -83,7 +89,7 @@ export default function TeamsListItem({
       });
       Router.replace(Router.asPath);
     } catch (err) {
-      console.log(err);
+      console.log(err.response);
       toast({
         title: 'Error.',
         description: 'Ha ocurrido un error al intentar eliminar el equipo.',
@@ -96,7 +102,6 @@ export default function TeamsListItem({
   };
 
   const onSelect = (selection) => {
-    console.log(selection);
     if (selection.target.innerText === 'Eliminar Equipo') {
       onOpen();
     } else if (selection.target.innerText === 'Invitar miembro') {
@@ -111,7 +116,58 @@ export default function TeamsListItem({
   const onCloseInviteModal = () => {
     setInviteModalOpen(false);
   };
+  const addMember = (newMember) => {
+    let isAlreadyAdded = false;
+    newMembers.map((member) => {
+      if (newMember._id === member._id) {
+        isAlreadyAdded = true;
+      }
+    });
+    if (!isAlreadyAdded) {
+      setNewMembers([...newMembers, newMember]);
+    }
+  };
 
+  const removeMember = (oldMember) => {
+    const members = newMembers.filter((member) => member._id !== oldMember._id);
+    setNewMembers(members);
+  };
+
+  const inviteMembers = async () => {
+    try {
+      await Axios.post(
+        `/api/email/sendInvitations`,
+        {
+          members: newMembers,
+          teamId: team._id,
+        },
+        {
+          headers: {
+            Authorization: jwtToken,
+          },
+        }
+      );
+      onCloseInviteModal();
+      toast({
+        position: 'top',
+        status: 'success',
+        title: 'Exito.',
+        description: 'Invitaciones Enviadas',
+        isClosable: true,
+        duration: 5000,
+      });
+    } catch (err) {
+      console.log(err.response);
+      toast({
+        position: 'top',
+        status: 'error',
+        title: 'Error.',
+        description: 'Ha ocurrido un error intentado enviar las invitaciones',
+        isClosable: true,
+        duration: 5000,
+      });
+    }
+  };
   //Autosuggest Settings
   const getSuggestions = (value) => {
     const inputValue = value.trim().toLowerCase();
@@ -119,7 +175,7 @@ export default function TeamsListItem({
 
     return inputLength === 0
       ? []
-      : users.filter(
+      : invitedUsers.filter(
           (user) =>
             `${user.firstName} ${user.lastName}`
               .toLowerCase()
@@ -130,10 +186,7 @@ export default function TeamsListItem({
 
   const renderSuggestion = (suggestion) => <SuggestionItem user={suggestion} />;
   const getSuggestionValue = (suggestion) => {
-    let newSuggestion = suggestion;
-    newSuggestion.permissions = '';
-    newSuggestion.role = 'Desarrollador';
-    addMember(newSuggestion);
+    addMember(suggestion);
     return '';
   };
 
@@ -154,7 +207,7 @@ export default function TeamsListItem({
   );
 
   const inputProps = {
-    placeholder: 'Escriba un nombre...',
+    placeholder: 'Escriba un nombre o correo electrónico...',
     value: suggestionValue,
     onChange,
   };
@@ -296,9 +349,30 @@ export default function TeamsListItem({
               <Wrap
                 padding="0.5em"
                 w="100%"
-                borderRadius="5px"
-                border="1px"
-                borderColor="blue.500"></Wrap>
+                borderRadius="10px"
+                className="input">
+                {newMembers.map((member) => (
+                  <WrapItem>
+                    <Badge bg="blue.400" padding="0.5em" borderRadius="100px">
+                      <HStack spacing="0.5em">
+                        <Avatar
+                          color="white"
+                          name={`${member.firstName} ${member.lastName}`}
+                          size="sm"
+                        />
+                        <Text
+                          color="white"
+                          fontSize="sm">{`${member.firstName} ${member.lastName}`}</Text>
+                        <CloseButton
+                          size="sm"
+                          color="white"
+                          onClick={() => removeMember(member)}
+                        />
+                      </HStack>
+                    </Badge>
+                  </WrapItem>
+                ))}
+              </Wrap>
             </VStack>
           </ModalBody>
           <ModalFooter>
@@ -310,7 +384,12 @@ export default function TeamsListItem({
                 Cancel
               </Button>
               <Spacer />
-              <Button bg={team.color} color="white" borderRadius="100px">
+              <Button
+                bg={team.color}
+                _hover={{ filter: 'saturate(70%)' }}
+                color="white"
+                onClick={inviteMembers}
+                borderRadius="100px">
                 Invitar Miembros
               </Button>
             </Flex>

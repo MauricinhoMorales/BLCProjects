@@ -76,7 +76,7 @@ export default function TeamDetailPage({
       }
       setTeamProjects(projects);
     } catch (err) {
-      console.log(err);
+      console.log(err.response);
       setFechingError(true);
     }
   }, []);

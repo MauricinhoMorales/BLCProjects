@@ -185,7 +185,7 @@ export default function ProjectPage({
         );
         setSections(newSections);
       } catch (err) {
-        console.log(err);
+        console.log(err.response);
       }
     } else {
       const newStartList = start.tasks.filter(
@@ -223,7 +223,7 @@ export default function ProjectPage({
           }
         );
       } catch (err) {
-        console.log(err);
+        console.log(err.response);
       }
     }
   };
@@ -451,7 +451,6 @@ export async function getServerSideProps(context) {
   let project;
   let members = [];
   let sections = [];
-  debugger;
   try {
     const response = await Axios.get(
       `${config.url}/api/projects/${context.query.id}`,
@@ -480,7 +479,7 @@ export async function getServerSideProps(context) {
         }
         project.sections = sections;
       } catch (err) {
-        console.log('Task Error', err);
+        console.log(err.response);
       }
     }
     if (project.creator.isTeam) {
@@ -492,20 +491,17 @@ export async function getServerSideProps(context) {
           },
         }
       );
-      console.log(team.data);
       members = team.data.members.map(async (member) => {
         const apiMember = await Axios.get(
           `${config.url}/api/users/${member.member_id}`,
           {
             headers: {
-              Authorization: jwtToken,
+              Authorization: user.jwtToken,
             },
           }
         );
         return apiMember.data;
       });
-
-      console.log(members);
     }
     return {
       props: {
@@ -516,7 +512,7 @@ export async function getServerSideProps(context) {
       },
     };
   } catch (err) {
-    console.log(err);
+    console.log(err.response);
     return {
       props: {
         isError: true,

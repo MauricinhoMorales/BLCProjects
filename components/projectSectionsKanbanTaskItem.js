@@ -65,7 +65,7 @@ export default function ProjectSectionsTaskItem({
         });
         setMember(response.data);
       } catch (err) {
-        console.log(err);
+        console.log(err.response);
       }
     }
   }, []);

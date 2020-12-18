@@ -12,6 +12,20 @@ class SendinBlueService {
   }
 
   async sendActivationEmail({ userEmail, userName, link }) {
+    this.sendSmtpEmail.templateId = 1;
+    await this.sendEmailWithLink({ userEmail, userName, link });
+  }
+
+  async sendRecoveryEmail({ userEmail, userName, link }) {
+    this.sendSmtpEmail.templateId = 2;
+    await this.sendEmailWithLink({ userEmail, userName, link });
+  }
+  async sendInvitation({ userEmail, userName, link, teamName }) {
+    this.sendSmtpEmail.templateId = 3;
+    await this.sendEmailWithInvitation({ userEmail, userName, link, teamName });
+  }
+
+  async sendEmailWithInvitation({ userEmail, userName, link, teamName }) {
     this.sendSmtpEmail.sender = {
       name: 'BLCProjects Team',
       email: 'blcprojectsteam@gmail.com',
@@ -21,9 +35,9 @@ class SendinBlueService {
       name: 'BLCProjects Team',
       email: 'blcprojectsteam@gmail.com',
     };
-    this.sendSmtpEmail.templateId = 1;
     this.sendSmtpEmail.params = {
       LINK: link,
+      TEAMNAME: teamName,
     };
 
     try {
@@ -36,7 +50,7 @@ class SendinBlueService {
     }
   }
 
-  async sendRecoveryEmail({ userEmail, userName, link }) {
+  async sendEmailWithLink({ userEmail, userName, link }) {
     this.sendSmtpEmail.sender = {
       name: 'BLCProjects Team',
       email: 'blcprojectsteam@gmail.com',
@@ -46,7 +60,6 @@ class SendinBlueService {
       name: 'BLCProjects Team',
       email: 'blcprojectsteam@gmail.com',
     };
-    this.sendSmtpEmail.templateId = 2;
     this.sendSmtpEmail.params = {
       LINK: link,
     };
