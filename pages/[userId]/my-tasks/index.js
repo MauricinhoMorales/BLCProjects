@@ -12,6 +12,93 @@ export default function MyTasksPage({ setUser, initialUser, setShow }) {
     }
     setShow(true);
   });
+
+  const Lista1 = [
+    {
+      "nombreTarea": "Tarea 1",
+      "nombreProyecto": "Proyecto Astralis",
+      "nombreEquipo": "Navidad",
+      "nombreResponsable": "Mauricio Morales",
+      "estadoTarea": "Terminada",
+      "prioridadTarea": "Alta",
+      "fechaEntrega": new Date(),
+      "descripcionTarea": "Esta es la descripcion de la tarea 1",
+      "color": "blue"
+    },
+    {
+      "nombreTarea": "Tarea 2",
+      "nombreProyecto": "Proyecto Marcapasos",
+      "nombreEquipo": "Octopus",
+      "nombreResponsable": "Tania Gutierrez",
+      "estadoTarea": "En Proceso",
+      "prioridadTarea": "Media",
+      "fechaEntrega": new Date(),
+      "descripcionTarea": "Esta es la descripcion de la tarea 2",
+      "color" : "green"
+    }
+  ]
+
+  const Lista2 = [
+    {
+      "nombreTarea": "Tarea 3",
+      "nombreProyecto": "Proyecto Makro",
+      "nombreEquipo": "Navidad",
+      "nombreResponsable": "Roger Franco",
+      "estadoTarea": "Terminada",
+      "prioridadTarea": "Baja",
+      "fechaEntrega": new Date(),
+      "descripcionTarea": "Esta es la descripcion de la tarea 3",
+      "color": "blue"
+    },
+    {
+      "nombreTarea": "Tarea 4",
+      "nombreProyecto": "Proyecto Marcapasos",
+      "nombreEquipo": "Octopus",
+      "nombreResponsable": "Tania Gutierrez",
+      "estadoTarea": "En Proceso",
+      "prioridadTarea": "Baja",
+      "fechaEntrega": new Date(),
+      "descripcionTarea": "Esta es la descripcion de la tarea 4",
+      "color" : "yellow"
+    }
+  ]
+
+  const Lista3 = [
+    {
+      "nombreTarea": "Tarea 5",
+      "nombreProyecto": "Proyecto Astralis",
+      "nombreEquipo": "Personal",
+      "nombreResponsable": "Ricardo Castellanos",
+      "estadoTarea": "Sin Iniciar",
+      "prioridadTarea": "Media",
+      "fechaEntrega": new Date(),
+      "descripcionTarea": "Esta es la descripcion de la tarea 5",
+      "color": "red"
+    },
+    {
+      "nombreTarea": "Tarea 6",
+      "nombreProyecto": "Proyecto Marcapasos",
+      "nombreEquipo": "Octopus",
+      "nombreResponsable": "Roger Franco",
+      "estadoTarea": "En Proceso",
+      "prioridadTarea": "Alta",
+      "fechaEntrega": new Date(),
+      "descripcionTarea": "Esta es la descripcion de la tarea 6",
+      "color" : "orange"
+    },
+    {
+      "nombreTarea": "Tarea 7",
+      "nombreProyecto": "Proyecto Navidad Explosiva",
+      "nombreEquipo": "Octopus",
+      "nombreResponsable": "Tania Gutierrez",
+      "estadoTarea": "Terminada",
+      "prioridadTarea": "Baja",
+      "fechaEntrega": new Date(),
+      "descripcionTarea": "Esta es la descripcion de la tarea 7",
+      "color" : "teal"
+    }
+  ]
+
   return (
     <>
       <Head>
@@ -22,9 +109,9 @@ export default function MyTasksPage({ setUser, initialUser, setShow }) {
           Mis Tareas
         </Heading>
         <Stack direction="column" w="100%" spacing="40px">
-          <TaskSectionList title="HOY" />
-          <TaskSectionList title="PROXIMOS" />
-          <TaskSectionList title="PROXIMAMENTE" />
+          <TaskSectionList title="HOY" lista={Lista1} memberPermission="edit"/>
+          <TaskSectionList title="PROXIMOS" lista={Lista2} memberPermission="edit"/>
+          <TaskSectionList title="PROXIMAMENTE" lista={Lista3} memberPermission="edit"/>
           <Box h="40px" />
         </Stack>
       </VStack>

@@ -6,7 +6,7 @@ export default function DescriptionControl({descripcionTarea}) {
   function EditableControls({ isEditing, onSubmit, onCancel, onEdit }) {
     return isEditing ? (
       <ButtonGroup justifyContent="center" size="sm">
-        <IconButton icon={<CheckIcon />} onClick={onSubmit} />
+        <IconButton icon={<CheckIcon />} onClick={onSubmit}/>
         <IconButton icon={<CloseIcon />} onClick={onCancel} />
       </ButtonGroup>
     ) : (

@@ -140,7 +140,7 @@ export default function TaskDataView(props){
                   <Text color="gray.500" fontSize="md">Fecha de Entrega</Text>
                 </Box>
                 <Box fontSize="md" height="6">
-                  <Text color="gray.500">Proyecto</Text>
+                  <Text color="gray.500">Etiquetas</Text>
                 </Box>
                 <Box fontSize="md" height="6">
                   <Text color="gray.500">Descripción</Text>
@@ -150,7 +150,7 @@ export default function TaskDataView(props){
                 <Box fontSize="md" height="6" textAlign="left">
                   <Stack direction="row" spacing={4}>
                     <Center h="6" w="8">
-                      <Avatar size="sm" name={props.nombreResponsable} color="red" textColor="white" />
+                      <Avatar size="sm" name={props.nombreResponsable} textColor="white" />
                     </Center>
                     <Text>{props.nombreResponsable}</Text>
                   </Stack>
@@ -166,7 +166,7 @@ export default function TaskDataView(props){
                         icon={<Icon as={IoIosCalendar} />}
                       />
                     </Center>
-                  <Text>{props.fechaEntrega}</Text>
+                  <Text>{props.fechaEntrega.toDateString()}</Text>
                   </Stack>
                 </Box>
                 <Box fontSize="md" height="6" textAlign="left">
@@ -176,12 +176,33 @@ export default function TaskDataView(props){
                       key="md"
                       borderRadius="full"
                       variant="solid"
-                      colorScheme="red"
+                      colorScheme ={props.color}
                     >
-                      <TagLabel>{props.nombreProyecto}</TagLabel>
+                      <TagLabel>Proyecto</TagLabel>
+                      <Box width="3" />
+                      <TagLabel><Text textColor="gray.300">{props.nombreProyecto}</Text></TagLabel>
+                    </Tag>
+                    <Tag
+                      size="md"
+                      key="md"
+                      borderRadius="full"
+                      variant="solid"
+                      colorScheme ={props.colorEstado}
+                    >
+                      <TagLabel>Estado</TagLabel>
                       <Box width="3" />
                       <TagLabel><Text textColor="gray.300">{props.estadoProyecto}</Text></TagLabel>
-                      <TagCloseButton />
+                    </Tag>
+                    <Tag
+                      size="md"
+                      key="md"
+                      borderRadius="full"
+                      variant="solid"
+                      colorScheme ={props.colorPrioridad}
+                    >
+                      <TagLabel>Prioridad</TagLabel>
+                      <Box width="3" />
+                      <TagLabel><Text textColor="gray.300">{props.prioridad}</Text></TagLabel>
                     </Tag>
                   </Stack>
                 </Box>

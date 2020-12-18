@@ -24,7 +24,8 @@ import TaskSectionTaskItem from '../components/taskSectionTaskItem';
 
 export default function TaskSectionList({
   memberPermission,
-  title
+  title,
+  lista
 }) {
 
   return (
@@ -67,33 +68,20 @@ export default function TaskSectionList({
           Prioridad
         </Text>
       </Stack>
-      <TaskSectionTaskItem memberPermission=""
-        nombreTarea = "Tarea 1"
-        nombreProyecto = "Proyecto Astralis"
-        nombreEquipo = "Navidad"
-        nombreResponsable = "Mauricio Morales"
-        estadoTarea = "Terminada"
-        prioridadTarea = "Alta"
-        fechaEntrega = "24 de agosto de 2020"
-        descripcionTarea = " Esta es la descripcion de la tarea 1"/>
-      <TaskSectionTaskItem memberPermission=""
-        nombreTarea = "Tarea 1"
-        nombreProyecto = "Proyecto Astralis"
-        nombreEquipo = "Navidad"
-        nombreResponsable = "Mauricio Morales"
-        estadoTarea = "Terminada"
-        prioridadTarea = "Alta"
-        fechaEntrega = "24 de agosto de 2020"
-        descripcionTarea = " Esta es la descripcion de la tarea 1"/>
-        <TaskSectionTaskItem memberPermission=""
-        nombreTarea = "Tarea 1"
-        nombreProyecto = "Proyecto Astralis"
-        nombreEquipo = "Navidad"
-        nombreResponsable = "Mauricio Morales"
-        estadoTarea = "Terminada"
-        prioridadTarea = "Alta"
-        fechaEntrega = "24 de agosto de 2020"
-        descripcionTarea = " Esta es la descripcion de la tarea 1"/>
+      {lista.map((task) => {
+        return (
+          <TaskSectionTaskItem memberPermission={memberPermission}
+            nombreTarea= {task.nombreTarea}
+            nombreProyecto={task.nombreProyecto}
+            nombreEquipo={task.nombreEquipo}
+            nombreResponsable={task.nombreResponsable}
+            estadoTarea={task.estadoTarea}
+            prioridadTarea={task.prioridadTarea}
+            fechaEntrega={task.fechaEntrega}
+            descripcionTarea={task.descripcionTarea} 
+            color={task.color}/>
+        );
+      })}
     </Stack>
 
   );
