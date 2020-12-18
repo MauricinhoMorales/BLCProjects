@@ -110,7 +110,7 @@ export default function TeamsListItem({
   };
 
   //Autosuggest Settings
-  const getSuggestions = (value) => {
+  /* const getSuggestions = (value) => {
     const inputValue = value.trim().toLowerCase();
     const inputLength = inputValue.length;
 
@@ -140,7 +140,7 @@ export default function TeamsListItem({
 
   const onSuggestionsClearRequested = () => {
     setSuggestions([]);
-  };
+  }; */
 
   const onChange = (event, { newValue }) => {
     setSuggestionValue(newValue);
@@ -272,7 +272,7 @@ export default function TeamsListItem({
                 fontWeight="bold">
                 Agregar miembro
               </Heading>
-              <Autosuggest
+              {/* <Autosuggest
                 theme={theme}
                 suggestions={suggestions}
                 onSuggestionsFetchRequested={onSuggestionsFetchRequested}
@@ -281,7 +281,7 @@ export default function TeamsListItem({
                 renderSuggestion={renderSuggestion}
                 inputProps={inputProps}
                 renderInputComponent={renderInputComponent}
-              />
+              /> */}
               <Heading
                 paddingTop="1.5em"
                 as="h5"
