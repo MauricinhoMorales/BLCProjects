@@ -15,16 +15,28 @@ import {
   Input,
   InputGroup,
   InputLeftElement,
+  Stack,
+  Button,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  Box,
+  useDisclosure,
 } from '@chakra-ui/react';
 import Axios from 'axios';
 import Head from 'next/head';
 import InContruction from '../../../../components/inConstruction';
 import { parseCookies } from '../../../../lib/parseCookies';
-import { ChevronDown, Columns, List } from 'react-feather';
+import { ChevronDown, Columns, List, Plus } from 'react-feather';
 import ProjectSectionsList from '../../../../components/projectSectionsList';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import { config } from '..7../../../config/index';
 import { useRouter } from 'next/router';
+import ProjectSectionsKanbanList from '../../../../components/ProjectSectionsKanbanList';
 
 export default function ProjectPage({
   initialUser,
@@ -39,6 +51,10 @@ export default function ProjectPage({
   });
   const [teamCreatorName, setTeamCreatorName] = useState('Personal');
   const [memberPermission, setMemberPermission] = useState('edit');
+  const [isKanban, setKanban] = useState(false);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [inputValue, setInputValue] = useState('');
+  const [loading, setLoading] = useState(false);
   const Router = useRouter();
 
   useEffect(() => {
@@ -71,7 +87,12 @@ export default function ProjectPage({
     }
   }, []);
 
+  const onChangeInput = (e) => {
+    setInputValue(e.target.value);
+  };
+
   const handleNewSection = async (e) => {
+    setLoading(true);
     if (e.key === 'Enter' || e.keyCode === 13) {
       try {
         await Axios.post(
@@ -91,10 +112,39 @@ export default function ProjectPage({
         console.log(err.response);
       }
       e.target.value = '';
+    } else if (e.target.localName === 'button') {
+      try {
+        await Axios.post(
+          `/api/projects/${project._id}/sections`,
+          {
+            name: inputValue,
+            tasks: [],
+          },
+          {
+            headers: {
+              Authorization: user.jwtToken,
+            },
+          }
+        );
+        setSections([...sections, { name: inputValue, tasks: [] }]);
+        onClose();
+      } catch (err) {
+        console.log(err.response);
+      }
+      setInputValue('');
     }
+    setLoading(false);
   };
 
-  const handleDragEnd = ({ source, destination }) => {
+  const onChangeToList = () => {
+    setKanban(false);
+  };
+
+  const onChangeToKanban = () => {
+    setKanban(true);
+  };
+
+  const handleDragEnd = async ({ source, destination }) => {
     if (!destination) return;
     if (
       source.droppableId === destination.droppableId &&
@@ -104,9 +154,6 @@ export default function ProjectPage({
 
     const start = sections[Number(source.droppableId)];
     const end = sections[Number(destination.droppableId)];
-
-    console.log('start', start);
-    console.log('end', end);
 
     if (start.name === end.name) {
       const newList = start.tasks;
@@ -119,7 +166,26 @@ export default function ProjectPage({
           newSections[index].tasks = newList;
         }
       });
-      setSections(newSections);
+      let requestSections = newSections.map((newSection) => {
+        const tasks = newSection.tasks.map((task) => task._id);
+        return { name: newSection.name, tasks };
+      });
+      try {
+        await Axios.put(
+          `/api/projects/${project._id}`,
+          {
+            sections: requestSections,
+          },
+          {
+            headers: {
+              Authorization: user.jwtToken,
+            },
+          }
+        );
+        setSections(newSections);
+      } catch (err) {
+        console.log(err);
+      }
     } else {
       const newStartList = start.tasks.filter(
         (_, index) => index !== source.index
@@ -127,16 +193,37 @@ export default function ProjectPage({
       const newEndList = end.tasks;
       newEndList.splice(destination.index, 0, start.tasks[source.index]);
 
-      let newSections = sections;
-      newSections.map((section, index) => {
+      let newSections = [];
+      sections.map((section) => {
         if (section.name === start.name) {
-          newSections[index].tasks = newStartList;
-        }
-        if (section.name === end.name) {
-          newSections[index].tasks = newEndList;
+          newSections.push({ name: section.name, tasks: newStartList });
+        } else if (section.name === end.name) {
+          newSections.push({ name: section.name, tasks: newEndList });
+        } else {
+          newSections.push({ name: section.name, tasks: section.tasks });
         }
       });
       setSections(newSections);
+
+      let requestSections = newSections.map((newSection) => {
+        const tasks = newSection.tasks.map((task) => task._id);
+        return { name: newSection.name, tasks };
+      });
+      try {
+        await Axios.put(
+          `/api/projects/${project._id}`,
+          {
+            sections: requestSections,
+          },
+          {
+            headers: {
+              Authorization: user.jwtToken,
+            },
+          }
+        );
+      } catch (err) {
+        console.log(err);
+      }
     }
   };
 
@@ -145,7 +232,11 @@ export default function ProjectPage({
       <Head>
         <title>Mis Projectos - {project.name} - BLCProjects</title>
       </Head>
-      <Flex padding="2em" direction="column">
+      <Flex
+        padding="2em"
+        direction="column"
+        w={sections.length <= 3 ? '100%' : 'initial'}
+        display={!isKanban ? 'block' : 'inline-block'}>
         <VStack
           align="start"
           spacing="5px"
@@ -203,30 +294,59 @@ export default function ProjectPage({
           <TabPanels w="100%" h="100%">
             <TabPanel padding="0" w="100%" h="100%">
               <HStack
+                margin="1em 0"
                 spacing="2px"
                 padding="0.5em 0"
                 justify="flex-end"
                 w="100%">
+                {isKanban ? (
+                  <Button
+                    variant="primery"
+                    color="white"
+                    borderRadius="100px"
+                    bg={project.color}
+                    padding="0.5em 1.5em"
+                    onClick={onOpen}
+                    leftIcon={<Icon as={Plus} color="white" />}>
+                    Agregar Columna
+                  </Button>
+                ) : null}
+
                 <IconButton
                   variant="ghost"
-                  icon={<Icon as={List} color="rufous.500" />}
+                  onClick={onChangeToList}
+                  icon={
+                    <Icon
+                      as={List}
+                      color={!isKanban ? project.color : 'romanSilver.500'}
+                    />
+                  }
                   isRound
                 />
                 <IconButton
                   variant="ghost"
-                  icon={<Icon as={Columns} color="romanSilver.700" />}
+                  onClick={onChangeToKanban}
+                  icon={
+                    <Icon
+                      as={Columns}
+                      color={isKanban ? project.color : 'romanSilver.500'}
+                    />
+                  }
                   isRound
                 />
               </HStack>
-              <DragDropContext onDragEnd={handleDragEnd}>
-                {sections.map((section, index) => {
-                  return (
-                    <Droppable droppableId={`${index}`}>
-                      {(provided) => (
-                        <>
+              <Stack
+                spacing="1em"
+                dir={!isKanban ? 'column' : 'row'}
+                isInline={!isKanban ? false : true}
+                align="start"
+                justify="start">
+                <DragDropContext onDragEnd={handleDragEnd}>
+                  {sections.map((section, index) => {
+                    return (
+                      <>
+                        {!isKanban ? (
                           <ProjectSectionsList
-                            provided={provided}
-                            innerRef={provided.innerRef}
                             index={index}
                             memberPermission={memberPermission}
                             sections={sections}
@@ -234,25 +354,34 @@ export default function ProjectPage({
                             user={user}
                             section={section}
                             projectId={project._id}
-                            color={project.color || 'blue'}
+                            color={project.color}
                           />
-
-                          {provided.placeholder}
-                        </>
-                      )}
-                    </Droppable>
-                  );
-                })}
-              </DragDropContext>
-              {memberPermission === 'edit' ? (
-                <InputGroup>
+                        ) : (
+                          <ProjectSectionsKanbanList
+                            index={index}
+                            memberPermission={memberPermission}
+                            sections={sections}
+                            setSections={setSections}
+                            user={user}
+                            section={section}
+                            projectId={project._id}
+                            color={project.color}
+                          />
+                        )}
+                      </>
+                    );
+                  })}
+                </DragDropContext>
+              </Stack>
+              {memberPermission === 'edit' && !isKanban ? (
+                <InputGroup marginTop="1em">
                   <InputLeftElement
                     pointerEvents="none"
                     children={<Icon as={ChevronDown} color="gray.500" />}
                   />
                   <Input
                     border="0"
-                    placeholder="Nueva seccion..."
+                    placeholder="Nueva sección..."
                     fontSize="lg"
                     fontWeight="bold"
                     color="richBlack.500"
@@ -276,6 +405,37 @@ export default function ProjectPage({
           </TabPanels>
         </Tabs>
       </Flex>
+      <Modal isOpen={isOpen} onClose={onClose} isCentered>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Nueva Columna</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <VStack spacing="0.5em" w="100%" h="100%" align="start">
+              <Text fontWeight="bold" color="richBlack.500">
+                Nombre de la columna
+              </Text>
+              <Input
+                className="input"
+                value={inputValue}
+                onChange={onChangeInput}
+              />
+            </VStack>
+          </ModalBody>
+          <ModalFooter alignContent="flex-end">
+            <Button
+              isLoading={loading}
+              variant="primary"
+              bg="rufous.500"
+              color="white"
+              borderRadius="100px"
+              className="button"
+              onClick={handleNewSection}>
+              Crear Columna
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </>
   );
 }
