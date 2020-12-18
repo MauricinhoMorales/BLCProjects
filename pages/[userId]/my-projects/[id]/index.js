@@ -33,10 +33,10 @@ import InContruction from '../../../../components/inConstruction';
 import { parseCookies } from '../../../../lib/parseCookies';
 import { ChevronDown, Columns, List, Plus } from 'react-feather';
 import ProjectSectionsList from '../../../../components/projectSectionsList';
-import { DragDropContext, Droppable } from 'react-beautiful-dnd';
+import ProjectSectionsKanbanList from '../../../../components/projectSectionsKanbanList';
+import { DragDropContext } from 'react-beautiful-dnd';
 import { config } from '..7../../../config/index';
 import { useRouter } from 'next/router';
-import ProjectSectionsKanbanList from '../../../../components/ProjectSectionsKanbanList';
 
 export default function ProjectPage({
   initialUser,
