@@ -13,8 +13,6 @@ const config = {
   authJwtSecret: process.env.AUTH_JWT_SECRET,
   publicApiKeyToken: process.env.PUBLIC_API_KEY_TOKEN,
   adminApiKeyToken: process.env.ADMIN_API_KEY_TOKEN,
-  mjApikeyPublic: process.env.MJ_APIKEY_PUBLIC,
-  mjApikeyPrivate: process.env.MJ_APIKEY_PRIVATE,
   mesiboAccessToken: process.env.MESIBO_ACCESS_TOKEN,
   mesiboAppId: process.env.MESIBO_APP_ID,
   mesiboApiUrl: process.env.MESIBO_API_URL,
