@@ -23,7 +23,7 @@ import {
   PopoverCloseButton,
   Portal,
   Button,
-  PopoverFooter
+  PopoverFooter,
 } from '@chakra-ui/react';
 import { ChevronDown } from 'react-feather';
 
@@ -32,81 +32,88 @@ import Axios from 'axios';
 
 import TaskDataView from '../components/taskDataView';
 
-export default function TaskSectionTaskItem({
-  memberPermission, nombreTarea, nombreProyecto, nombreEquipo, nombreResponsable, estadoTarea, prioridadTarea, fechaEntrega, descripcionTarea, color
-}) {
+export default function TaskSectionTaskItem({ task, tasks, setTasks, user }) {
   const prioridades = [
-  {"prioridad":"Alta",
-    "color":"red"},
-  {"prioridad":"Media",
-    "color":"yellow"},
-  {"prioridad":"Baja",
-    "color":"green"}
+    { prioridad: 'Alta', color: 'red' },
+    { prioridad: 'Media', color: 'yellow' },
+    { prioridad: 'Baja', color: 'green' },
   ];
 
   const estados = [
-    {"estado":"Sin Iniciar",
-      "color":"red"},
-    {"estado":"En Proceso",
-      "color":"yellow"},
-    {"estado":"Terminada",
-      "color":"green"}
-    ];
+    { estado: 'Sin Iniciar', color: 'red' },
+    { estado: 'En Proceso', color: 'yellow' },
+    { estado: 'Terminada', color: 'green' },
+  ];
 
-    
   const obtenerColorPrioridad = (e) => {
-    switch(e){
-      case "Alta": return "red"; 
-      case "Media": return "yellow";
-      case "Baja": return "green";
-      default: return "blue";
+    switch (e) {
+      case 'Alta':
+        return 'red';
+      case 'Media':
+        return 'yellow';
+      case 'Baja':
+        return 'green';
+      default:
+        return 'blue';
     }
-  }
+  };
 
   const obtenerColorEstado = (e) => {
-    switch(e){
-      case "Sin Iniciar": return "red"; 
-      case "En Proceso": return "yellow";
-      case "Terminada": return "green";
-      default: return"blue";
+    switch (e) {
+      case 'Sin Iniciar':
+        return 'red';
+      case 'En Proceso':
+        return 'yellow';
+      case 'Terminada':
+        return 'green';
+      default:
+        return 'blue';
     }
-  }
+  };
 
-  const [colorPrioridad,setColorPrioridad]= useState(() => obtenerColorPrioridad(prioridadTarea));
-  const [colorEstado,setColorEstado]= useState(() => obtenerColorEstado(estadoTarea));
-  const [valueEstado, setValueEstado]=useState(estadoTarea);
-  const [valuePrioridad, setValuePrioridad]=useState(prioridadTarea);
-  const [valueDescripcion,setValueDescripicon] =useState(descripcionTarea);
+  const [colorPrioridad, setColorPrioridad] = useState(() =>
+    obtenerColorPrioridad(task.currentPriority)
+  );
+  const [colorEstado, setColorEstado] = useState(() =>
+    obtenerColorEstado(task.currentStatus)
+  );
+  const [valueEstado, setValueEstado] = useState(task.currentStatus);
+  const [valuePrioridad, setValuePrioridad] = useState(task.currentPriority);
+  const [valueDescripcion, setValueDescripicon] = useState(task.description);
 
-  const [valueDate, onChange] = useState(fechaEntrega);
+  const [valueDate, onChange] = useState(() => {
+    return task.dueDate && task.dueDate.start && task.dueDate.start !== ''
+      ? new Date(task.dueDate.start)
+      : '';
+  });
   const [isVisible, setIsVisible] = useState(false);
 
   const ShowTask = () => {
     setIsVisible(true);
-  }
+  };
 
   const hideTask = () => {
-    setValueDescripicon(descripcionTarea);
+    setValueDescripicon(task.description);
     setIsVisible(false);
-  }
+  };
 
   const onChangeDate = async (date) => {
     onChange(date);
   };
 
-  const onChangeEstado = (e) =>{
+  const onChangeEstado = (e) => {
     setColorEstado(estados[e].color);
     setValueEstado(estados[e].estado);
-  }
+  };
 
-  const onChangePrioridad = (e) =>{
+  const onChangePrioridad = (e) => {
     setColorPrioridad(prioridades[e].color);
     setValuePrioridad(prioridades[e].prioridad);
-  }
+  };
 
-  const onChangeDescripcion = (e) =>{
+  const onChangeDescripcion = (e) => {
     setValueDescripicon(e);
-  }
+  };
 
   return (
     <>
@@ -116,56 +123,41 @@ export default function TaskSectionTaskItem({
           <Box
             flex={6}
             as="button"
-            borderLeft={`10px solid ${color}`}
+            borderLeft={`10px solid ${task.project.color}`}
             bg="gray.100"
             padding="0.8em"
             margin="0 2px 2px 0"
             size="md"
             onClick={ShowTask}
-            textAlign="left"
-          >
+            textAlign="left">
             <Stack direction="column" spacing="0.0em">
               <Text fontSize="md" color="richBlack.500">
-                {nombreTarea}
+                {task.name}
               </Text>
               <Stack direction="row">
                 <Text fontSize="sm" color="gray.500">
-                  {nombreEquipo + " > " + nombreProyecto}
+                  {task.project.creator.creator_id === task.assignedTo
+                    ? 'Personal'
+                    : task.creator.team.name + ' > ' + task.project.name}
                 </Text>
               </Stack>
             </Stack>
           </Box>
         </Stack>
-        <Box flex={2} bg="gray.100" margin="0 2px 2px 0" padding="0.8em" size="md">
-          {memberPermission === 'edit' ? (
-            <Popover placement="bottom" isLazy>
-              <PopoverTrigger>
-                <Center
-                  _hover={{ cursor: 'pointer' }}
-                  borderRadius="100px"
-                  style={{ backgroundColor: valueDate !== '' ? color : 'gray.200' }}
-                  padding="0.3em"
-                  w="100%"
-                  h="100%">
-                  <Text fontSize="sm" color="white" textAlign="center">
-                    {valueDate !== '' ? valueDate.toDateString() : ''}
-                  </Text>
-                </Center>
-              </PopoverTrigger>
-              <PopoverContent>
-                <PopoverBody padding={0}>
-                  <Calendar
-                    onChange={onChangeDate}
-                    value={valueDate}
-                    locale="es-ve"
-                  />
-                </PopoverBody>
-              </PopoverContent>
-            </Popover>
-          ) : (
+        <Box
+          flex={2}
+          bg="gray.100"
+          margin="0 2px 2px 0"
+          padding="0.8em"
+          size="md">
+          <Popover placement="bottom" isLazy>
+            <PopoverTrigger>
               <Center
+                _hover={{ cursor: 'pointer' }}
                 borderRadius="100px"
-                style={{ backgroundColor: valueDate !== '' ? color : 'gray.200' }}
+                style={{
+                  backgroundColor: valueDate !== '' ? color : 'gray.200',
+                }}
                 padding="0.3em"
                 w="100%"
                 h="100%">
@@ -173,13 +165,26 @@ export default function TaskSectionTaskItem({
                   {valueDate !== '' ? valueDate.toDateString() : ''}
                 </Text>
               </Center>
-            )}
+            </PopoverTrigger>
+            <PopoverContent>
+              <PopoverBody padding={0}>
+                <Calendar
+                  onChange={onChangeDate}
+                  value={valueDate}
+                  locale="es-ve"
+                />
+              </PopoverBody>
+            </PopoverContent>
+          </Popover>
         </Box>
-
-
         <Popover>
           <PopoverTrigger>
-            <Center flex={2} bg={colorEstado+".500"} padding="0.5em" margin="0 2px 2px 0" size="md">
+            <Center
+              flex={2}
+              bg={colorEstado + '.500'}
+              padding="0.5em"
+              margin="0 2px 2px 0"
+              size="md">
               <Text fontSize="md" color="white" textAlign="center">
                 {valueEstado}
               </Text>
@@ -188,17 +193,30 @@ export default function TaskSectionTaskItem({
           <Portal>
             <PopoverContent>
               <PopoverArrow />
-              <PopoverHeader>
-                <Center>
-                  Seleccionar el estado de la tarea
-                </Center>
-              </PopoverHeader>
               <PopoverCloseButton />
               <PopoverBody>
                 <Stack direction="row">
-                  <Button colorScheme={estados[0].color} onClick={() => onChangeEstado(0)}><Text fontSize="md" fontWeight="normal">{estados[0].estado}</Text></Button>
-                  <Button colorScheme={estados[1].color} onClick={() => onChangeEstado(1)}><Text fontSize="md" fontWeight="normal">{estados[1].estado}</Text></Button>
-                  <Button colorScheme={estados[2].color} onClick={() => onChangeEstado(2)}><Text fontSize="md" fontWeight="normal">{estados[2].estado}</Text></Button>
+                  <Button
+                    colorScheme={estados[0].color}
+                    onClick={() => onChangeEstado(0)}>
+                    <Text fontSize="md" fontWeight="normal">
+                      {estados[0].estado}
+                    </Text>
+                  </Button>
+                  <Button
+                    colorScheme={estados[1].color}
+                    onClick={() => onChangeEstado(1)}>
+                    <Text fontSize="md" fontWeight="normal">
+                      {estados[1].estado}
+                    </Text>
+                  </Button>
+                  <Button
+                    colorScheme={estados[2].color}
+                    onClick={() => onChangeEstado(2)}>
+                    <Text fontSize="md" fontWeight="normal">
+                      {estados[2].estado}
+                    </Text>
+                  </Button>
                 </Stack>
               </PopoverBody>
             </PopoverContent>
@@ -207,7 +225,12 @@ export default function TaskSectionTaskItem({
 
         <Popover>
           <PopoverTrigger>
-            <Center flex={2} bg={colorPrioridad+".500"} padding="0.5em" margin="0 2px 2px 0" size="md">
+            <Center
+              flex={2}
+              bg={colorPrioridad + '.500'}
+              padding="0.5em"
+              margin="0 2px 2px 0"
+              size="md">
               <Text fontSize="md" color="white" textAlign="center">
                 {valuePrioridad}
               </Text>
@@ -216,43 +239,51 @@ export default function TaskSectionTaskItem({
           <Portal>
             <PopoverContent>
               <PopoverArrow />
-              <PopoverHeader>
-                <Center>
-                  Seleccionar la prioridad de la tarea
-                </Center>
-              </PopoverHeader>
               <PopoverCloseButton />
               <PopoverBody>
                 <Center>
-                <Stack direction="row">
-                  <Button colorScheme={prioridades[0].color} onClick={() => onChangePrioridad(0)}><Text fontSize="md" fontWeight="normal">{prioridades[0].prioridad}</Text></Button>
-                  <Button colorScheme={prioridades[1].color} onClick={() => onChangePrioridad(1)}><Text fontSize="md" fontWeight="normal">{prioridades[1].prioridad}</Text></Button>
-                  <Button colorScheme={prioridades[2].color} onClick={() => onChangePrioridad(2)}><Text fontSize="md" fontWeight="normal">{prioridades[2].prioridad}</Text></Button>
-                </Stack>
+                  <Stack direction="row">
+                    <Button
+                      colorScheme={prioridades[0].color}
+                      onClick={() => onChangePrioridad(0)}>
+                      <Text fontSize="md" fontWeight="normal">
+                        {prioridades[0].prioridad}
+                      </Text>
+                    </Button>
+                    <Button
+                      colorScheme={prioridades[1].color}
+                      onClick={() => onChangePrioridad(1)}>
+                      <Text fontSize="md" fontWeight="normal">
+                        {prioridades[1].prioridad}
+                      </Text>
+                    </Button>
+                    <Button
+                      colorScheme={prioridades[2].color}
+                      onClick={() => onChangePrioridad(2)}>
+                      <Text fontSize="md" fontWeight="normal">
+                        {prioridades[2].prioridad}
+                      </Text>
+                    </Button>
+                  </Stack>
                 </Center>
               </PopoverBody>
             </PopoverContent>
           </Portal>
         </Popover>
       </Stack>
-
-      {isVisible === true ?
+      {isVisible === true ? (
         <TaskDataView
-          hideTask={hideTask}
-          descripcionTarea={valueDescripcion}
-          estadoProyecto={valueEstado}
-          fechaEntrega={valueDate}
-          nombreProyecto={nombreProyecto}
-          nombreResponsable={nombreResponsable}
-          nombreTarea={nombreTarea}
-          prioridad={valuePrioridad}
-          colorPrioridad={colorPrioridad}
-          colorEstado={colorEstado}
-          color={color}
+          task={task}
+          tasks={tasks}
+          setTasks={tasks}
+          status={valueEstado}
+          statusColor={colorEstado}
+          priority={valuePrioridad}
+          priorityColor={colorPrioridad}
         />
-        :
+      ) : (
         <Box />
-      }
+      )}
     </>
   );
 }

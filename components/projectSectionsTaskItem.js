@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Calendar from 'react-calendar';
 import {
   Flex,
@@ -21,8 +21,11 @@ import {
   PopoverFooter,
   Spacer,
   Button,
+  Avatar,
+  Tooltip,
 } from '@chakra-ui/react';
 import { ChevronDown } from 'react-feather';
+import TaskDataView from './taskDataView';
 
 import 'react-calendar/dist/Calendar.css';
 import Axios from 'axios';
@@ -37,19 +40,37 @@ export default function ProjectSectionsTaskItem({
   setSections,
   sectionName,
   projectId,
+  members,
   memberPermission,
+  project,
   provided,
   innerRef,
 }) {
   const [value, onChange] = useState(() => {
-    console.log(task.dueDate);
     return task.dueDate && task.dueDate.start
       ? new Date(task.dueDate.start)
       : '';
   });
   const [isVisible, setIsVisible] = useState(false);
+  const [taskViewVisible, setTaskViewVisible] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [inputValue, setValue] = useState(task.name);
+  const [member, setMember] = useState({});
+
+  useEffect(async () => {
+    if (task.assignedTo.length) {
+      try {
+        const response = await Axios.get(`/api/users/${task.assignedTo}`, {
+          headers: {
+            Authorization: jwtToken,
+          },
+        });
+        setMember(response.data);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  }, []);
 
   const onChangeDate = async () => {
     try {
@@ -149,6 +170,14 @@ export default function ProjectSectionsTaskItem({
     }
   };
 
+  const onTaskVisible = () => {
+    setTaskViewVisible(true);
+  };
+
+  const onTaskInvisible = () => {
+    setTaskViewVisible(false);
+  };
+
   return (
     <div
       style={{ width: '100%' }}
@@ -197,7 +226,8 @@ export default function ProjectSectionsTaskItem({
           ) : (
             <Box w="1.8em"></Box>
           )}
-          <Box
+          <Flex
+            onClick={onTaskVisible}
             flex={6}
             borderLeft={`10px solid ${color}`}
             bg="gray.200"
@@ -215,7 +245,17 @@ export default function ProjectSectionsTaskItem({
                 {task.name}
               </Text>
             )}
-          </Box>
+            <Spacer />
+            {member._id ? (
+              <Tooltip label={`${member.firstName} ${member.lastName}`}>
+                <Avatar
+                  size="sm"
+                  color="white"
+                  name={`${member.firstName} ${member.lastName}`}
+                />
+              </Tooltip>
+            ) : null}
+          </Flex>
         </HStack>
         <Box flex={2} bg="gray.200" margin="0 2px 2px 0" padding="0.5em">
           {memberPermission === 'edit' ? (
@@ -280,6 +320,18 @@ export default function ProjectSectionsTaskItem({
         </Center>
         <Box flex={1} bg="gray.200" margin="0 0 2px 0"></Box>
       </Flex>
+      {taskViewVisible ? (
+        <TaskDataView
+          onCloseParent={onTaskInvisible}
+          task={task}
+          tasks={tasks}
+          setTasks={setTasks}
+          project={project}
+          member={member}
+          memberPermision={memberPermission}
+          members={members}
+        />
+      ) : null}
     </div>
   );
 }

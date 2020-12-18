@@ -1,11 +1,19 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Heading, VStack, Flex, Text, Stack, Box } from '@chakra-ui/react';
 import Head from 'next/head';
 import { parseCookies } from '../../../lib/parseCookies';
-import TaskDataView from '../../../components/taskDataView';
 import TaskSectionList from '../../../components/taskSectionList';
+import Axios from 'axios';
+import { config } from '../../../config/index';
 
-export default function MyTasksPage({ setUser, initialUser, setShow }) {
+export default function MyTasksPage({
+  setUser,
+  user,
+  initialUser,
+  setShow,
+  tasks,
+  isError,
+}) {
   useEffect(() => {
     if (initialUser) {
       setUser(initialUser);
@@ -13,91 +21,26 @@ export default function MyTasksPage({ setUser, initialUser, setShow }) {
     setShow(true);
   });
 
-  const Lista1 = [
-    {
-      "nombreTarea": "Tarea 1",
-      "nombreProyecto": "Proyecto Astralis",
-      "nombreEquipo": "Navidad",
-      "nombreResponsable": "Mauricio Morales",
-      "estadoTarea": "Terminada",
-      "prioridadTarea": "Alta",
-      "fechaEntrega": new Date(),
-      "descripcionTarea": "Esta es la descripcion de la tarea 1",
-      "color": "blue"
-    },
-    {
-      "nombreTarea": "Tarea 2",
-      "nombreProyecto": "Proyecto Marcapasos",
-      "nombreEquipo": "Octopus",
-      "nombreResponsable": "Tania Gutierrez",
-      "estadoTarea": "En Proceso",
-      "prioridadTarea": "Media",
-      "fechaEntrega": new Date(),
-      "descripcionTarea": "Esta es la descripcion de la tarea 2",
-      "color" : "green"
+  const [pastTasks, setPastTasks] = useState(() => {
+    if (tasks.length) {
+      return tasks.filter((task) => {
+        if (task.dueDate && task.dueDate.start) {
+          const taskDate = new Date(task.dueDate.start);
+          const today = new Date(Date.now());
+          return taskDate.getMilliseconds < today.getMilliseconds();
+        }
+      });
     }
-  ]
+    return [];
+  });
 
-  const Lista2 = [
-    {
-      "nombreTarea": "Tarea 3",
-      "nombreProyecto": "Proyecto Makro",
-      "nombreEquipo": "Navidad",
-      "nombreResponsable": "Roger Franco",
-      "estadoTarea": "Terminada",
-      "prioridadTarea": "Baja",
-      "fechaEntrega": new Date(),
-      "descripcionTarea": "Esta es la descripcion de la tarea 3",
-      "color": "blue"
-    },
-    {
-      "nombreTarea": "Tarea 4",
-      "nombreProyecto": "Proyecto Marcapasos",
-      "nombreEquipo": "Octopus",
-      "nombreResponsable": "Tania Gutierrez",
-      "estadoTarea": "En Proceso",
-      "prioridadTarea": "Baja",
-      "fechaEntrega": new Date(),
-      "descripcionTarea": "Esta es la descripcion de la tarea 4",
-      "color" : "yellow"
-    }
-  ]
+  const [nextTasks, setNextTasks] = useState(() => {
+    return [];
+  });
 
-  const Lista3 = [
-    {
-      "nombreTarea": "Tarea 5",
-      "nombreProyecto": "Proyecto Astralis",
-      "nombreEquipo": "Personal",
-      "nombreResponsable": "Ricardo Castellanos",
-      "estadoTarea": "Sin Iniciar",
-      "prioridadTarea": "Media",
-      "fechaEntrega": new Date(),
-      "descripcionTarea": "Esta es la descripcion de la tarea 5",
-      "color": "red"
-    },
-    {
-      "nombreTarea": "Tarea 6",
-      "nombreProyecto": "Proyecto Marcapasos",
-      "nombreEquipo": "Octopus",
-      "nombreResponsable": "Roger Franco",
-      "estadoTarea": "En Proceso",
-      "prioridadTarea": "Alta",
-      "fechaEntrega": new Date(),
-      "descripcionTarea": "Esta es la descripcion de la tarea 6",
-      "color" : "orange"
-    },
-    {
-      "nombreTarea": "Tarea 7",
-      "nombreProyecto": "Proyecto Navidad Explosiva",
-      "nombreEquipo": "Octopus",
-      "nombreResponsable": "Tania Gutierrez",
-      "estadoTarea": "Terminada",
-      "prioridadTarea": "Baja",
-      "fechaEntrega": new Date(),
-      "descripcionTarea": "Esta es la descripcion de la tarea 7",
-      "color" : "teal"
-    }
-  ]
+  const [unassignedTasks, setUnassignedTasks] = useState(() => {
+    return [];
+  });
 
   return (
     <>
@@ -109,10 +52,24 @@ export default function MyTasksPage({ setUser, initialUser, setShow }) {
           Mis Tareas
         </Heading>
         <Stack direction="column" w="100%" spacing="40px">
-          <TaskSectionList title="HOY" lista={Lista1} memberPermission="edit"/>
-          <TaskSectionList title="PROXIMOS" lista={Lista2} memberPermission="edit"/>
-          <TaskSectionList title="PROXIMAMENTE" lista={Lista3} memberPermission="edit"/>
-          <Box h="40px" />
+          <TaskSectionList
+            title="Pasadas"
+            tasks={pastTasks}
+            setTasks={setPastTasks}
+            user={user}
+          />
+          <TaskSectionList
+            title="Próximo"
+            tasks={nextTasks}
+            setTasks={setNextTasks}
+            user={user}
+          />
+          <TaskSectionList
+            title="Sin Fecha"
+            tasks={unassignedTasks}
+            setTasks={setUnassignedTasks}
+            user={user}
+          />
         </Stack>
       </VStack>
     </>
@@ -123,9 +80,56 @@ export async function getServerSideProps({ req }) {
   const userCookie = parseCookies(req);
   const user = JSON.parse(userCookie.user);
 
-  return {
-    props: {
-      initialUser: user,
-    },
-  };
+  try {
+    const response = await Axios.get(`${config.url}/api/tasks`, {
+      params: {
+        assignedTo: user.user.id,
+      },
+      headers: {
+        Authorization: user.jwtToken,
+      },
+    });
+    if (response.data.length) {
+      let myTasks = response.data;
+      response.data.map(async (task, index) => {
+        const project = await Axios.get(
+          `${config.url}/api/projects/${task.projects[0].project_id}`,
+          {
+            headers: {
+              Authorization: user.jwtToken,
+            },
+          }
+        );
+        myTasks[index].project = project.data;
+
+        if (project.data.creator.isTeam) {
+          const team = await Axios.get(
+            `${config.url}/api/teams/${project.data.creator.creator_id}`,
+            {
+              headers: {
+                Authorization: user.jwtToken,
+              },
+            }
+          );
+          myTasks[index].team = team.data;
+        }
+      });
+    }
+    return {
+      props: {
+        tasks: response.data,
+        isError: false,
+        initialUser: user,
+      },
+    };
+  } catch (err) {
+    console.log(err.response);
+    return {
+      props: {
+        tasks: [],
+        isError: true,
+        initialUser: user,
+      },
+    };
+  }
 }

@@ -21,8 +21,9 @@ import {
   VStack,
   Spacer,
   Avatar,
+  Tooltip,
 } from '@chakra-ui/react';
-import { ChevronDown } from 'react-feather';
+import TaskDataView from './taskDataView';
 
 import 'react-calendar/dist/Calendar.css';
 import Axios from 'axios';
@@ -37,23 +38,37 @@ export default function ProjectSectionsTaskItem({
   setSections,
   sectionName,
   projectId,
+  members,
   memberPermission,
+  project,
   provided,
   innerRef,
 }) {
   const [value, onChange] = useState(() => {
-    console.log(task.dueDate);
     return task.dueDate && task.dueDate.start
       ? new Date(task.dueDate.start)
       : '';
   });
-  const [isVisible, setIsVisible] = useState(false);
+
+  const [taskViewVisible, setTaskViewVisible] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [inputValue, setValue] = useState(task.name);
+  const [member, setMember] = useState({});
 
-  /* useEffect(() => {
-    setTasks
-  }) */
+  useEffect(async () => {
+    if (task.assignedTo.length) {
+      try {
+        const response = await Axios.get(`/api/users/${task.assignedTo}`, {
+          headers: {
+            Authorization: jwtToken,
+          },
+        });
+        setMember(response.data);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  }, []);
 
   const onChangeDate = async (date) => {
     onChange(date);
@@ -76,82 +91,12 @@ export default function ProjectSectionsTaskItem({
     }
   };
 
-  const changeVisibleOnEnter = () => {
-    if (memberPermission === 'edit') {
-      setIsVisible(true);
-    }
+  const onTaskVisible = () => {
+    setTaskViewVisible(true);
   };
 
-  const changeVisibleOnLeave = () => {
-    if (memberPermission === 'edit') {
-      setIsVisible(false);
-    }
-  };
-
-  const handleOnSelect = async (selection) => {
-    switch (selection) {
-      case 'rename':
-        setIsEditing(true);
-        break;
-      case 'delete':
-        try {
-          await Axios.delete(`/api/projects/${projectId}/tasks`, {
-            params: {
-              sectionName: sectionName,
-              taskId: task._id,
-            },
-            headers: {
-              Authorization: jwtToken,
-            },
-          });
-          let newTasks = tasks.filter((newTask) => newTask._id !== task._id);
-          setTasks(newTasks);
-          let mySections = sections;
-          sections.map((mySection, index) => {
-            if (mySection.name === sectionName) {
-              mySections[index].tasks = sections[index].tasks.filter(
-                (sectionTask) => sectionTask._id !== task._id
-              );
-            }
-          });
-          setSections(mySections);
-        } catch (err) {
-          console.log(err.response);
-        }
-        break;
-    }
-  };
-
-  const onChangeValue = (e) => {
-    setValue(e.target.value);
-  };
-
-  const onChangeTaskName = async (e) => {
-    if (e.key === 'Enter' || e.keyCode === 13) {
-      try {
-        await Axios.put(
-          `/api/tasks/${task._id}`,
-          {
-            name: inputValue,
-          },
-          {
-            headers: {
-              Authorization: jwtToken,
-            },
-          }
-        );
-        let oldTasks = tasks;
-        oldTasks.map((oldTask, index) => {
-          if (oldTask.name === task.name) {
-            oldTasks[index].name = inputValue;
-          }
-        });
-        setTasks(oldTasks);
-        setIsEditing(false);
-      } catch (err) {
-        console.log(err);
-      }
-    }
+  const onTaskInvisible = () => {
+    setTaskViewVisible(false);
   };
 
   return (
@@ -167,18 +112,39 @@ export default function ProjectSectionsTaskItem({
         h="auto"
         boxShadow="0 0 10px"
         padding="0.5em"
-        marginBottom="0.8em">
-        <Flex align="center">
+        marginBottom="0.8em"
+        onClick={onTaskVisible}>
+        <Flex align="center" onClick={onTaskVisible}>
           <Text fontWeight="bold" color="richBlack.500">
             {task.name}
           </Text>
           <Spacer />
-          <Avatar color="white" name="Tania Gutierrez" size="sm" />
+          {member._id ? (
+            <Tooltip label={`${member.firtName} ${member.lastName}`}>
+              <Avatar
+                color="white"
+                name={`${member.firtName} ${member.lastName}`}
+                size="sm"
+              />
+            </Tooltip>
+          ) : null}
         </Flex>
         <Text fontSize="sm" color="gray.600">
           {value !== '' ? value.toDateString() : ''}
         </Text>
       </Box>
+      {taskViewVisible ? (
+        <TaskDataView
+          onCloseParent={onTaskInvisible}
+          task={task}
+          tasks={tasks}
+          setTasks={setTasks}
+          project={project}
+          memberPermision={memberPermission}
+          member={member}
+          members={members}
+        />
+      ) : null}
     </div>
   );
 }

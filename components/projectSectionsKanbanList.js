@@ -36,8 +36,10 @@ export default function ProjectSectionsKanbanList({
   projectId,
   color,
   user,
+  project,
   sections,
   setSections,
+  members,
   memberPermission,
   index,
 }) {
@@ -260,7 +262,9 @@ export default function ProjectSectionsKanbanList({
                           provided={provided}
                           innerRef={provided.innerRef}
                           memberPermission={memberPermission}
+                          members={members}
                           projectId={projectId}
+                          project={project}
                           sectionName={section.name}
                           tasks={tasks}
                           setTasks={setTasks}

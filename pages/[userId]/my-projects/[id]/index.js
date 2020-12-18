@@ -45,6 +45,7 @@ export default function ProjectPage({
   isError,
   user,
   setShow,
+  members,
 }) {
   const [sections, setSections] = useState(() => {
     return project.sections || [];
@@ -353,17 +354,21 @@ export default function ProjectPage({
                             setSections={setSections}
                             user={user}
                             section={section}
+                            project={project}
                             projectId={project._id}
                             color={project.color}
+                            members={members}
                           />
                         ) : (
                           <ProjectSectionsKanbanList
                             index={index}
                             memberPermission={memberPermission}
+                            members={members}
                             sections={sections}
                             setSections={setSections}
                             user={user}
                             section={section}
+                            project={project}
                             projectId={project._id}
                             color={project.color}
                           />
@@ -444,6 +449,9 @@ export async function getServerSideProps(context) {
   const userCookie = parseCookies(context.req);
   const user = JSON.parse(userCookie.user);
   let project;
+  let members = [];
+  let sections = [];
+  debugger;
   try {
     const response = await Axios.get(
       `${config.url}/api/projects/${context.query.id}`,
@@ -454,7 +462,6 @@ export async function getServerSideProps(context) {
       }
     );
     project = response.data;
-    let sections = [];
     if (project.sections) {
       try {
         for (let i = 0; i < project.sections.length; i++) {
@@ -476,9 +483,34 @@ export async function getServerSideProps(context) {
         console.log('Task Error', err);
       }
     }
+    if (project.creator.isTeam) {
+      const team = await Axios.get(
+        `${config.url}/api/teams/${project.creator.creator_id}`,
+        {
+          headers: {
+            Authorization: user.jwtToken,
+          },
+        }
+      );
+      console.log(team.data);
+      members = team.data.members.map(async (member) => {
+        const apiMember = await Axios.get(
+          `${config.url}/api/users/${member.member_id}`,
+          {
+            headers: {
+              Authorization: jwtToken,
+            },
+          }
+        );
+        return apiMember.data;
+      });
+
+      console.log(members);
+    }
     return {
       props: {
         initialUser: user,
+        members,
         project,
         isError: false,
       },
@@ -490,6 +522,7 @@ export async function getServerSideProps(context) {
         isError: true,
         initialUser: user,
         project: { name: '', sections: [], creator: { creator_id: '' } },
+        members: [],
       },
     };
   }

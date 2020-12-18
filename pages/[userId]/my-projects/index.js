@@ -102,9 +102,7 @@ export async function getServerSideProps({ req }) {
     });
     let teamProjects = [];
     for (let i = 0; i < teams.data.length; i++) {
-      console.log('Team', teams.data[i].projects);
       for (let j = 0; j < teams.data[i].projects.length; j++) {
-        console.log('Project', teams.data[i].projects[j]);
         const project = await Axios.get(
           `${config.url}/api/projects/${teams.data[i].projects[j]}`,
           {

@@ -17,20 +17,15 @@ import {
   MenuDivider,
   Menu,
   Input,
-  Spacer
+  Spacer,
 } from '@chakra-ui/react';
 
 import TaskSectionTaskItem from '../components/taskSectionTaskItem';
 
-export default function TaskSectionList({
-  memberPermission,
-  title,
-  lista
-}) {
-
+export default function TaskSectionList({ title, tasks, setTasks, user }) {
   return (
     <Stack direction="column" spacing="0.2em" flex={6}>
-      <Stack direction="row" >
+      <Stack direction="row" padding="0">
         <Text
           fontSize="2xl"
           color="richBlack.500"
@@ -68,21 +63,16 @@ export default function TaskSectionList({
           Prioridad
         </Text>
       </Stack>
-      {lista.map((task) => {
+      {tasks.map((task) => {
         return (
-          <TaskSectionTaskItem memberPermission={memberPermission}
-            nombreTarea= {task.nombreTarea}
-            nombreProyecto={task.nombreProyecto}
-            nombreEquipo={task.nombreEquipo}
-            nombreResponsable={task.nombreResponsable}
-            estadoTarea={task.estadoTarea}
-            prioridadTarea={task.prioridadTarea}
-            fechaEntrega={task.fechaEntrega}
-            descripcionTarea={task.descripcionTarea} 
-            color={task.color}/>
+          <TaskSectionTaskItem
+            task={task}
+            tasks={tasks}
+            setTasks={setTasks}
+            user={user}
+          />
         );
       })}
     </Stack>
-
   );
 }

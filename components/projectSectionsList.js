@@ -26,8 +26,10 @@ export default function ProjectSectionsList({
   projectId,
   color,
   user,
+  project,
   sections,
   setSections,
+  members,
   memberPermission,
   index,
 }) {
@@ -273,8 +275,10 @@ export default function ProjectSectionsList({
                         <ProjectSectionsTaskItem
                           provided={provided}
                           innerRef={provided.innerRef}
+                          members={members}
                           memberPermission={memberPermission}
                           projectId={projectId}
+                          project={project}
                           sectionName={section.name}
                           tasks={tasks}
                           setTasks={setTasks}
