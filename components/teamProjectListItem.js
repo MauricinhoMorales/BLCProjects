@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import {
   Box,
@@ -41,6 +42,10 @@ export default function TeamProjectListItem({
   const [inputValue, setInputValue] = useState(project.name);
   const [descriptionValue, setDescriptionValue] = useState(project.description);
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    setTeamProjects(teamProjects);
+  });
 
   const seeProjectDetail = (e) => {
     console.log(e);

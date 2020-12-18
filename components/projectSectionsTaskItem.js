@@ -18,6 +18,9 @@ import {
   MenuDivider,
   Menu,
   Input,
+  PopoverFooter,
+  Spacer,
+  Button,
 } from '@chakra-ui/react';
 import { ChevronDown } from 'react-feather';
 
@@ -30,6 +33,8 @@ export default function ProjectSectionsTaskItem({
   jwtToken,
   tasks,
   setTasks,
+  sections,
+  setSections,
   sectionName,
   projectId,
   memberPermission,
@@ -46,14 +51,13 @@ export default function ProjectSectionsTaskItem({
   const [isEditing, setIsEditing] = useState(false);
   const [inputValue, setValue] = useState(task.name);
 
-  const onChangeDate = async (date) => {
-    onChange(date);
+  const onChangeDate = async () => {
     try {
       await Axios.put(
         `/api/tasks/${task._id}`,
         {
           dueDate: {
-            start: date,
+            start: value,
           },
         },
         {
@@ -97,6 +101,15 @@ export default function ProjectSectionsTaskItem({
           });
           let newTasks = tasks.filter((newTask) => newTask._id !== task._id);
           setTasks(newTasks);
+          let mySections = sections;
+          sections.map((mySection, index) => {
+            if (mySection.name === sectionName) {
+              mySections[index].tasks = sections[index].tasks.filter(
+                (sectionTask) => sectionTask._id !== task._id
+              );
+            }
+          });
+          setSections(mySections);
         } catch (err) {
           console.log(err.response);
         }
@@ -137,9 +150,8 @@ export default function ProjectSectionsTaskItem({
   };
 
   return (
-    <li
-      key={task._id}
-      style={{ listStyle: 'none', listStyleType: 'none' }}
+    <div
+      style={{ width: '100%' }}
       ref={innerRef}
       {...provided.draggableProps}
       {...provided.dragHandleProps}>
@@ -223,12 +235,24 @@ export default function ProjectSectionsTaskItem({
               </PopoverTrigger>
               <PopoverContent>
                 <PopoverBody padding={0}>
-                  <Calendar
-                    onChange={onChangeDate}
-                    value={value}
-                    locale="es-ve"
-                  />
+                  <Calendar onChange={onChange} value={value} locale="es-ve" />
                 </PopoverBody>
+                <PopoverFooter>
+                  <Flex>
+                    <Button variant="link" color="richBlack.500">
+                      {' '}
+                      Resetear fecha
+                    </Button>
+                    <Spacer />
+                    <Button
+                      onClick={onChangeDate}
+                      variant="primary"
+                      bg={color}
+                      _hover={{ filter: 'saturate(60%)' }}>
+                      Aplicar
+                    </Button>
+                  </Flex>
+                </PopoverFooter>
               </PopoverContent>
             </Popover>
           ) : (
@@ -244,57 +268,11 @@ export default function ProjectSectionsTaskItem({
             </Center>
           )}
         </Box>
-        {/* <Popover placement="bottom-start">
-          <PopoverTrigger> */}
         <Center flex={2} bg="red.500" padding="0.5em" margin="0 2px 2px 0">
           <Text fontSize="md" color="white" textAlign="center">
             Sin Empezar
           </Text>
         </Center>
-        {/* </PopoverTrigger>
-          <PopoverContent w="175px" bg="red.500" h="20em">
-            <PopoverArrow />
-            <PopoverBody padding="0" h="15em">
-              <Wrap
-                direction="column"
-                spacing={4}
-                padding="0.7em"
-                h="15em"
-                bg="green.500">
-                <WrapItem>
-                  <Center padding="0.5em" h="10" w="9em" bg="blue.500">
-                    Estado
-                  </Center>
-                </WrapItem>
-                <WrapItem>
-                  <Center padding="0.5em" h="10" w="9em" bg="blue.500">
-                    Estado
-                  </Center>
-                </WrapItem>
-                <WrapItem>
-                  <Center padding="0.5em" h="10" w="9em" bg="blue.500">
-                    Estado
-                  </Center>
-                </WrapItem>
-                <WrapItem>
-                  <Center padding="0.5em" h="10" w="9em" bg="blue.500">
-                    Estado
-                  </Center>
-                </WrapItem>
-                <WrapItem>
-                  <Center padding="0.5em" h="10" w="9em" bg="blue.500">
-                    Estado
-                  </Center>
-                </WrapItem>
-                <WrapItem>
-                  <Center padding="0.5em" h="10" w="9em" bg="blue.500">
-                    Estado
-                  </Center>
-                </WrapItem>
-              </Wrap>
-            </PopoverBody>
-          </PopoverContent>
-        </Popover> */}
         <Center flex={2} bg="yellow.500" padding="0.5em" margin="0 2px 2px 0">
           <Text fontSize="md" color="white" textAlign="center">
             Alta
@@ -302,6 +280,6 @@ export default function ProjectSectionsTaskItem({
         </Center>
         <Box flex={1} bg="gray.200" margin="0 0 2px 0"></Box>
       </Flex>
-    </li>
+    </div>
   );
 }

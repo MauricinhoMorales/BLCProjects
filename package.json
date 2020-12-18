@@ -23,7 +23,6 @@
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^3.6.2",
     "next": "9.5.5",
-    "node-mailjet": "^3.3.1",
     "react": "17.0.1",
     "react-autosuggest": "^10.0.4",
     "react-beautiful-dnd": "^13.0.0",
@@ -33,7 +32,8 @@
     "react-dom": "17.0.1",
     "react-feather": "^2.0.9",
     "react-hook-form": "^6.11.5",
-    "react-icons": "^4.1.0"
+    "react-icons": "^4.1.0",
+    "sib-api-v3-sdk": "^8.0.2"
   },
   "devDependencies": {},
   "engines": {

@@ -7,7 +7,6 @@ import ActivatedAccount from '../../components/activatedAccount';
 import CodeInvalid from '../../components/codeInvalid';
 
 export default function ActivationPage({ isActivated }) {
-  /* return <h1>{isActivated ? 'Account Active' : 'Code Invalid'}</h1>; */
   return (
     <>
       <Head>
@@ -23,7 +22,7 @@ export default function ActivationPage({ isActivated }) {
 export async function getServerSideProps(context) {
   try {
     const response = await Axios.get(
-      `http://${config.url}/api/auth/activate/${context.params.activationCode}`
+      `${config.url}/api/auth/activate/${context.params.activationCode}`
     );
     if (response.status === 200) {
       return {

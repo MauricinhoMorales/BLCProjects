@@ -5,6 +5,7 @@ import Axios from 'axios';
 import { parseCookies } from '../../../lib/parseCookies';
 import {
   Heading,
+  HStack,
   VStack,
   Text,
   TabList,
@@ -19,7 +20,7 @@ import {
   Icon,
 } from '@chakra-ui/react';
 import TeamDetailMemberItem from '../../../components/teamDetailMemberItem';
-import { PlusCircle } from 'react-feather';
+import { PlusCircle, UserPlus } from 'react-feather';
 import TeamProjectListItem from '../../../components/teamProjectListItem';
 
 export default function TeamDetailPage({
@@ -111,6 +112,23 @@ export default function TeamDetailPage({
         </TabList>
         <TabPanels w="100%" h="100%">
           <TabPanel marginTop="2em" padding="0">
+            <HStack
+              w="100%"
+              spacing="0"
+              justify="end"
+              align="end"
+              marginBottom="2em">
+              <Button
+                padding="0.5em 1.5em"
+                borderRadius="100px"
+                bg={team.color}
+                color="white"
+                _hover={{ filter: 'saturate(70%)' }}
+                leftIcon={<Icon as={UserPlus} color="white" />}>
+                Invitar miembro
+              </Button>
+            </HStack>
+
             <Box
               borderRadius="10px"
               w="100%"

@@ -32,6 +32,8 @@ import Axios from 'axios';
 import { MoreVertical, Trash, UserPlus } from 'react-feather';
 import { useRouter } from 'next/router';
 import Autosuggest from 'react-autosuggest';
+import theme from '../styles/suggestionTheme.module.css';
+import SuggestionItem from './suggestionItem';
 
 export default function TeamsListItem({
   team,
@@ -43,21 +45,22 @@ export default function TeamsListItem({
   const Router = useRouter();
   const toast = useToast();
   const [inviteModalOpen, setInviteModalOpen] = useState(false);
-  const [suggestions, setSuggestions] = useState([]);
+  const [suggestions, setSuggestions] = useState(() => {
+    return users.filter((user) => {
+      let isMember = false;
+      for (let i = 0; i < team.members.length; i++) {
+        if (user._id === team.members[i].member_id) {
+          isMember = true;
+          break;
+        }
+      }
+      if (!isMember) {
+        return user;
+      }
+    });
+  });
   const [suggestionValue, setSuggestionValue] = useState('');
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const usersToInvite = users.filter((user) => {
-    let isMember = false;
-    for (let i = 0; i < team.members.length; i++) {
-      if (user._id === team.members[i].member_id) {
-        isMember = true;
-        break;
-      }
-    }
-    if (!isMember) {
-      return user;
-    }
-  });
 
   const handleClick = async (e) => {
     console.log(e);
@@ -110,7 +113,7 @@ export default function TeamsListItem({
   };
 
   //Autosuggest Settings
-  /* const getSuggestions = (value) => {
+  const getSuggestions = (value) => {
     const inputValue = value.trim().toLowerCase();
     const inputLength = inputValue.length;
 
@@ -154,7 +157,7 @@ export default function TeamsListItem({
     placeholder: 'Escriba un nombre...',
     value: suggestionValue,
     onChange,
-  }; */
+  };
 
   return (
     <>
@@ -272,7 +275,7 @@ export default function TeamsListItem({
                 fontWeight="bold">
                 Agregar miembro
               </Heading>
-              {/* <Autosuggest
+              <Autosuggest
                 theme={theme}
                 suggestions={suggestions}
                 onSuggestionsFetchRequested={onSuggestionsFetchRequested}
@@ -281,7 +284,7 @@ export default function TeamsListItem({
                 renderSuggestion={renderSuggestion}
                 inputProps={inputProps}
                 renderInputComponent={renderInputComponent}
-              /> */}
+              />
               <Heading
                 paddingTop="1.5em"
                 as="h5"
@@ -307,10 +310,7 @@ export default function TeamsListItem({
                 Cancel
               </Button>
               <Spacer />
-              <Button
-                colorScheme="red"
-                borderRadius="100px"
-                onClick={onDeleteTeam}>
+              <Button bg={team.color} color="white" borderRadius="100px">
                 Invitar Miembros
               </Button>
             </Flex>

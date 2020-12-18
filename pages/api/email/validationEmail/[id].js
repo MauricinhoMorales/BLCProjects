@@ -3,12 +3,12 @@ const crypto = require('crypto');
 const { config } = require('../../../../config/index');
 const { errorHandler } = require('../../../../utils/middlewares/errorHandlers');
 const UserService = require('../../../../services/user');
-const MailjetService = require('../../../../services/mailjet');
+const SendinBlueService = require('../../../../services/sendinblue');
 
 export default async function handler(req, res) {
   const { method } = req;
   const userService = new UserService();
-  const mailjetService = new MailjetService();
+  const sendinBlueService = new SendinBlueService();
 
   if (method === 'POST') {
     const {
@@ -22,7 +22,7 @@ export default async function handler(req, res) {
       const activationCodeExpires = Date.now() + 24 * 3600 * 1000;
       const link = `${config.url}/activation/${activationCode}`;
       const user = await userService.getUser({ id });
-      mailjetService.sendActivationEmail({
+      sendinBlueService.sendActivationEmail({
         userEmail: user.email,
         userName: `${user.firstName} ${user.lastName}`,
         link,
