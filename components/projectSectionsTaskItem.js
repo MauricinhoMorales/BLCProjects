@@ -18,6 +18,9 @@ import {
   MenuDivider,
   Menu,
   Input,
+  PopoverFooter,
+  Spacer,
+  Button,
 } from '@chakra-ui/react';
 import { ChevronDown } from 'react-feather';
 
@@ -48,14 +51,13 @@ export default function ProjectSectionsTaskItem({
   const [isEditing, setIsEditing] = useState(false);
   const [inputValue, setValue] = useState(task.name);
 
-  const onChangeDate = async (date) => {
-    onChange(date);
+  const onChangeDate = async () => {
     try {
       await Axios.put(
         `/api/tasks/${task._id}`,
         {
           dueDate: {
-            start: date,
+            start: value,
           },
         },
         {
@@ -233,12 +235,24 @@ export default function ProjectSectionsTaskItem({
               </PopoverTrigger>
               <PopoverContent>
                 <PopoverBody padding={0}>
-                  <Calendar
-                    onChange={onChangeDate}
-                    value={value}
-                    locale="es-ve"
-                  />
+                  <Calendar onChange={onChange} value={value} locale="es-ve" />
                 </PopoverBody>
+                <PopoverFooter>
+                  <Flex>
+                    <Button variant="link" color="richBlack.500">
+                      {' '}
+                      Resetear fecha
+                    </Button>
+                    <Spacer />
+                    <Button
+                      onClick={onChangeDate}
+                      variant="primary"
+                      bg={color}
+                      _hover={{ filter: 'saturate(60%)' }}>
+                      Aplicar
+                    </Button>
+                  </Flex>
+                </PopoverFooter>
               </PopoverContent>
             </Popover>
           ) : (
