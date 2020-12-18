@@ -110,7 +110,7 @@ export default function TeamsListItem({
   };
 
   //Autosuggest Settings
-  /* const getSuggestions = (value) => {
+  const getSuggestions = (value) => {
     const inputValue = value.trim().toLowerCase();
     const inputLength = inputValue.length;
 
@@ -154,7 +154,7 @@ export default function TeamsListItem({
     placeholder: 'Escriba un nombre...',
     value: suggestionValue,
     onChange,
-  }; */
+  };
 
   return (
     <>
@@ -272,7 +272,7 @@ export default function TeamsListItem({
                 fontWeight="bold">
                 Agregar miembro
               </Heading>
-              {/* <Autosuggest
+              <Autosuggest
                 theme={theme}
                 suggestions={suggestions}
                 onSuggestionsFetchRequested={onSuggestionsFetchRequested}
@@ -281,7 +281,7 @@ export default function TeamsListItem({
                 renderSuggestion={renderSuggestion}
                 inputProps={inputProps}
                 renderInputComponent={renderInputComponent}
-              /> */}
+              />
               <Heading
                 paddingTop="1.5em"
                 as="h5"
@@ -308,7 +308,7 @@ export default function TeamsListItem({
               </Button>
               <Spacer />
               <Button
-                colorScheme="red"
+                bg={team.color}
                 borderRadius="100px"
                 onClick={onDeleteTeam}>
                 Invitar Miembros

@@ -47,7 +47,7 @@ export default function NewTeamPage({
   users,
 }) {
   const { register, handleSubmit, errors } = useForm();
-  const [color, setColor] = useState('green.500');
+  const [color, setColor] = useState('#ffffff');
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [suggestions, setSuggestions] = useState([]);
@@ -242,8 +242,8 @@ export default function NewTeamPage({
                   w="100%"
                   placeholder="Seleccione..."
                   className="input">
-                  {departamentos.map((departamento) => {
-                    return <option>{departamento}</option>;
+                  {departamentos.map((departamento, index) => {
+                    return <option key={index}>{departamento}</option>;
                   })}
                 </Select>
               </Flex>
@@ -358,7 +358,9 @@ export async function getServerSideProps({ req }) {
         props: {
           initialUser: user,
           isError: false,
-          users: users.data,
+          users: users.data.filter(
+            (memberUser) => memberUser._id !== user.user.id
+          ),
         },
       };
     } catch (err) {
