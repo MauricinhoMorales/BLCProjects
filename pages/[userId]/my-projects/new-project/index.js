@@ -33,12 +33,14 @@ import { CirclePicker } from 'react-color';
 import colorArray from '../../../../theme/colors';
 import Axios from 'axios';
 import { parseCookies } from '../../../../lib/parseCookies';
+import { config } from '../../../../config/index';
 
 export default function NewProjectPage({
   setShow,
   user,
   initialUser,
   setUser,
+  teams,
 }) {
   const { register, handleSubmit, errors } = useForm();
   const [color, setColor] = useState('green.500');
@@ -56,7 +58,6 @@ export default function NewProjectPage({
 
   const onSubmit = async (data) => {
     let response;
-    console.log('user', user);
     setLoading(true);
     try {
       response = await Axios.post(
@@ -67,7 +68,7 @@ export default function NewProjectPage({
           creator:
             data.creator === 'personal'
               ? { creator_id: user.user.id, isTeam: false }
-              : '',
+              : { creator_id: data.creator, isTeam: true },
           color: color,
           currentPriority: {},
           currentStatus: {},
@@ -82,6 +83,18 @@ export default function NewProjectPage({
           },
         }
       );
+      debugger;
+      if (data.creator !== 'personal') {
+        await Axios.post(
+          `/api/teams/${data.creator}/projects`,
+          { project: response.data },
+          {
+            headers: {
+              Authorization: user.jwtToken,
+            },
+          }
+        );
+      }
       setLoading(false);
       toast({
         title: 'Exito',
@@ -133,7 +146,7 @@ export default function NewProjectPage({
             borderRadius="10px"
             margin="2em">
             <Heading as="h3" color="richBlack.500">
-              Nuevo Projecto
+              Nuevo Proyecto
             </Heading>
             <form style={{ width: '100%' }}>
               <VStack spacing="1.5em" align="center" justify="center">
@@ -166,6 +179,9 @@ export default function NewProjectPage({
                       placeholder="Seleccione"
                       className="input">
                       <option value="personal">{`${user.user.firstName} ${user.user.lastName}`}</option>
+                      {teams.map((team) => (
+                        <option value={`${team._id}`}>{`${team.name}`}</option>
+                      ))}
                     </Select>
                   </Flex>
                 </FormControl>
@@ -266,9 +282,29 @@ export default function NewProjectPage({
 
 export async function getServerSideProps({ req }) {
   const userCookie = parseCookies(req);
-  return {
-    props: {
-      initialUser: JSON.parse(userCookie.user),
-    },
-  };
+  const user = JSON.parse(userCookie.user);
+  try {
+    const teams = await Axios.get(`${config.url}/api/teams`, {
+      params: {
+        memberId: user.user.id,
+      },
+      headers: {
+        Authorization: user.jwtToken,
+      },
+    });
+    return {
+      props: {
+        initialUser: user,
+        teams: teams.data,
+      },
+    };
+  } catch (err) {
+    console.log(err.response);
+    return {
+      props: {
+        initialUser: user,
+        teams: [],
+      },
+    };
+  }
 }

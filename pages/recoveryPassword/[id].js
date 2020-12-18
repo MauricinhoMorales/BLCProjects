@@ -15,9 +15,7 @@ export default function RecoveryPasswordPage({ isValid, userId }) {
 
 export async function getServerSideProps(context) {
   try {
-    const response = await Axios.get(
-      `http://${config.url}/api/auth/recovery/${context.query.id}`
-    );
+    await Axios.get(`${config.url}/api/auth/recovery/${context.query.id}`);
     return {
       props: {
         isValid: true,

@@ -2,7 +2,6 @@ const MongoLib = require('../lib/db');
 const TeamService = require('./teams');
 const UserService = require('./user');
 const TaskService = require('./task');
-const project = require('../utils/models/project');
 
 class ProjectService {
   constructor() {
@@ -60,6 +59,15 @@ class ProjectService {
       exist.sections.map(async (section) => {
         await this.deleteSection({ id, sectionName: section.name });
       });
+      const team = await this.teamService.getTeam({
+        id: exist.creator.creator_id,
+      });
+      if (team._id) {
+        await this.teamService.deleteProject({
+          id: exist.creator.creator_id,
+          projectId: id,
+        });
+      }
       return await this.MongoDB.delete(this.collection, id);
     } else {
       throw new Error('El proyecto no existe');

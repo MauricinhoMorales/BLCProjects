@@ -3,12 +3,12 @@ const crypto = require('crypto');
 const { config } = require('../../../../config/index');
 const { errorHandler } = require('../../../../utils/middlewares/errorHandlers');
 const UserService = require('../../../../services/user');
-const MailjetService = require('../../../../services/mailjet');
+const SendinBlueService = require('../../../../services/sendinblue');
 
 export default async function handler(req, res) {
   const { method } = req;
   const userService = new UserService();
-  const mailjetService = new MailjetService();
+  const sendinblueService = new SendinBlueService();
 
   if (method === 'POST') {
     const {
@@ -20,9 +20,9 @@ export default async function handler(req, res) {
     try {
       const recoveryCode = crypto.randomBytes(20).toString('hex');
       const recoveryCodeExpires = Date.now() + 24 * 3600 * 1000;
-      const link = `http://${config.url}/recoveryPassword/${recoveryCode}`;
+      const link = `${config.url}/recoveryPassword/${recoveryCode}`;
       const user = await userService.getUsers({ email: id });
-      mailjetService.sendRecoveryEmail({
+      sendinblueService.sendRecoveryEmail({
         userEmail: id,
         userName: `${user.firstName} ${user.lastName}`,
         link,

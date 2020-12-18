@@ -132,7 +132,11 @@ export default authenticated(async function (req, res) {
               } = req;
               try {
                 const updatedProjectId = await projectService.deleteTaskFromSection(
-                  { id, sectionName, taskId }
+                  {
+                    id,
+                    sectionName,
+                    taskId,
+                  }
                 );
                 res.status(200).json(updatedProjectId);
               } catch (err) {
