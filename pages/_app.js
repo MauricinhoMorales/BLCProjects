@@ -91,11 +91,17 @@ export async function getStaticProps() {
 }
 
 export async function getInitialProps({ req }) {
-  const user = parseCookies(req);
+  const userCookie = parseCookies(req);
+  let user;
+  if (!userCookie.user) {
+    user = null;
+  } else {
+    user = JSON.parse(userCookie.user);
+  }
 
   return {
     props: {
-      initialUser: JSON.parse(user.user),
+      initialUser: user,
     },
   };
 }

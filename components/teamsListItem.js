@@ -49,6 +49,7 @@ export default function TeamsListItem({
 }) {
   const Router = useRouter();
   const toast = useToast();
+  const [isLoading, setIsLoading] = useState(false);
   const [inviteModalOpen, setInviteModalOpen] = useState(false);
   const [suggestions, setSuggestions] = useState([]);
   const [suggestionValue, setSuggestionValue] = useState('');
@@ -134,6 +135,7 @@ export default function TeamsListItem({
   };
 
   const inviteMembers = async () => {
+    setIsLoading(true);
     try {
       await Axios.post(
         `/api/email/sendInvitations`,
@@ -147,7 +149,6 @@ export default function TeamsListItem({
           },
         }
       );
-      onCloseInviteModal();
       toast({
         position: 'top',
         status: 'success',
@@ -167,6 +168,8 @@ export default function TeamsListItem({
         duration: 5000,
       });
     }
+    onCloseInviteModal();
+    setIsLoading(false);
   };
   //Autosuggest Settings
   const getSuggestions = (value) => {
@@ -388,6 +391,7 @@ export default function TeamsListItem({
                 bg={team.color}
                 _hover={{ filter: 'saturate(70%)' }}
                 color="white"
+                isLoading={isLoading}
                 onClick={inviteMembers}
                 borderRadius="100px">
                 Invitar Miembros

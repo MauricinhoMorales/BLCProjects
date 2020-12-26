@@ -96,11 +96,20 @@ class TeamService {
 
   async addNewMember({ id, member }) {
     let team = await this.getTeam({ id });
+    let isMember = false;
     if (team.length) {
       throw new Error('El equipo no existe');
     } else {
-      team.members.push(member);
-      return await this.updateTeam({ id, team });
+      team.members.map((memberItem) => {
+        if (memberItem.member_id === member.member_id) {
+          isMember = true;
+        }
+      });
+      if (!isMember) {
+        team.members.push(member);
+        return await this.updateTeam({ id, team });
+      }
+      return '';
     }
   }
 

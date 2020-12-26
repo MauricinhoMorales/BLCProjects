@@ -16,14 +16,16 @@ export default function HomePage({ user, setUser, initialUser }) {
   return null;
 }
 export async function getServerSideProps({ req }) {
-  const user = parseCookies(req);
-  try {
-    return {
-      props: {
-        initialUser: JSON.parse(user.user),
-      },
-    };
-  } catch (err) {
-    return { props: {} };
+  const userCookie = parseCookies(req);
+  let user;
+  if (!userCookie.user) {
+    user = null;
+  } else {
+    user = JSON.parse(userCookie.user);
   }
+  return {
+    props: {
+      initialUser: user,
+    },
+  };
 }

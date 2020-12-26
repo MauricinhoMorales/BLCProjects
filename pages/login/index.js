@@ -14,12 +14,18 @@ export default function LoginPage({
   user,
   setShow,
   initialUser,
+  teamId,
 }) {
   const Router = useRouter();
   useEffect(() => {
     setShow(false);
     if (initialUser) {
-      Router.replace(`/${user.user.id}/my-tasks`);
+      setUser(initialUser);
+      if (teamId) {
+        Router.replace(`/${initialUser.user.id}/my-teams/${teamId}`);
+      } else {
+        Router.replace(`/${initialUser.user.id}/my-tasks`);
+      }
     }
   });
   return (
@@ -55,19 +61,21 @@ export default function LoginPage({
   );
 }
 
-export async function getServerSideProps({ req }) {
-  const userCookie = parseCookies(req);
+export async function getServerSideProps(context) {
+  const userCookie = parseCookies(context.req);
   let user;
-  if (typeof userCookie === 'object') {
+  if (!userCookie.user) {
     user = null;
   } else {
     user = JSON.parse(userCookie.user);
   }
+  const teamId = context.query.teamId ? context.query.teamId : null;
 
   return {
     props: {
       apiToken: config.publicApiKeyToken,
       initialUser: user,
+      teamId: teamId,
     },
   };
 }

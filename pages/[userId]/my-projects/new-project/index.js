@@ -83,7 +83,6 @@ export default function NewProjectPage({
           },
         }
       );
-      debugger;
       if (data.creator !== 'personal') {
         await Axios.post(
           `/api/teams/${data.creator}/projects`,

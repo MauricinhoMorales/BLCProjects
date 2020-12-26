@@ -41,6 +41,9 @@ export default function TeamDetailMemberItem({
   jwtToken,
   setTeamMembers,
   teamMembers,
+  users,
+  invitedUsers,
+  setInvitedUsers,
 }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [otherTeams, setOtherTeams] = useState([]);
@@ -84,7 +87,6 @@ export default function TeamDetailMemberItem({
   };
 
   const onMenuSelect = (selection) => {
-    console.log(err.response);
     if (selection.target.innerText === 'Eliminar Miembro') {
       onOpen();
     }
@@ -104,6 +106,13 @@ export default function TeamDetailMemberItem({
         (oldMember) => oldMember.member_id !== member.member_id
       );
       setTeamMembers(remainingMembers);
+      let addedUsers = [];
+      users.map((user) => {
+        if (user._id === member.member_id) {
+          addedUsers.push(user);
+        }
+      });
+      setInvitedUsers([...invitedUsers, ...addedUsers]);
     } catch (err) {
       console.log(err.response);
       toast({

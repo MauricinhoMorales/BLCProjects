@@ -4,13 +4,29 @@ import { useEffect } from 'react';
 import { config } from '../../../config';
 import { parseCookies } from '../../../lib/parseCookies';
 
-export default function InviteMember({ teamId, isError, initialUser }) {
+export default function InviteMember({
+  teamId,
+  isError,
+  initialUser,
+  setUser,
+}) {
   const Router = useRouter();
   useEffect(() => {
-    if (initialUser) {
+    const userCookie = document.cookie;
+    let user;
+    if (!userCookie.user) {
+      user = null;
+    } else {
+      user = JSON.parse(userCookie.user);
+    }
+    if (initialUser || user) {
       if (!isError) {
-        Router.replace(`/${initialUser.user.id}/my-teams/${teamId}`);
+        Router.replace(
+          `/${initialUser.user.id || user.user.id}/my-teams/${teamId}`
+        );
       }
+    } else {
+      Router.replace(`/login?teamId=${teamId}`);
     }
   });
 
@@ -18,28 +34,27 @@ export default function InviteMember({ teamId, isError, initialUser }) {
 }
 
 export async function getServerSideProps(context) {
-  debugger;
   const userCookie = parseCookies(context.req);
-  const user = JSON.parse(userCookie.user);
+  let user;
+  if (!userCookie.user) {
+    user = null;
+  } else {
+    user = JSON.parse(userCookie.user);
+  }
   try {
     await Axios.post(
-      `${config.url}/api/teams/${context.query.teamId}/members`,
+      `${config.url}/api/teams/${context.query.teamId}/addMember`,
       {
         member_id: context.query.id,
         role: 'Desarrollador',
         permissions: 'view',
-      },
-      {
-        headers: {
-          Authorization: user.jwtToken,
-        },
       }
     );
     return {
       props: {
         initialUser: user,
         isError: false,
-        teamId: context.query.id,
+        teamId: context.query.teamId,
       },
     };
   } catch (err) {
@@ -47,7 +62,7 @@ export async function getServerSideProps(context) {
       props: {
         initialUser: user || null,
         isError: true,
-        teamId: context.query.id,
+        teamId: context.query.teamId,
       },
     };
   }
